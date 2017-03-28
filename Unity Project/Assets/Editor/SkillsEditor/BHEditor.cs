@@ -36,7 +36,7 @@ public class BHEditor : EditorWindow
     }
 
     // Add menu named "My Window" to the Window menu
-    [MenuItem("Window/Banco de Habilidades")]
+    [MenuItem("Window/Banco de habilidades")]
     static void Init()
     {
         // Get existing open window or if none, make a new one:
