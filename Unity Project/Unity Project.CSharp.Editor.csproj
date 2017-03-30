@@ -112,9 +112,6 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="NCalc">
-      <HintPath>Assets\isometra-dialog-system\Assets\Plugins\NCalc.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity Project.CSharp.csproj">
@@ -133,58 +130,12 @@
     <Compile Include="Assets\Editor\PassiveEditorWindow.cs" />
     <Compile Include="Assets\Editor\PassiveTemplate.cs" />
     <Compile Include="Assets\Editor\Skill.cs" />
-    <Compile Include="Assets\Editor\SkillRequirement.cs" />
+    <Compile Include="Assets\Editor\SkillRequirement\SkillRequirement.cs" />
     <Compile Include="Assets\Editor\SkillsDB.cs" />
     <Compile Include="Assets\Editor\SkillsEditor\BHEditor.cs" />
     <Compile Include="Assets\Editor\SpecEditorWindow.cs" />
     <Compile Include="Assets\Editor\SpecTemplate.cs" />
     <Compile Include="Assets\Editor\Template.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Drawing.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Inspector\DialogEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Inspector\ForkGroupEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Inspector\FormulaSetterEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Inspector\GameEventEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Inspector\MultiForkEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Inspector\OptionsEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\IsoAssetsManager.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\IsoSettingsPopup.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\IsoSwitchesEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Menus\DecorationMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Menus\GameMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Menus\IsoSettingsMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Menus\IsoSwitchesMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Menus\MapMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Menus\SequenceMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Menus\TextureMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\MyHandles.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditorFactory.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\DefaultNodeEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\DialogNodeEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EmptyNodeEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EventEditors\AddItemEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EventEditors\ChangeSwitchEventEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EventEditors\DefaultEventEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EventEditors\EventEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EventEditors\EventEditorFactory.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EventEditors\ParamEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\EventNodeEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\ForkEditors\ForkEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\ForkEditors\FormulaForkEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\ForkEditors\ISwitchForkEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\NodeEditors\NodeEditors\ForkEditors\ItemForkEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\SequenceAsset.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\SequenceNodeAsset.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\SequenceWindow.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\SerializableGameEvent.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SecuenceEditor\SwitchesMenu.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\SequenceEditor.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Editor\Tests\GameEventTests.cs" />
-    <Compile Include="Assets\isometra-dialog-system\Assets\IsoUnity\Source\Util\JSONObject\Editor\JSONChecker.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\isometra-dialog-system\Assets\IsoUnity\Source\Util\JSONObject\readme.txt" />
-    <None Include="Assets\isometra-dialog-system\ProjectSettings\ProjectVersion.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

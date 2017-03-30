@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class BHEditor : EditorWindow
 {
+    private static int MAX_REQUIREMENTS = 1000;
+
 
     private int damage = 0;
     private int distance = 0;
@@ -22,6 +24,11 @@ public class BHEditor : EditorWindow
     private string[] skillType1 = new string[] { "Healing", "Damage", "Both" };
     int selectedSkillType1;
 
+    private string[] requirements = new string[] { "Level Requirement", "Specialization Requirement", "Class Requirement" };
+    private int[] selectedRequirement = new int[MAX_REQUIREMENTS];
+    int numberRequirements = 0;
+    bool activeRequirements = true;
+
     List<Vector2> activeBoxes = new List<Vector2>();
 
 
@@ -36,7 +43,7 @@ public class BHEditor : EditorWindow
     }
 
     // Add menu named "My Window" to the Window menu
-    [MenuItem("Window/Banco de habilidades")]
+    [MenuItem("TRPG/Banco de habilidades")]
     static void Init()
     {
         // Get existing open window or if none, make a new one:
@@ -117,29 +124,66 @@ public class BHEditor : EditorWindow
                                 EditorGUILayout.EndHorizontal();
                             }
                             GUI.backgroundColor = Color.white;
+
+
+                            //requisitos para la habilidad
+                            activeRequirements = EditorGUILayout.Foldout(activeRequirements, "Requirements");
+
+                            if (activeRequirements) {
+
+                                if (GUILayout.Button("Add Requirement"))
+                                    numberRequirements = numberRequirements + 1;
+                            
+                                if (numberRequirements > 0)
+                                {
+                                    for(int i = 0; i < numberRequirements; i++)
+                                    {
+                                        EditorGUILayout.BeginHorizontal();
+                                        selectedRequirement[i] = EditorGUILayout.Popup(selectedRequirement[i], requirements);
+                                        string requisito = EditorGUILayout.TextField("Requirement");
+
+
+                                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
+                                        {
+                                            //Ha pulsado borrar boton
+                                            numberRequirements--;
+                                        }
+
+                                        EditorGUILayout.EndHorizontal();
+
+                                     }
+                                }
+
+                            }
+
+                           
                             break;
 
+                        //Se ha escogido una habilidad que selecciona a todos los enemigos
                         case 1:
-                            //Se ha escogido una habilidad que selecciona a todos los enemigos
                             EditorGUILayout.BeginHorizontal();
                             EditorGUILayout.LabelField("Damage:");
                             damage = EditorGUILayout.IntField(damage);
                             EditorGUILayout.EndHorizontal();
                             break;
-                        case 2:
-                            //Se ha escogido una habilidad que selecciona a todos los aliados
+
+                        //Se ha escogido una habilidad que selecciona a todos los aliados
+                        case 2: 
                             EditorGUILayout.BeginHorizontal();
                             EditorGUILayout.LabelField("Healing:");
                             damage = EditorGUILayout.IntField(damage);
                             EditorGUILayout.EndHorizontal();
                             break;
+
+                        //Se ha escogido una habilidad que selecciona a todos los objetivos (amigos o enemigos del mapa)
                         case 3:
-                            //Se ha escogido una habilidad que selecciona a todos los objetivos (amigos o enemigos del mapa)
                             EditorGUILayout.BeginHorizontal();
                             EditorGUILayout.LabelField("Damage:");
                             damage = EditorGUILayout.IntField(damage);
                             EditorGUILayout.EndHorizontal();
                             break;
+
+                        //Se ha escogido una habilidad que selecciona en area
                         case 4:
                             GUILayout.BeginHorizontal();
                             EditorGUILayout.LabelField("Type of damage");
@@ -157,14 +201,6 @@ public class BHEditor : EditorWindow
 
                             if (area > 0)
                             {
-
-                                /*
-                                 * intento de crear una nueva ventana para definir el area, no funciona
-                                area = 0;
-                                // Get existing open window or if none, make a new one:
-                                AreaEditor window = (AreaEditor)EditorWindow.GetWindow(typeof(AreaEditor));
-                                window.Show();
-                                */
 
                                 EditorGUILayout.BeginHorizontal();
                                 EditorGUILayout.LabelField("Distance:");
@@ -254,11 +290,10 @@ public class BHEditor : EditorWindow
                         EditorGUILayout.BeginHorizontal();
                         //el nombre no se puede modificar porque es la clave de la base de datos
                         EditorGUILayout.LabelField(skill.getName());
-                        skill.changeName(skillName);
 
                         string skillDescription1 = EditorGUILayout.TextField(skill.getDescription());
                         skill.changeDescription(skillDescription1);
-                        int selectedSkillType1 = EditorGUILayout.Popup(selectedSkillType, skillType);
+                        selectedSkillType1 = EditorGUILayout.Popup(selectedSkillType1, skillType);
                         int damage1 = EditorGUILayout.IntField(skill.getDamage());
                         skill.changeSkillDamage(damage1);
                         int distance1 = EditorGUILayout.IntField(skill.getDistance());
@@ -272,41 +307,12 @@ public class BHEditor : EditorWindow
                             //Ha pulsado borrar boton
                             this.skills.deleteSkill(skill);
                             SkillsDB.Instance.deleteSkill(skill);
+                            Repaint();
                         }
 
 
                         EditorGUILayout.EndHorizontal();
                     }
-
-
-                       /* for (int i = 0; i < this.skills.getSize(); i++)
-                    {
-                        Skill skill = this.skills.getHabilidad(i);
-                        EditorGUILayout.BeginHorizontal();
-                        skillName = EditorGUILayout.TextField(skill.getName());
-                        skill.changeName(skillName);
-
-                        string skillDescription1 = EditorGUILayout.TextField(skill.getDescription());
-                        skill.changeDescription(skillDescription1);
-                        int selectedSkillType1 =  EditorGUILayout.Popup(selectedSkillType, skillType);
-                        int damage1 = EditorGUILayout.IntField(skill.getDamage());
-                        skill.changeSkillDamage(damage1);
-                        int distance1 = EditorGUILayout.IntField(skill.getDistance());
-                        skill.changeDistance(distance1);
-
-
-                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
-                        {
-                            //Ha pulsado borrar boton
-                            this.skills.deleteSkill(skill);
-                            SkillsDB.Instance.deleteSkill(skill);
-                        }
-
-
-                        EditorGUILayout.EndHorizontal();
-
-                    }
-                    */
 
                     EditorGUILayout.BeginHorizontal("Box");
                     if (GUILayout.Button("Back to Menu", GUILayout.Width(100), GUILayout.Height(50)))

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BancoHabilidades : MonoBehaviour {
-    [SerializeField]
+public class BancoHabilidades {
+    
     private List<Skill> habilidadesDisponibles = new List<Skill>();
 
     // Use this for initialization
