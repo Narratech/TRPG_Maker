@@ -2,26 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// THINGS SPECS SHOULD HAVE:
-// ...
-
-public class SpecTemplate: Template
+public class ItemTemplate: Template 
     {
     // Attributes defined in templates
     // ...
     // Attributes defined in instances
-    
-    public SpecTemplate(string name, string description/*, Sprite logo*/, List<Formula> formulas, List<Template> slots): 
-        base(name,description/*,logo*/,formulas,slots)
+    // ...
+
+    public ItemTemplate(string nameId, string description/*, Sprite logo*/, List<Formula> formulas, List<Template> slots): 
+        base(nameId,description/*,logo*/,formulas,slots)
         {
         // Attributes defined in templates
         // ...
         // Attributes defined in instances
+        // ...
         }
 
     public new void print()
         {
-        Debug.Log("I'm a SpecTemplate");
+        Debug.Log("I'm a ItemTemplate");
         }
 
     }

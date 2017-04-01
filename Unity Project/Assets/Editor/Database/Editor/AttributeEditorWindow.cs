@@ -5,19 +5,19 @@ using System.Collections.Generic;
 
 public class AttributeEditorWindow: EditorWindow
     {
-    // Current attribute values and container
+    // Current attribute values and container for the values
     bool attribIsCore;  // 'true' if is a core attribute
-    string attribLabel;  // Three letters identifier
-    string attribName;  // Long identifier
-    string attribDescription;
-    int attribMinValue;
-    int attribMaxValue;
-    Attribute temporal;
-    // Attributes in database
+    string attribId;  // Three letters identifier for the attribute
+    string attribName;  // Name of the attribute readable by humans
+    string attribDescription;  // Description of the attribute
+    int attribMinValue;  // Minimum value the attribute can have
+    int attribMaxValue;  // Maximum value the attribute can have
+    Attribute temporal;  // Temporal container for the Attribute
+    // Attributes from database
     List<string> attribsInDatabaseList;  // List of attributes identifiers (string) loaded from database
     string[] attribsInDatabaseArray;  // The same list in aray format for the Editor
     int attribCount;  // Number of real elements in the array
-    int selectedAttrib;  // Selected attribute to delete
+    int selectedAttrib;  // Selected attribute to edit/delete
 
     // Constructor
     public AttributeEditorWindow()
@@ -37,9 +37,9 @@ public class AttributeEditorWindow: EditorWindow
     void OnGUI()
         {
         // Events
-        // Left mouse click
+        // Left mouse click on ADD/DELETE button
         if(Event.current.isMouse && Event.current.type == EventType.mouseDown && Event.current.button == 0)
-            reloadAttribsFromDatabase();
+            loadAttribsFromDatabase();
         // Zones
         // Selection zone
         EditorGUILayout.BeginVertical("Box");
@@ -50,16 +50,16 @@ public class AttributeEditorWindow: EditorWindow
             {
             if(selectedAttrib==0)  // if 'selectedAttrib' is '<NEW>' then reset the fields
                 resetFields();
-            else  // else if 'selectedAttrib' exists then manage it directly from database
+            else  // else if 'selectedAttrib' exists then manage it directly from database through 'temporal' container
                 temporal=Database.Instance.attributes[attribsInDatabaseArray[selectedAttrib]];
             }
         EditorGUILayout.EndVertical();
         // Edit (add, modify and delete) zone
         EditorGUILayout.BeginVertical("Box");
-        if(selectedAttrib==0)  // if 'selectedAttrib' is '<NEW>' then allow to create a label
-            temporal.label=EditorGUILayout.TextField("Attribute label",temporal.label);
-        else  // else if 'selectedAttrib' exists then do not allow to create a existing label
-            EditorGUILayout.LabelField("Attribute label                 " + temporal.label);
+        if(selectedAttrib==0)  // if 'selectedAttrib' is '<NEW>' then allow to create a id
+            temporal.id=EditorGUILayout.TextField("Attribute id",temporal.id);
+        else  // else if 'selectedAttrib' exists then do not allow to create a existing id
+            EditorGUILayout.LabelField("Attribute id                      " + temporal.id);
         temporal.name=EditorGUILayout.TextField("Attribute name",temporal.name);
         temporal.description=EditorGUILayout.TextField("Attribute description",temporal.description,GUILayout.Height(50));
         temporal.minValue=EditorGUILayout.IntField("Min value",temporal.minValue);
@@ -99,19 +99,19 @@ public class AttributeEditorWindow: EditorWindow
         {       
         // Current attributes and container
         attribIsCore=false;
-        attribLabel="Enter your attribute label here";
+        attribId="Enter your attribute id here";
         attribName="Enter your attribute name here";
         attribDescription="Enter your attribute description here";
         attribMinValue=1;
         attribMaxValue=100;
-        temporal=new Attribute(attribIsCore, attribLabel,attribName,attribDescription, attribMaxValue, attribMinValue);
-        // Attributes in database
-        reloadAttribsFromDatabase();
+        temporal=new Attribute(attribIsCore,attribId,attribName,attribDescription,attribMinValue,attribMaxValue);
+        // Attributes from database
+        loadAttribsFromDatabase();
         attribCount=attribsInDatabaseList.Count;
         selectedAttrib=0;
         }
 
-    private void reloadAttribsFromDatabase()
+    private void loadAttribsFromDatabase()
         {
         attribsInDatabaseList=new List<string>(Database.Instance.getAttribIdentifiers());
         attribsInDatabaseList.Insert(0,"<NEW>");
