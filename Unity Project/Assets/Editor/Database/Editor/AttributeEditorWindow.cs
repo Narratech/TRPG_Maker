@@ -27,7 +27,7 @@ public class AttributeEditorWindow: EditorWindow
         }
 
     // Methods
-    [MenuItem("Window/Attribute Editor")]
+    [MenuItem("TRPG/Database/Attribute Editor")]
     static void CreateWindow()
         {
         AttributeEditorWindow window = (AttributeEditorWindow)EditorWindow.GetWindow(typeof(AttributeEditorWindow));

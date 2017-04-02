@@ -18,9 +18,12 @@ public class ItemTemplate: Template
         // ...
         }
 
-    public new void print()
+    public void toConsole()
         {
-        Debug.Log("I'm a ItemTemplate");
+        Debug.Log(nameId);
+        Debug.Log(description);
+        Debug.Log(formulas.Count);
+        Debug.Log(slots.Count);
         }
 
     }

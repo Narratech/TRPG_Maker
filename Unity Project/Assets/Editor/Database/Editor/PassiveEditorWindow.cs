@@ -11,7 +11,7 @@ public class PassiveEditorWindow : EditorWindow
         }
 
     // Methods
-    [MenuItem("Window/Passive Editor")]
+    [MenuItem("TRPG/Database/Passive Editor")]
     static void CreateWindow()
         {
         PassiveEditorWindow window = (PassiveEditorWindow)EditorWindow.GetWindow(typeof(PassiveEditorWindow));

@@ -23,7 +23,7 @@ class Database
         items=new Dictionary<string, ItemTemplate>();
         passives=new Dictionary<string, PassiveTemplate>();
         // Creating example database
-        createExampleDatabase();
+        createExampleDatabase(); 
         }  
     
     // Properties    
@@ -39,8 +39,7 @@ class Database
     private void createExampleDatabase()
         // Creates an Example Database for testing purpouses. Typically called from constructor. It follows
         // the way an user would create things from editor.
-        {        
-        Debug.Log("Creating example database!");
+        {
         // Filling core core 'attributes' (exist in every RPG)
         Attribute level=new Attribute(true,"LVL","Level","Character level",1,100);
         Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
@@ -198,19 +197,36 @@ class Database
         // AssetDatabase.FindAssets("t:Mitipo");
         }
 
-    public bool addItem(ItemTemplate it)
+    public bool addItemTemplate(ItemTemplate it)
         // Adds a ItemTemplate to the database. The idea is that this method will be called from 
-        // Editor when you CREATE/MODIFY an Item
-        {
-        /*
-        Debug.Log(items["Sword"].nameId);
-        Debug.Log(it.nameId);
-        */    
+        // Editor when you CREATE an Item
+        {  
         bool canAdd=false;
         canAdd=items.ContainsValue(it) ? false : true;
         if (canAdd)
             items.Add(it.nameId,it);
         return canAdd;
+        }
+
+    public bool modifyItemTemplate(ItemTemplate it)
+        // Adds a ItemTemplate to the database. The idea is that this method will be called from 
+        // Editor when you MODIFY an Item
+        {  
+        bool canModify=false;
+        canModify=items.ContainsKey(it.nameId) ? true : false;
+        if (canModify)
+            {
+            items.Remove(it.nameId);
+            items.Add(it.nameId,it);
+            }
+        return canModify;
+        }
+
+    public bool deleteItemTemplate(string nameId)
+        {
+        // Deletes an ItemTemplate. This method will be called from Editor when you DELETE an Item
+        items.Remove(nameId);
+        return false;
         }
 
     public bool addTemplate(Template t)
