@@ -112,6 +112,9 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="NCalc">
+      <HintPath>Assets\dll\NCalc.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity Project.csproj">
@@ -121,6 +124,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\BancoHabilidades.cs" />
+    <Compile Include="Assets\Editor\Character\CharacterConstructor.cs" />
+    <Compile Include="Assets\Editor\Character\CharacterSheet.cs" />
+    <Compile Include="Assets\Editor\Character\Editor\CharacterEditorWindow.cs" />
+    <Compile Include="Assets\Editor\Character\FormulaManager.cs" />
+    <Compile Include="Assets\Editor\Character\FormulaPool.cs" />
     <Compile Include="Assets\Editor\Database\Attribute.cs" />
     <Compile Include="Assets\Editor\Database\Database.cs" />
     <Compile Include="Assets\Editor\Database\Editor\AttributeEditorWindow.cs" />

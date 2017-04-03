@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PassiveEditorWindow : EditorWindow
+public class PassiveEditorWindow: EditorWindow
     {
     // Constructor
     public PassiveEditorWindow()
