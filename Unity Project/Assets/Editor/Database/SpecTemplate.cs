@@ -11,8 +11,8 @@ public class SpecTemplate: Template
     // ...
     // Attributes defined in instances
     
-    public SpecTemplate(string name, string description/*, Sprite logo*/, List<Formula> formulas, List<Template> slots): 
-        base(name,description/*,logo*/,formulas,slots)
+    public SpecTemplate(string nameId, string description/*, Sprite logo*/, List<Formula> formulas, List<Template> slots): 
+        base(nameId,description/*,logo*/,formulas,slots)
         {
         // Attributes defined in templates
         // ...

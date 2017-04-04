@@ -51,7 +51,7 @@ public class SpecEditorWindow: EditorWindow
         }
 
     // Methods
-    [MenuItem("Window/Specialization Editor")]
+    [MenuItem("TRPG/Database/Specialization Editor")]
     static void CreateWindow()
         {
         SpecEditorWindow window = (SpecEditorWindow)EditorWindow.GetWindow(typeof(SpecEditorWindow));

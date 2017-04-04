@@ -16,8 +16,8 @@ public class PassiveTemplate: Template
     // Attributes defined in instances
     // ...
 
-    public PassiveTemplate(string name, string description/*, Sprite logo*/, List<Formula> formulas, List<Template> slots): 
-        base(name,description/*,logo*/,formulas,slots)
+    public PassiveTemplate(string nameId, string description/*, Sprite logo*/, List<Formula> formulas, List<Template> slots): 
+        base(nameId,description/*,logo*/,formulas,slots)
         {
         // Attributes defined in templates
         // ...
