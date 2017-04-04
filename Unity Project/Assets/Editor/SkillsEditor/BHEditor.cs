@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BHEditor : EditorWindow
 {
-    private static int MAX_REQUIREMENTS = 1000;
+    private static int MAX_REQUIREMENTS = 100;
 
 
     private int damage = 0;
@@ -330,16 +330,6 @@ public class BHEditor : EditorWindow
                         skill.changeDistance(distance1);
 
 
-                        SkillsDB.Instance.updateSkill(skill);
-
-                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
-                        {
-                            //Ha pulsado borrar boton
-                            this.skills.deleteSkill(skill);
-                            SkillsDB.Instance.deleteSkill(skill);
-                            Repaint();
-                        }
-
 
                         //requisitos para la habilidad
                         EditorGUILayout.BeginVertical();
@@ -371,10 +361,24 @@ public class BHEditor : EditorWindow
                             }
 
                         }
+
+
+                        SkillsDB.Instance.updateSkill(skill);
+
+
                         EditorGUILayout.EndVertical();
 
+                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
+                        {
+                            //Ha pulsado borrar boton
+                            this.skills.deleteSkill(skill);
+                            SkillsDB.Instance.deleteSkill(skill);
+
+                        }
 
                         EditorGUILayout.EndHorizontal();
+
+                       
                     }
 
                     EditorGUILayout.BeginHorizontal("Box");
@@ -425,7 +429,7 @@ private void selectColor(bool active)
         requisito = "Requirement";
         requisitos = new string[MAX_REQUIREMENTS];
         selectedRequirement = new int[MAX_REQUIREMENTS];
-        skillRequirements.Clear();
+        
         numberRequirements = 0;
         activeRequirements = true;
     }
