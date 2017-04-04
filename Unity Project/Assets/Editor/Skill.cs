@@ -191,9 +191,12 @@ public string changeDescRQ(string description, int skill)
        return this.requirement[skill].changeDescRQ(description);
     }
 
-public void removeRQ(int position)
+public void removeRQ(SkillRequirement position)
     {
-        this.requirement[position] = null;
+        SkillRequirement remove = this.requirement.Find(x => x.getTypeRQ() == position.getTypeRQ());
+        this.requirement.Remove(remove);
+        this.requirements--;
+
     }
 
 }

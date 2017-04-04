@@ -71,4 +71,6 @@ public class BancoHabilidades {
     {
         this.habilidadesDisponibles.Remove(deletedskill);
     }
+
+
 }

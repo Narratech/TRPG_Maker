@@ -28,7 +28,7 @@ public class BHEditor : EditorWindow
     int[] selectedSkillTypes;
 
 
-    string requisito = "Requirement";
+    
     private string[] requirements = new string[] { "Level Requirement", "Specialization Requirement", "Class Requirement" };
     private int[] selectedRequirement = new int[MAX_REQUIREMENTS];
     private List<SkillRequirement> skillRequirements = new List<SkillRequirement>();
@@ -162,12 +162,7 @@ public class BHEditor : EditorWindow
 
                                         if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(30)))
                                         {
-                                            SkillRequirement encontrada = skillRequirements.Find(x => x.getTypeRQ() == require.getTypeRQ());
-                                            if (encontrada != null){
-                                                 skillRequirements.Remove(encontrada);
-                                                 skillRequirements.Add(require);
-                                            }
-                                            else skillRequirements.Add(require);
+                                            skillRequirements.Add(require);
 
                                         }
                                       
@@ -309,6 +304,7 @@ public class BHEditor : EditorWindow
 
                     Skill[] savedSkills = SkillsDB.Instance.getSavedSkills();
                     selectedSkillTypes = new int[savedSkills.Length];
+                    int[,] selectedRequirements = new int[savedSkills.Length, MAX_REQUIREMENTS];
                     for (int i = 0; i < savedSkills.Length; i++)
                     {
                         Skill skill = savedSkills[i];
@@ -335,24 +331,31 @@ public class BHEditor : EditorWindow
                         EditorGUILayout.BeginVertical();
                         activeRequirements = EditorGUILayout.Foldout(activeRequirements, "Requirements");
 
+
                         if (activeRequirements)
                         {
                             if (skill.numberRequirements() > 0)
                             {
+                                
                                 for (int j = 0; j < skill.numberRequirements(); j++)
                                 {
                                     EditorGUILayout.BeginHorizontal();
-                                    // selectedRequirement[j] = EditorGUILayout.Popup(selectedRequirement[j], requirements);
-                                    skill.changeTypeRQ(EditorGUILayout.Popup(skill.getTypeRQ(j), requirements), j);
+                                   
+                                    selectedRequirements[i,j] = skill.getTypeRQ(j);
+                                    selectedRequirements[i,j] = EditorGUILayout.Popup(selectedRequirements[i,j], requirements); 
+                                    skill.changeTypeRQ(selectedRequirements[i,j], j);
+
                                     skill.changeDescRQ(EditorGUILayout.TextField(skill.getDescRQ(j)), j);
 
                                     SkillRequirement require = new SkillRequirement(skill.getTypeRQ(j), skill.getDescRQ(j));
                                    
                                     if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
                                     {
-                                        skill.removeRQ(j);
-                                        skillRequirements.Remove(require);
+
+                                        skill.removeRQ(require);
                                         numberRequirements--;
+                                        SkillsDB.Instance.updateSkill(skill);
+
                                     }
 
                                     EditorGUILayout.EndHorizontal();
@@ -376,9 +379,11 @@ public class BHEditor : EditorWindow
 
                         }
 
+
                         EditorGUILayout.EndHorizontal();
 
-                       
+                        
+
                     }
 
                     EditorGUILayout.BeginHorizontal("Box");
@@ -426,7 +431,6 @@ private void selectColor(bool active)
         selectedSkillType = 0;
         selectedSkillType1 = 0;
         selectedSkillTypes = new int[0];
-        requisito = "Requirement";
         requisitos = new string[MAX_REQUIREMENTS];
         selectedRequirement = new int[MAX_REQUIREMENTS];
         
