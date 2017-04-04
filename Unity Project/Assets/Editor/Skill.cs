@@ -21,7 +21,13 @@ public class Skill {
     //Definir el tipo de habilidad, ya sea area, unitarget...
     private string type;
 
-    private SkillRequirement[] requirement;
+    private int TypeSkill;
+
+
+    private List<SkillRequirement> requirement = new List<SkillRequirement>();
+    private int requirements = 0;
+    
+    
 
 
     //Dependiendo de como vaya desarrollandose
@@ -32,15 +38,15 @@ public class Skill {
 
 
     //Constructora básica 
-    public Skill(string name, string description, string skillType, int damage, int distance)
+    public Skill(string name, string description, string skillType, int damage, int distance, List<SkillRequirement> requirements, int requirementsCreated)
     {
         this.name = name;
         this.description = description;
         this.type = skillType;
         this.damage = damage;
         this.distance = distance;
-
-
+        this.requirement = requirements;
+        this.requirements = requirementsCreated;
     }
     
 
@@ -73,7 +79,7 @@ public class Skill {
         
     }
 
-
+    //Getters
     public string getName()
     {
         return this.name;
@@ -84,9 +90,18 @@ public class Skill {
         return this.description;
     }
 
-    public string getTypeDamage()
+    public int getTypeDamage()
     {
-        return this.type;
+        if(type.Equals("One Target"))
+            return 0;
+        else if (type.Equals("All Enemies"))
+            return 1;
+        else if (type.Equals("All Allies"))
+            return 2;
+        else if (type.Equals("All Map"))
+            return 3;
+        else
+            return 4;
     }
 
     public int getDamage()
@@ -100,6 +115,19 @@ public class Skill {
 
     }
 
+    public int getTypeRQ(int numberRQ)
+    {
+        return this.requirement[numberRQ].getTypeRQ();
+    }
+
+    public string getDescRQ(int numberRQ)
+    {
+        return this.requirement[numberRQ].getRequirement();
+    }
+
+
+
+    //setters
 
     public void changeName(string name)
     {
@@ -120,4 +148,52 @@ public class Skill {
     {
         this.distance = distance;
     }
+
+    public void changeTypeSkill(int type)
+    {
+        switch (type)
+        {
+            case 0:
+                this.type = "One Target";
+                break;
+            case 1:
+                this.type = "All Enemies";
+                break;
+            case 2:
+                this.type = "All Allies";
+                break;
+            case 3:
+                this.type = "All Map";
+                break;
+            case 4:
+                this.type = "Area";
+                break;
+            default:
+                break;
+
+        }
+    }
+
+public int numberRequirements()
+    {
+        return this.requirements;
+    }
+
+
+public int changeTypeRQ(int type, int skill)
+    {
+       return this.requirement[skill].changeTypeRQ(type);
+    }
+
+    
+public string changeDescRQ(string description, int skill)
+    {
+       return this.requirement[skill].changeDescRQ(description);
+    }
+
+public void removeRQ(int position)
+    {
+        this.requirement[position] = null;
+    }
+
 }
