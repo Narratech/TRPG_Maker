@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BHEditor : EditorWindow
 {
-    private static int MAX_REQUIREMENTS = 1000;
+    private static int MAX_REQUIREMENTS = 5;
 
 
     private int damage = 0;
@@ -22,12 +22,19 @@ public class BHEditor : EditorWindow
     private string[] skillType = new string[] { "One Target", "All Enemies", "All Allies", "All Map", "Area" };
     private int selectedSkillType;
     private string[] skillType1 = new string[] { "Healing", "Damage", "Both" };
+    //para la creacion de habilidad
     int selectedSkillType1;
+    //para la edicion de habilidades
+    int[] selectedSkillTypes;
 
+
+    
     private string[] requirements = new string[] { "Level Requirement", "Specialization Requirement", "Class Requirement" };
     private int[] selectedRequirement = new int[MAX_REQUIREMENTS];
+    private List<SkillRequirement> skillRequirements = new List<SkillRequirement>();
     int numberRequirements = 0;
     bool activeRequirements = true;
+    string[] requisitos = new string[MAX_REQUIREMENTS];
 
     List<Vector2> activeBoxes = new List<Vector2>();
 
@@ -133,21 +140,33 @@ public class BHEditor : EditorWindow
 
                                 if (GUILayout.Button("Add Requirement"))
                                     numberRequirements = numberRequirements + 1;
-                            
+                                    
                                 if (numberRequirements > 0)
                                 {
-                                    for(int i = 0; i < numberRequirements; i++)
+
+                                    for (int i = 0; i < numberRequirements; i++)
                                     {
                                         EditorGUILayout.BeginHorizontal();
                                         selectedRequirement[i] = EditorGUILayout.Popup(selectedRequirement[i], requirements);
-                                        string requisito = EditorGUILayout.TextField("Requirement");
+                                        requisitos[i] = EditorGUILayout.TextField(requisitos[i]);
 
+                                        SkillRequirement require = new SkillRequirement(selectedRequirement[i], requisitos[i]);
+                                        
 
                                         if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
                                         {
                                             //Ha pulsado borrar boton
+                                            skillRequirements.Remove(require);
                                             numberRequirements--;
                                         }
+
+                                        if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(30)))
+                                        {
+                                            skillRequirements.Add(require);
+
+                                        }
+                                      
+
 
                                         EditorGUILayout.EndHorizontal();
 
@@ -261,7 +280,7 @@ public class BHEditor : EditorWindow
                         setDefaults();
                         step = 0;
                     }
-                    else if (GUILayout.Button("Save Skill", GUILayout.Width(100), GUILayout.Height(50)))
+                    else if (GUILayout.Button("Create Skill", GUILayout.Width(100), GUILayout.Height(50)))
                     {
                         // Mensaje de salvado! -> aceptar -> step 1
                         saveSkill();
@@ -284,6 +303,9 @@ public class BHEditor : EditorWindow
                     EditorGUILayout.EndHorizontal();
 
                     Skill[] savedSkills = SkillsDB.Instance.getSavedSkills();
+                    selectedSkillTypes = new int[savedSkills.Length];
+                    int[,] selectedRequirements = new int[savedSkills.Length, MAX_REQUIREMENTS];
+                    string[,] descriptionRequirements = new string[savedSkills.Length, MAX_REQUIREMENTS];
                     for (int i = 0; i < savedSkills.Length; i++)
                     {
                         Skill skill = savedSkills[i];
@@ -291,27 +313,80 @@ public class BHEditor : EditorWindow
                         //el nombre no se puede modificar porque es la clave de la base de datos
                         EditorGUILayout.LabelField(skill.getName());
 
+                        //changing the description
                         string skillDescription1 = EditorGUILayout.TextField(skill.getDescription());
                         skill.changeDescription(skillDescription1);
-                        selectedSkillType1 = EditorGUILayout.Popup(selectedSkillType1, skillType);
+                        //changingtype of damage
+                        selectedSkillTypes[i] = EditorGUILayout.Popup(skill.getTypeDamage(), skillType);
+                        skill.changeTypeSkill(selectedSkillTypes[i]);
+                        //changing amount of damage
                         int damage1 = EditorGUILayout.IntField(skill.getDamage());
                         skill.changeSkillDamage(damage1);
+                        //changing distance
                         int distance1 = EditorGUILayout.IntField(skill.getDistance());
                         skill.changeDistance(distance1);
 
 
+
+                        //requisitos para la habilidad
+                        EditorGUILayout.BeginVertical();
+                        activeRequirements = EditorGUILayout.Foldout(activeRequirements, "Requirements");
+
+
+                        if (activeRequirements)
+                        {
+                            if (skill.numberRequirements() > 0)
+                            {
+                                
+                                for (int j = 0; j < skill.numberRequirements(); j++)
+                                {
+                                    EditorGUILayout.BeginHorizontal();
+                                   
+                                    selectedRequirements[i,j] = skill.getTypeRQ(j);
+                                    selectedRequirements[i,j] = EditorGUILayout.Popup(selectedRequirements[i,j], requirements); 
+                                    skill.changeTypeRQ(selectedRequirements[i,j], j);
+
+                                    descriptionRequirements[i, j] = skill.getDescRQ(j);
+                                    descriptionRequirements[i, j] = EditorGUILayout.TextField(skill.getDescRQ(j));
+                                    skill.changeDescRQ(descriptionRequirements[i, j], j);
+
+                                    SkillRequirement require = new SkillRequirement(skill.getTypeRQ(j), skill.getDescRQ(j));
+                                   
+                                    if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
+                                    {
+
+                                        skill.removeRQ(require);
+                                        numberRequirements--;
+                                        SkillsDB.Instance.updateSkill(skill);
+
+                                    }
+
+                                    EditorGUILayout.EndHorizontal();
+
+                                }
+                            }
+
+                        }
+
+
                         SkillsDB.Instance.updateSkill(skill);
+
+
+                        EditorGUILayout.EndVertical();
 
                         if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
                         {
                             //Ha pulsado borrar boton
                             this.skills.deleteSkill(skill);
                             SkillsDB.Instance.deleteSkill(skill);
-                            Repaint();
+
                         }
 
 
                         EditorGUILayout.EndHorizontal();
+
+                        
+
                     }
 
                     EditorGUILayout.BeginHorizontal("Box");
@@ -349,11 +424,29 @@ private void selectColor(bool active)
     {
         // Limpia todas las variables y estructuras temporales para crear la spec y las vuelve a dejar a sus
         // defaults
+        damage = 0;
+        distance = 0;
+        step = 0;
+        area = 0;
+        skillName = "";
+        skillDescription = "";
+        selectedObjective = 0;
+        selectedSkillType = 0;
+        selectedSkillType1 = 0;
+        selectedSkillTypes = new int[0];
+        requisitos = new string[MAX_REQUIREMENTS];
+        selectedRequirement = new int[MAX_REQUIREMENTS];
+        this.skillRequirements = new List<SkillRequirement>();
+
+
+
+        numberRequirements = 0;
+        activeRequirements = true;
     }
 
     private void saveSkill()
     {
-        Skill skill = new Skill(this.skillName, this.skillDescription, this.skillType[this.selectedSkillType], this.damage,this.distance);
+        Skill skill = new Skill(this.skillName, this.skillDescription, this.skillType[this.selectedSkillType], this.damage,this.distance, this.skillRequirements, numberRequirements);
         this.skills.add(skill);
 
         SkillsDB.Instance.addSkill(skill);
