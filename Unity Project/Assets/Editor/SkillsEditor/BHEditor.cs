@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BHEditor : EditorWindow
 {
-    private static int MAX_REQUIREMENTS = 100;
+    private static int MAX_REQUIREMENTS = 5;
 
 
     private int damage = 0;
@@ -305,6 +305,7 @@ public class BHEditor : EditorWindow
                     Skill[] savedSkills = SkillsDB.Instance.getSavedSkills();
                     selectedSkillTypes = new int[savedSkills.Length];
                     int[,] selectedRequirements = new int[savedSkills.Length, MAX_REQUIREMENTS];
+                    string[,] descriptionRequirements = new string[savedSkills.Length, MAX_REQUIREMENTS];
                     for (int i = 0; i < savedSkills.Length; i++)
                     {
                         Skill skill = savedSkills[i];
@@ -345,7 +346,9 @@ public class BHEditor : EditorWindow
                                     selectedRequirements[i,j] = EditorGUILayout.Popup(selectedRequirements[i,j], requirements); 
                                     skill.changeTypeRQ(selectedRequirements[i,j], j);
 
-                                    skill.changeDescRQ(EditorGUILayout.TextField(skill.getDescRQ(j)), j);
+                                    descriptionRequirements[i, j] = skill.getDescRQ(j);
+                                    descriptionRequirements[i, j] = EditorGUILayout.TextField(skill.getDescRQ(j));
+                                    skill.changeDescRQ(descriptionRequirements[i, j], j);
 
                                     SkillRequirement require = new SkillRequirement(skill.getTypeRQ(j), skill.getDescRQ(j));
                                    
@@ -433,7 +436,10 @@ private void selectColor(bool active)
         selectedSkillTypes = new int[0];
         requisitos = new string[MAX_REQUIREMENTS];
         selectedRequirement = new int[MAX_REQUIREMENTS];
-        
+        this.skillRequirements = new List<SkillRequirement>();
+
+
+
         numberRequirements = 0;
         activeRequirements = true;
     }
