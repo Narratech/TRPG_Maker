@@ -5,16 +5,18 @@ using UnityEngine;
 
 class Database
     {
-    // Data
+    #region Attributes
+    // Database
     public Dictionary<string,Attribute> attributes;
     public Dictionary<string,SpecTemplate> specs;
     public Dictionary<string,ItemTemplate> items;
     public Dictionary<string,PassiveTemplate> passives;
-
+    private List<string> _templates;
     // Singleton
     protected static Database instance;
+    #endregion
 
-    // Constructor
+    #region Constructor
     protected Database()
         {
         // Initializing structures
@@ -22,29 +24,65 @@ class Database
         specs=new Dictionary<string, SpecTemplate>();
         items=new Dictionary<string, ItemTemplate>();
         passives=new Dictionary<string, PassiveTemplate>();
-        // Creating example database
+        _templates=new List<string>{ "Specialization", "Item", "Passive"};
+        //_templates.Add("Specialization");
+        //_templates.Add("Item");
+        //_templates.Add("Passive");
+        // Creating database
         createExampleDatabase(); 
-        }  
-    
-    // Properties    
+        //createAbbeyDemoDatabase();
+        //createEmptyDatabase();
+        }
+    #endregion
+
+    #region Properties
     public static Database Instance
         {
-        get
-            {
-            return instance == null ? instance = new Database() : instance;
-            }
+        get { return instance == null ? instance = new Database() : instance; }
         }
 
-    // Methods
+    public Dictionary<string,Attribute> Attributes
+        {
+        get { return attributes; }
+        set { attributes=value; }
+        }
+
+    public Dictionary<string,SpecTemplate> Specs
+        {
+        get { return specs; }
+        set { specs=value; }
+        }
+
+    public Dictionary<string,ItemTemplate> Items
+        {
+        get { return items; }
+        set { items=value; }
+        }
+
+    public Dictionary<string,PassiveTemplate> Passives
+        {
+        get { return passives; }
+        set { passives=value; }
+        }
+
+    public List<string> Templates
+        {
+        get { return _templates; }
+        set { value=_templates; }
+        }
+    #endregion
+
+    #region Methods
+    #region Creating Database: createExampleDatabase(), createAbbeyDemoDatabase(), createEmptyDatabase()
     private void createExampleDatabase()
         // Creates an Example Database for testing purpouses. Typically called from constructor. It follows
         // the way an user would create things from editor.
         {
         // Filling core core 'attributes' (exist in every RPG)
-        Attribute level=new Attribute(true,"LVL","Level","Character level",1,100);
+        Attribute experience=new Attribute(true,"EXP","Experience","Experience acumulated",1,100);
         Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
         Attribute mp=new Attribute(true,"MPS","MagicPoints","Character magic points",0,1000);
-        attributes.Add("LVL",level);
+        attributes.Add("EXP",experience);
         attributes.Add("HPS",hp);
         attributes.Add("MPS",mp);
         // Filling core 'attributes' (exist in every RPG slitghtly different)
@@ -61,12 +99,14 @@ class Database
         attributes.Add("CON",constitution);
         attributes.Add("CHA",charisma);
         // Filling derived 'attributes' 
+        Attribute level=new Attribute(false,"LVL","Level","Character level",1,100);
         Attribute damage=new Attribute(false,"dmg","Damage","Base damage for a weapon",1,10000);
         Attribute critical=new Attribute(false,"cri","Critical","Chance of a crtical strike",1,10000);
         Attribute trading=new Attribute(false,"tra","Trading","Trading capabilities",1,10000);
         Attribute dodging=new Attribute(false,"dod","Dodging","Dodging probability",1,10000);
         Attribute defense=new Attribute(false,"def","Defense","Defense probability",1,10000);
         Attribute fireDamage=new Attribute(false,"fdg","Fire damage","Fire damage for a weapon",1,10000);
+        attributes.Add("lvl",level);
         attributes.Add("dmg",damage);
         attributes.Add("cri",critical);
         attributes.Add("tra",trading);
@@ -155,6 +195,47 @@ class Database
         // END                
         Debug.Log("Example database created!");
         }
+
+    private void createAbbeyDemoDatabase()
+        // Creates a Database for the Abbey demo. Called from constructor. It follows
+        // the way an user would create things from editor.
+        {
+        // Filling core core 'attributes' (exist in every RPG)
+        Attribute experience=new Attribute(true,"EXP","Experience","Experience acumulated",1,100);
+        Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
+        Attribute mp=new Attribute(true,"MPS","MagicPoints","Character magic points",0,1000);
+        attributes.Add("EXP",experience);
+        attributes.Add("HPS",hp);
+        attributes.Add("MPS",mp);
+        // Filling core 'attributes' (exist in every RPG slitghtly different)
+        Attribute strength=new Attribute(true,"STR","Strength","Strength necessary to fisical strikes",1,100);
+        Attribute intelligence=new Attribute(true,"INT","Intelligence","Intelligence to trade and find things",1,100);
+        Attribute wisdom=new Attribute(true,"WIS","Wisdom","Wisdom helps you interacting and upgrading things",1,100);
+        Attribute dexterity=new Attribute(true,"DEX","Dexterity","Dexterity helps in a lot of things",1,100);
+        Attribute constitution=new Attribute(true,"CON","Constitution","Constitution is for wearing things",1,100);
+        Attribute charisma=new Attribute(true,"CHA","Charisma","Charisma could save you without using a weapon",1,100);
+        attributes.Add("STR",strength);
+        attributes.Add("INT",intelligence);
+        attributes.Add("WIS",wisdom);
+        attributes.Add("DEX",dexterity);
+        attributes.Add("CON",constitution);
+        attributes.Add("CHA",charisma);
+        Debug.Log("Abbey Demo database created!");
+        }
+
+    private void createEmptyDatabase()
+        // Creates an empty Database with its core 'attributes'. Called from constructor
+        {
+        // Filling core core 'attributes' (exist in every RPG)
+        Attribute experience=new Attribute(true,"EXP","Experience","Experience acumulated",1,100);
+        Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
+        Attribute mp=new Attribute(true,"MPS","MagicPoints","Character magic points",0,1000);
+        attributes.Add("EXP",experience);
+        attributes.Add("HPS",hp);
+        attributes.Add("MPS",mp);
+        Debug.Log("Empty database created!");
+        }
+    #endregion
 
     public List<string> getAttribIdentifiers()
         {
@@ -289,9 +370,21 @@ class Database
         return canDelete;
         }
 
+    public List<string> getAllowedSlots(Template t)
+        {
+        if (t is SpecTemplate)
+            return new List<string>{ "Specialization", "Item", "Passive" };
+        else if (t is ItemTemplate)
+            return new List<string>{ "Item", "Passive" };
+        else if (t is PassiveTemplate)
+            return new List<string>{ "Passives" };
+        else
+            return new List<string>{ "Template not supported" };
+        }
+
     public void print()
         {
         Debug.Log("I'm a database");
         }
-
+    #endregion
     }

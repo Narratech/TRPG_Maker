@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ItemEditorWindow: EditorWindow
     {
-    #region Local attributes
+    #region Attributes
     // Database instance
     Database d;
     // Constants
@@ -17,24 +17,24 @@ public class ItemEditorWindow: EditorWindow
     List<Formula> itemFormulas;  // Every formula that modifies attributes for this Template
     List<Template> itemSlots;  // Templates which this Template has
     ItemTemplate currentItemTemplate;  // Temporal container for the ItemTemplate we are editing
-    // Attribute related
-    List<string> attribsInDatabaseList;  // List of existing 'Attribute.id' in database
-    string[] attribsInDatabaseArray;  // The same list in array format for the Editor
     // Item related
     List<string> itemsInDatabaseList;  // List of item 'Item.nameId' in database
     string[] itemsInDatabaseArray;  // The same list in array format for the Editor
     int selectedItem;  // Position in Popup for selected item to add/modify/delete 
     // Formula|Item related
+    List<string> attribsInDatabaseList;  // List of existing 'Attribute.id' in database
+    string[] attribsInDatabaseArray;  // The same list in array format for the Editor
     List<int> formulasCountForEachItemList;  // Number of formulas each item in database has
     int[] formulasCountForEachItemArray;  // The same list in array format for the Editor
     int formulaCount;  // Number of formulas the item being added/modified/deleted currently has
     int[] selectedAttribInEachFormula;  // Position in Popup for selected Attribute in each formula
     string[] formulasArray;  // Formulas themselves
     // Slot|Item related
-    string[] slotTypesArray;  // Array of slot types (item, passive, spec) the item can add to himself 
-    int slotsCount;  // Number of slots the item (as container) has
-    int dbSlotsCount;  // Number of slots the item (in database) has
-    int[] selectedSlotTypeInEachSlot;  // Slot type for each slot
+    List<string> slotTypesAllowedList;  // List of slot types the item can add to himself 
+    string[] slotTypesAllowedArray;  // Array of slot types the item can add to himself 
+    int slotsCount;  // Number of slots the item being added/modified/deleted currently has
+    int[] selectedTemplateTypeInEachSlot;  // Position in Popup for selected Template type in each slot
+    //int[] selectedTemplateInEachSlot;  // Slot type for each slot
     #endregion
 
     #region Constructor
@@ -98,6 +98,10 @@ public class ItemEditorWindow: EditorWindow
         itemDescription=EditorGUILayout.TextField("Item description",itemDescription,GUILayout.Height(50));
         EditorGUILayout.EndVertical();
         #endregion
+        #region EJEMPLO DE LLAMAR GENERICO
+        //EditableModifierEditor.target = itemTemplate;
+        //EditableTemplateEditor.OnGUI();
+        #endregion
         #region Formulas zone
         /////////////////////
         EditorGUILayout.BeginVertical("Box");
@@ -123,13 +127,14 @@ public class ItemEditorWindow: EditorWindow
             slotsCount=0;
         else if (slotsCount>MAX_SLOTS)
             slotsCount=MAX_SLOTS;
-        EditorGUILayout.EndVertical();
         for (int i=0; i<slotsCount; i++)
             {
             EditorGUILayout.BeginHorizontal();
-            // TO DO
+            selectedTemplateTypeInEachSlot[i]=EditorGUILayout.Popup(selectedTemplateTypeInEachSlot[i],slotTypesAllowedArray,GUILayout.Width(70),GUILayout.Height(40));
+            //formulasArray[i]=EditorGUILayout.TextField("=",formulasArray[i]); 
             EditorGUILayout.EndHorizontal();  
             }
+        EditorGUILayout.EndVertical();
         #endregion
         #region Buttons zone
         ////////////////////
@@ -176,16 +181,18 @@ public class ItemEditorWindow: EditorWindow
     private void createEmptyItemTemplate()
         // Sets the fields to default in order to build a new ItemTemplate (<NEW> in selection Popup)
         {
+        // Item related
         itemNameId="Enter your item name id here";  // Info for textField
         itemDescription="Enter your item description here";  // Info for textField
+        // Formula|Item related
         List<Formula> itemFormulas=new List<Formula>();  // Empty list of formulas
-        List<Template> itemSlots=new List<Template>();  // Empty list of slots
         formulaCount=0;
         selectedAttribInEachFormula=new int[MAX_FORMULAS];
         formulasArray=new string[MAX_FORMULAS];
+        // Slot|Item related
+        List<Template> itemSlots=new List<Template>();  // Empty list of slots
         slotsCount=0;
-        slotTypesArray=new string[] {"Item","Passive","Specialization"};
-        selectedAttribInEachFormula=new int[MAX_SLOTS];
+        selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];
         }
 
     private void loadSelectedItemTemplate()
@@ -251,7 +258,11 @@ public class ItemEditorWindow: EditorWindow
 
     private void loadSlotsFromDatabase()
         {
-        // TO DO
+        Template t=new ItemTemplate();
+        slotTypesAllowedList=new List<string>(d.getAllowedSlots(t));
+        slotTypesAllowedArray=slotTypesAllowedList.ToArray();
+        //formulasCountForEachItemList=getFormulasCountForEachItem();
+        //formulasCountForEachItemArray=formulasCountForEachItemList.ToArray();
         }
     #endregion
 

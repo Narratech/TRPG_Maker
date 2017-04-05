@@ -11,6 +11,10 @@ public class Template
     public List<Template> slots;  // Templates which this Template has
     //public Sprite logo;
 
+    public Template()
+        {
+        }
+
     public Template(string nameId, string description/*, Sprite logo*/, List<Formula> formulas, List<Template> slots)
         {
         // Defined in templates
