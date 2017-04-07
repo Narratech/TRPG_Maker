@@ -9,18 +9,25 @@ public class ItemEditorWindow: EditorWindow
     // Database instance
     Database d;
     // Constants
+    private static int MAX_TAGS=30;
     private static int MAX_FORMULAS=10;
     private static int MAX_SLOTS=10;
     // Current item values and container for the values
-    string itemNameId;  // The name of the item identifies it
-    string itemDescription;  // Description of the item
-    List<Formula> itemFormulas;  // Every formula that modifies attributes for this Template
+    string itemNameId;  // The name of the ItemTemplate identifies it
+    string itemDescription;  // Description of the ItemTemplate
+    List<string> itemTags;  // Every tag that this ItemTemplate has
+    List<Formula> itemFormulas;  // Every formula that modifies attributes for this ItemTemplate
     List<Template> itemSlots;  // Templates which this Template has
     ItemTemplate currentItemTemplate;  // Temporal container for the ItemTemplate we are editing
     // Item related
     List<string> itemsInDatabaseList;  // List of item 'Item.nameId' in database
     string[] itemsInDatabaseArray;  // The same list in array format for the Editor
     int selectedItem;  // Position in Popup for selected item to add/modify/delete 
+    // Tags|Item related
+    List<string> tagsInDatabaseList;  // List of tags for ItemTemplate in database
+    string[] tagsInDatabaseArray;  // The same list in array format for the Editor
+    int[] selectedTag;  // Position in Popup for selected type tag in each tag
+    int tagsCount;  // Number of tags the item being added/modified/deleted currently has
     // Formula|Item related
     List<string> attribsInDatabaseList;  // List of existing 'Attribute.id' in database
     string[] attribsInDatabaseArray;  // The same list in array format for the Editor
@@ -38,7 +45,6 @@ public class ItemEditorWindow: EditorWindow
     #endregion
 
     #region Constructor
-    // Constructor
     public ItemEditorWindow()
         {
         d=Database.Instance;
@@ -48,7 +54,6 @@ public class ItemEditorWindow: EditorWindow
     #endregion
 
     #region Methods
-    // Methods
     #region GUI: CreateWindow(), OnGUI()
     // Unity menu
     [MenuItem("TRPG/Database/Item Editor")]
@@ -59,7 +64,7 @@ public class ItemEditorWindow: EditorWindow
         }
 
     void OnGUI()
-        {
+       { 
         #region Events
         // Events
         // Left mouse click on any button (ADD/MODIFY/DELETE)
@@ -69,7 +74,6 @@ public class ItemEditorWindow: EditorWindow
         #region Item selection zone
         ///////////////////////////
         EditorGUILayout.BeginVertical("Box");
-        itemsInDatabaseArray=itemsInDatabaseList.ToArray();
         EditorGUI.BeginChangeCheck();
         selectedItem=EditorGUILayout.Popup(selectedItem,itemsInDatabaseArray,GUILayout.Width(150));
         if(EditorGUI.EndChangeCheck())
@@ -82,8 +86,7 @@ public class ItemEditorWindow: EditorWindow
             else  // else if 'selectedItem' exists then load it from database to manage it
                 {
                 loadSelectedItemTemplate();
-                updateFormulasZone(selectedItem);
-                updateSlotsZone(selectedItem);
+                updateGUIZones(selectedItem);
                 }
             }
         EditorGUILayout.EndVertical();
@@ -97,6 +100,27 @@ public class ItemEditorWindow: EditorWindow
             EditorGUILayout.LabelField("Item name id                  "+itemNameId);
         itemDescription=EditorGUILayout.TextField("Item description",itemDescription,GUILayout.Height(50));
         EditorGUILayout.EndVertical();
+        #endregion
+        #region Tags zone
+        /////////////////
+        EditorGUILayout.BeginVertical("Box");
+        tagsCount=EditorGUILayout.IntField("Tags count",tagsCount);
+        if (tagsCount<0)
+            tagsCount=0;
+        else if (tagsCount>MAX_TAGS)
+            tagsCount=MAX_TAGS;
+        EditorGUILayout.BeginHorizontal();
+        for (int i=0; i<tagsCount; i++)
+            {
+            selectedTag[i]=EditorGUILayout.Popup(selectedTag[i],tagsInDatabaseArray,GUILayout.Width(70));
+            if ((i%5==4))
+                {
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();  
+                }
+            }
+        EditorGUILayout.EndHorizontal();  
+        EditorGUILayout.EndVertical();  
         #endregion
         #region EJEMPLO DE LLAMAR GENERICO
         //EditableModifierEditor.target = itemTemplate;
@@ -144,7 +168,7 @@ public class ItemEditorWindow: EditorWindow
             if (GUILayout.Button("ADD",GUILayout.Width(80),GUILayout.Height(80)))
                 {
                 constructCurrentItemTemplate();
-                if (d.addItemTemplate(currentItemTemplate))
+                if (d./*addTemplate(currentItemTemplate)*/addModDelTemplate(currentItemTemplate,"add"))
                     {
                     selectedItem=0;
                     loadInfoFromDatabase();
@@ -157,7 +181,7 @@ public class ItemEditorWindow: EditorWindow
             if (GUILayout.Button("MODIFY",GUILayout.Width(80),GUILayout.Height(80)))
                 {
                 constructCurrentItemTemplate();
-                if (d.modifyItemTemplate(currentItemTemplate))
+                if (d./*modifyTemplate(currentItemTemplate)*/addModDelTemplate(currentItemTemplate,"mod"))
                     {
                     selectedItem=0;
                     loadInfoFromDatabase();
@@ -166,10 +190,13 @@ public class ItemEditorWindow: EditorWindow
                 }
             if (GUILayout.Button("DELETE",GUILayout.Width(80),GUILayout.Height(80)))
                 {
-                d.deleteItemTemplate(itemNameId);
-                selectedItem=0;
-                loadInfoFromDatabase();
-                createEmptyItemTemplate();
+                constructCurrentItemTemplate();
+                if (d./*deleteTemplate(itemNameId)*/addModDelTemplate(currentItemTemplate,"del"))
+                    {
+                    selectedItem=0;
+                    loadInfoFromDatabase();
+                    createEmptyItemTemplate();
+                    }
                 }
             }
         EditorGUILayout.EndHorizontal();
@@ -179,11 +206,15 @@ public class ItemEditorWindow: EditorWindow
 
     #region ItemTemplate: createEmptyItemTemplate(), loadSelectedItemTemplate(), constructCurrentItemTemplate()
     private void createEmptyItemTemplate()
-        // Sets the fields to default in order to build a new ItemTemplate (<NEW> in selection Popup)
+        // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
+        // ADD/MODIFY/DELETE operation. Then fields and structures are ready for a new ItemTemplate
         {
         // Item related
         itemNameId="Enter your item name id here";  // Info for textField
         itemDescription="Enter your item description here";  // Info for textField
+        // Tags|Item related
+        tagsCount=0;
+        selectedTag=new int[MAX_TAGS];
         // Formula|Item related
         List<Formula> itemFormulas=new List<Formula>();  // Empty list of formulas
         formulaCount=0;
@@ -200,6 +231,7 @@ public class ItemEditorWindow: EditorWindow
         {
         itemNameId=d.items[itemsInDatabaseArray[selectedItem]].nameId; 
         itemDescription=d.items[itemsInDatabaseArray[selectedItem]].description;
+        itemTags=d.items[itemsInDatabaseArray[selectedItem]].tags;
         itemFormulas=d.items[itemsInDatabaseArray[selectedItem]].formulas;
         itemSlots=d.items[itemsInDatabaseArray[selectedItem]].slots;
         }
@@ -209,6 +241,12 @@ public class ItemEditorWindow: EditorWindow
         // mean constructing a new ItemTemplate or just modifying one that already exists in database 
         // (in this case destroys the old ItemTemplate in database and adds the new one)
         {
+        itemTags=new List<string>();
+        for (int i=0; i<tagsCount; i++)
+            {
+            string tag=tagsInDatabaseArray[selectedTag[i]];
+            itemTags.Add(tag);
+            }
         itemFormulas=new List<Formula>(); 
         for (int i=0; i<formulaCount; i++)
             {
@@ -220,14 +258,18 @@ public class ItemEditorWindow: EditorWindow
             {
             // TO DO
             }
-        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemFormulas,itemSlots);
+        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemTags,itemFormulas,itemSlots);
         }
     #endregion
 
     #region Database: loadInfoFromDatabase(), auxiliary methods
     private void loadInfoFromDatabase()
+        // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
+        // ADD/MODIFY/DELETE operation. Then you have the updated and necessary info from database 
+        // to create a new ItemTemplate
         {
         loadItemsFromDatabase();
+        loadTagsFromDatabase();
         loadAttribsFromDatabase();
         loadSlotsFromDatabase();
         }
@@ -236,6 +278,18 @@ public class ItemEditorWindow: EditorWindow
         {
         itemsInDatabaseList=new List<string>(d.getItemNames());
         itemsInDatabaseList.Insert(0,"<NEW>");
+        itemsInDatabaseArray=itemsInDatabaseList.ToArray();
+        }
+
+    private void loadTagsFromDatabase()
+        {
+        Dictionary<string,string> auxTags=d.Tags["Item"];
+        tagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxTags)
+            {
+            tagsInDatabaseList.Add(result.Value);
+            }
+        tagsInDatabaseArray=tagsInDatabaseList.ToArray();
         }
 
     private void loadAttribsFromDatabase()
@@ -266,18 +320,56 @@ public class ItemEditorWindow: EditorWindow
         }
     #endregion
 
-    #region Update GUI zones: updateFormulasZone(), updateSlotsZone(), auxiliary methods
+    #region GUI zones: updateGUIZones(), auxiliary methods
+    private void updateGUIZones(int selectedItem)
+        // Updates the fields in the Editor according to the item from database selected in the Item Popup.
+        // This item is identified by the 'selectedItem' integer
+        {
+        updateTagsZone(selectedItem);
+        updateFormulasZone(selectedItem);
+        updateSlotsZone(selectedItem);
+        }
+
+    private void updateTagsZone(int selectedItem)
+        {
+        tagsCount=itemTags.Count; 
+        for (int i=0; i<tagsCount; i++)
+            {
+            selectedTag[i]=bindTags(itemTags[i]);  // Attribute selected in each formula
+            }
+        }
+
+    private int bindTags(string tagStr)
+        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagStr> with its position in the local 
+        // list (used for the Editor) 'List<string> tagsInDatabaseList' returning the position itself
+        {
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        while(!found && i<tagsInDatabaseList.Count)
+            {
+            if (tagsInDatabaseList[i]==tagStr)
+                {
+                position=i;
+                found=true;
+                }
+            i++;
+            }
+        return position;
+        }
+
     private void updateFormulasZone(int selectedItem)
         {
         formulaCount=formulasCountForEachItemArray[selectedItem-1]; 
         for (int i=0; i<formulaCount; i++)
             {
-            selectedAttribInEachFormula[i]=bind(d.items[itemsInDatabaseList[selectedItem]].formulas[i].label);  // Attribute selected in each formula
+            selectedAttribInEachFormula[i]=bindFormulas(d.items[itemsInDatabaseList[selectedItem]].formulas[i].label);  // Attribute selected in each formula
             formulasArray[i]=d.items[itemsInDatabaseList[selectedItem]].formulas[i].formula;  // Formulas themselves
             }
         }
 
-    private int bind(string attrStr)
+    private int bindFormulas(string attrStr)
         // Binds the 'attrStr' which represents an 'Attribute.id' (LVL, HPS, MPS...) with its position in the local 
         // list (used for the Editor) 'List<string> attribsInDatabaseList' returning the position itself
         {
