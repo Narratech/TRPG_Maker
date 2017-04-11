@@ -13,7 +13,7 @@ public class ItemTemplate: Template
         {
         }
 
-    public ItemTemplate(string nameId, string description/*, Sprite logo*/, List<string> tags, List<Formula> formulas, List<Template> slots): 
+    public ItemTemplate(string nameId, string description, List<string> tags, List<Formula> formulas, List<Template> slots): 
         base(nameId,description/*,logo*/,tags,formulas,slots)
         {
         // Attributes defined in templates
@@ -29,5 +29,4 @@ public class ItemTemplate: Template
         Debug.Log(formulas.Count);
         Debug.Log(slots.Count);
         }
-
     }

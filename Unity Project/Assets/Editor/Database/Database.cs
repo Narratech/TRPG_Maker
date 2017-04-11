@@ -2,16 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// this version just uses tags with no hierarchy
+// future version should use tags in hierarchy (trees): http://stackoverflow.com/questions/942053/why-is-there-no-treet-class-in-net
 
 class Database
     {
     #region Attributes
-    // Database
-    public Dictionary<string,Attribute> attributes;
-    public Dictionary<string,SpecTemplate> specs;
-    public Dictionary<string,ItemTemplate> items;
-    public Dictionary<string,PassiveTemplate> passives;
-    Dictionary<string,Dictionary<string,string>> _tags;  // Tags per template. Example: tags["Item"]["Weapon"] returns "Weapon"
+    // Database elements
+    public Dictionary<string,Attribute> attributes;  // Every Attribute in Database
+    public Dictionary<string,SpecTemplate> specs;  // Every SpecTemplate in Database
+    Dictionary<string,ItemTemplate> _items;  // Every ItemTemplate in Database
+    public Dictionary<string,PassiveTemplate> passives;  // Every PassiveTemplate in Database
+    // Info to show and relate database elements
+    Dictionary<string,Dictionary<string,string>> _tags;  // Tags per template. Example: _tags["Item"]["Weapon"] returns "Weapon"
+    SlotsOpt _slotsOptions;  // Slots options  // Options per template type in slots
     List<string> _templates;  // The types of 'Template' stored in database
     // Singleton
     protected static Database instance;
@@ -23,7 +27,7 @@ class Database
         // Initializing structures
         attributes=new Dictionary<string, Attribute>();
         specs=new Dictionary<string, SpecTemplate>();
-        items=new Dictionary<string, ItemTemplate>();
+        _items=new Dictionary<string, ItemTemplate>();
         passives=new Dictionary<string, PassiveTemplate>();
         _templates=new List<string>{ "Specialization", "Item", "Passive" };
         // Creating database
@@ -53,8 +57,8 @@ class Database
 
     public Dictionary<string,ItemTemplate> Items
         {
-        get { return items; }
-        set { items=value; }
+        get { return _items; }
+        set { _items=value; }
         }
 
     public Dictionary<string,PassiveTemplate> Passives
@@ -74,6 +78,12 @@ class Database
         get { return _tags; }
         set { value=_tags; }
         }
+
+    public SlotsOpt SlotsOptions
+        {
+        get { return _slotsOptions; }
+        set { value=_slotsOptions; }
+        }
     #endregion
 
     #region Methods
@@ -82,8 +92,9 @@ class Database
         // Creates an Example Database for testing purpouses. Typically called from constructor. It follows
         // the way an user would create things from editor.
         {
-        // Filling the tags
+        // Filling the tags and options
         fillTags();
+        fillSlotOptions();
         // Filling core core 'attributes' (exist in every RPG)
         Attribute experience=new Attribute(true,"EXP","Experience","Experience acumulated",1,100);
         Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
@@ -119,7 +130,7 @@ class Database
         attributes.Add("dod",dodging);
         attributes.Add("def",defense);
         attributes.Add("fdg",fireDamage);
-        // Filling 'items'
+        // Filling '_items'
         // Sword item
         List<Formula> swordFormulas=new List<Formula>();
         swordFormulas.Add(new Formula("DEX","DEX+3",1));
@@ -129,7 +140,7 @@ class Database
         swordTags.Add("Weapon");
         swordTags.Add("Melee");
         ItemTemplate sword=new ItemTemplate("Sword","Common sword",swordTags,swordFormulas,null);
-        items.Add("Sword",sword);
+        _items.Add("Sword",sword);
         // Fire Sword item
         List<Formula> fireSwordFormulas=new List<Formula>();
         fireSwordFormulas.Add(new Formula("DEX","DEX+3",1));
@@ -140,7 +151,7 @@ class Database
         fireSwordTags.Add("Weapon");
         fireSwordTags.Add("Melee");
         ItemTemplate fireSword=new ItemTemplate("Fire sword","Fire sword",fireSwordTags,fireSwordFormulas,null);
-        items.Add("Fire sword",fireSword);
+        _items.Add("Fire sword",fireSword);
         // Axe item
         List<Formula> axeFormulas=new List<Formula>();
         axeFormulas.Add(new Formula("dmg","8",1));
@@ -149,7 +160,7 @@ class Database
         axeTags.Add("Weapon");
         axeTags.Add("Melee");
         ItemTemplate axe=new ItemTemplate("Axe","Common axe",axeTags,axeFormulas,null);
-        items.Add("Axe",axe);
+        _items.Add("Axe",axe);
         // Bow item
         List<Formula> bowFormulas=new List<Formula>();
         bowFormulas.Add(new Formula("dmg","2",1));
@@ -158,7 +169,7 @@ class Database
         bowTags.Add("Weapon");
         bowTags.Add("Ranged");
         ItemTemplate bow=new ItemTemplate("Bow","Common bow",bowTags,bowFormulas,null);
-        items.Add("Bow",bow);
+        _items.Add("Bow",bow);
         /*
         // Filling 'passives'
         // Kindness passive
@@ -221,7 +232,10 @@ class Database
     private void createAbbeyDemoDatabase()
         // Creates a Database for the Abbey demo. Called from constructor. It follows
         // the way an user would create things from editor.
-        {
+        {        
+        // Filling the tags and options
+        fillTags();
+        fillSlotOptions();
         // Filling core core 'attributes' (exist in every RPG)
         Attribute experience=new Attribute(true,"EXP","Experience","Experience acumulated",1,100);
         Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
@@ -259,17 +273,28 @@ class Database
         }
 
     private void fillTags()
-        // Fills the database with the tags that can be attached to any Template (ItemTemplate, PassiveTemplate,
-        // SpecTemplate)
+        // Fills the database with the tags that can be attached to certain Template (PassiveTemplate, ItemTemplate, 
+        // SpecTemplate). The tags for PassiveTemplate mean when the pasive happens and to whom is executed. The tags 
+        // for ItemTemplate mean what the item is or where it is equipped. The tags for SpecTemplate ...TO DO...
         {
         // Create tags container      
         _tags=new Dictionary<string,Dictionary<string,string>>();
+        // Create tags for PassiveTemplate
+        _tags.Add("Passive",new Dictionary<string, string>());
+        _tags["Passive"].Add("Permanent","Permanent");
+        _tags["Passive"].Add("Turn","Turn");
+        _tags["Passive"].Add("Time","Time");
+        _tags["Passive"].Add("Self","Self");
+        _tags["Passive"].Add("Enemy","Enemy");
+        _tags["Passive"].Add("Friend","Friend");
+        _tags["Passive"].Add("Enemy Group","Enemy Group");
+        _tags["Passive"].Add("Friend Group","Friend Group");
         // Create tags for ItemTemplate
         _tags.Add("Item",new Dictionary<string, string>());
-        _tags["Item"].Add("Wearable","Wearable");  // ItemTemplate is wearable (potions for example, are not)
-        _tags["Item"].Add("Weapon","Weapon");  // ItemTemplate is a weapon
-        _tags["Item"].Add("Melee","Melee");  // ItemTemplate is a melee weapon
-        _tags["Item"].Add("Ranged","Ranged");  // ItemTemplate is a ranged weapon
+        _tags["Item"].Add("Wearable","Wearable");
+        _tags["Item"].Add("Weapon","Weapon");
+        _tags["Item"].Add("Melee","Melee");
+        _tags["Item"].Add("Ranged","Ranged");
         _tags["Item"].Add("Cloth","Cloth");
         _tags["Item"].Add("Head","Head");
         _tags["Item"].Add("Chest","Chest");
@@ -278,17 +303,38 @@ class Database
         _tags["Item"].Add("Hands","Hands");
         _tags["Item"].Add("Finger","Finger");
         _tags["Item"].Add("Legs","Legs");
+        _tags["Item"].Add("Addon","Addon");
+        _tags["Item"].Add("Common","Common");
         _tags["Item"].Add("Special","Special");
-        // Create tags for PassiveTemplate
-        _tags.Add("Passive",new Dictionary<string, string>());
-        // TO DO
         // Create tags for SpecTemplate
         _tags.Add("Specialization",new Dictionary<string, string>());
+        // ...TO DO...
+        }
+
+    private void fillSlotOptions()
+        // Fills the database with the options that are shown when you add a slot to a Template you
+        // are editing (PassiveTemplate, ItemTemplate, SpecTemplate)
+        { 
+        // Create slots options container  
+        _slotsOptions=new SlotsOpt();
+        // Create slot options for PassiveTemplate
+        _slotsOptions.PassiveOptions.Add("When",new Dictionary<string,string>());
+        _slotsOptions.PassiveOptions["When"].Add("Permanent","Permanent");
+        _slotsOptions.PassiveOptions["When"].Add("Turn","Turn");
+        _slotsOptions.PassiveOptions["When"].Add("Time","Time");
+        _slotsOptions.PassiveOptions.Add("To whom",new Dictionary<string,string>());
+        _slotsOptions.PassiveOptions["To whom"].Add("Self","Self");
+        _slotsOptions.PassiveOptions["To whom"].Add("Enemy","Enemy");
+        _slotsOptions.PassiveOptions["To whom"].Add("Friend","Friend");
+        _slotsOptions.PassiveOptions["To whom"].Add("Enemy Group","Enemy Group");
+        _slotsOptions.PassiveOptions["To whom"].Add("Friend Group","Friend Group");
+        // Create slot options for ItemTemplate
+        // -Not needed (tags consulted)
+        // Create slot options for SpecTemplate
         // TO DO
         }
     #endregion
-
-
+    
     public List<string> getAttribIdentifiers()
         {
         // Retrieves the list of identifiers for every Attribute stored in the database Dictionary 'attributes'
@@ -302,9 +348,9 @@ class Database
 
     public List<string> getItemNames()
         {
-        // Retrieves the list of names (identifieres) for every ItemTemplate stored in the database Dictionary 'items'
+        // Retrieves the list of names (identifieres) for every ItemTemplate stored in the database Dictionary '_items'
         List<string> itemIdentifiers=new List<string>();
-        foreach (KeyValuePair<string,ItemTemplate> result in items)
+        foreach (KeyValuePair<string,ItemTemplate> result in _items)
             {
             itemIdentifiers.Add(result.Value.nameId);
             }
@@ -313,14 +359,14 @@ class Database
 
     public List<Formula> getItemFormulas(string nameId)
         {
-        // Retrieves the list of formulas (Formula) for a ItemTemplate stored in the database Dictionary 'items'
-        return items[nameId].formulas;
+        // Retrieves the list of formulas (Formula) for a ItemTemplate stored in the database Dictionary '_items'
+        return _items[nameId].formulas;
         }
 
     public List<Template> getItemSlots(string nameId)
         {
         // Retrieves the list of slots (Template) for a ItemTemplate stored in the database Dictionary 'items'
-        return items[nameId].slots;
+        return _items[nameId].slots;
         }
 
     public void loadDatabase()
@@ -340,24 +386,24 @@ class Database
             {
             if (order=="add")
                 {
-                canAct=items.ContainsValue(t as ItemTemplate) ? false : true;
+                canAct=_items.ContainsValue(t as ItemTemplate) ? false : true;
                 if (canAct)
-                    items.Add(t.nameId,t as ItemTemplate);
+                    _items.Add(t.nameId,t as ItemTemplate);
                 }
             else if (order=="mod")
                 {
-                canAct=items.ContainsKey(t.nameId) ? true : false;
+                canAct=_items.ContainsKey(t.nameId) ? true : false;
                 if (canAct)
                     {
-                    items.Remove(t.nameId);
-                    items.Add(t.nameId,t as ItemTemplate);
+                    _items.Remove(t.nameId);
+                    _items.Add(t.nameId,t as ItemTemplate);
                     }
                 }
             else if (order=="del")
                 {
-                canAct=items.ContainsKey(t.nameId) ? true : false;
+                canAct=_items.ContainsKey(t.nameId) ? true : false;
                 if (canAct)            
-                    items.Remove(t.nameId);
+                    _items.Remove(t.nameId);
                 }
             }
         else if (t is PassiveTemplate)
@@ -418,9 +464,9 @@ class Database
         bool canAdd=false;
         if (t is ItemTemplate)
             {
-            canAdd=items.ContainsValue(t as ItemTemplate) ? false : true;
+            canAdd=_items.ContainsValue(t as ItemTemplate) ? false : true;
             if (canAdd)
-                items.Add(t.nameId,t as ItemTemplate);
+                _items.Add(t.nameId,t as ItemTemplate);
             }
         else if (t is PassiveTemplate)
             {
@@ -444,11 +490,11 @@ class Database
         bool canModify=false;
         if (t is ItemTemplate)
             {
-            canModify=items.ContainsKey(t.nameId) ? true : false;
+            canModify=_items.ContainsKey(t.nameId) ? true : false;
             if (canModify)
                 {
-                items.Remove(t.nameId);
-                items.Add(t.nameId,t as ItemTemplate);
+                _items.Remove(t.nameId);
+                _items.Add(t.nameId,t as ItemTemplate);
                 }
             }
         else if (t is PassiveTemplate)
@@ -479,9 +525,9 @@ class Database
         bool canDelete=false;
         if(t is ItemTemplate)
             {
-            canDelete=items.ContainsKey(t.nameId) ? true : false;
+            canDelete=_items.ContainsKey(t.nameId) ? true : false;
             if (canDelete)            
-                items.Remove(t.nameId);
+                _items.Remove(t.nameId);
             }
         else if(t is PassiveTemplate)
             {

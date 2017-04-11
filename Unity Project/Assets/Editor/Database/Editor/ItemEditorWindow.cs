@@ -11,7 +11,7 @@ public class ItemEditorWindow: EditorWindow
     // Constants
     private static int MAX_TAGS=30;
     private static int MAX_FORMULAS=10;
-    private static int MAX_SLOTS=10;
+    private static int MAX_SLOTS=24;
     // Current item values and container for the values
     string itemNameId;  // The name of the ItemTemplate identifies it
     string itemDescription;  // Description of the ItemTemplate
@@ -41,7 +41,15 @@ public class ItemEditorWindow: EditorWindow
     string[] slotTypesAllowedArray;  // Array of slot types the item can add to himself 
     int slotsCount;  // Number of slots the item being added/modified/deleted currently has
     int[] selectedTemplateTypeInEachSlot;  // Position in Popup for selected Template type in each slot
-    //int[] selectedTemplateInEachSlot;  // Slot type for each slot
+    // ItemSlot|Slot|Item related
+    int[] itemTagMasks;  // List of tag masks for every item slot selected
+    // PassiveSlot|Slot|Item related
+    List<string> whenPassiveOptionsList;
+    string[] whenPassiveOptionsArray;
+    int[] selectedWhenPassive;
+    List<string> toWhomPassiveOptionsList;
+    string[] toWhomPassiveOptionsArray;
+    int[] selectedToWhomPassive;
     #endregion
 
     #region Constructor
@@ -64,7 +72,7 @@ public class ItemEditorWindow: EditorWindow
         }
 
     void OnGUI()
-       { 
+        { 
         #region Events
         // Events
         // Left mouse click on any button (ADD/MODIFY/DELETE)
@@ -93,7 +101,10 @@ public class ItemEditorWindow: EditorWindow
         #endregion
         #region Item basics zone
         ////////////////////////
+        EditorGUILayout.BeginHorizontal("Button");
+        EditorGUILayout.BeginVertical();
         EditorGUILayout.BeginVertical("Box");
+        EditorGUILayout.LabelField("Basics:",EditorStyles.boldLabel);
         if(selectedItem==0)  // if 'selectedItem' is '<NEW>' then allow to create a name id
             itemNameId=EditorGUILayout.TextField("Item name id",itemNameId);
         else  // else if 'selectedAttrib' exists then do not allow to create a existing name id
@@ -103,8 +114,9 @@ public class ItemEditorWindow: EditorWindow
         #endregion
         #region Tags zone
         /////////////////
-        EditorGUILayout.BeginVertical("Box");
-        tagsCount=EditorGUILayout.IntField("Tags count",tagsCount);
+        EditorGUILayout.BeginVertical("Box");        
+        EditorGUILayout.LabelField("Tags:",EditorStyles.boldLabel);
+        tagsCount=EditorGUILayout.IntField("Count",tagsCount);
         if (tagsCount<0)
             tagsCount=0;
         else if (tagsCount>MAX_TAGS)
@@ -129,7 +141,8 @@ public class ItemEditorWindow: EditorWindow
         #region Formulas zone
         /////////////////////
         EditorGUILayout.BeginVertical("Box");
-        formulaCount=EditorGUILayout.IntField("Formula count",formulaCount);
+        EditorGUILayout.LabelField("Formulas:",EditorStyles.boldLabel);
+        formulaCount=EditorGUILayout.IntField("Count",formulaCount);
         if (formulaCount<0)
             formulaCount=0;
         else if (formulaCount>MAX_FORMULAS)
@@ -142,11 +155,13 @@ public class ItemEditorWindow: EditorWindow
             EditorGUILayout.EndHorizontal();  
             }
         EditorGUILayout.EndVertical();
+        EditorGUILayout.EndVertical();
         #endregion
         #region Slots zone
         //////////////////
-        EditorGUILayout.BeginVertical("Box");
-        slotsCount=EditorGUILayout.IntField("Slots count",slotsCount);
+        EditorGUILayout.BeginVertical("Box",GUILayout.Width(310));
+        EditorGUILayout.LabelField("Slots:",EditorStyles.boldLabel);
+        slotsCount=EditorGUILayout.IntField("Count",slotsCount);
         if (slotsCount<0)
             slotsCount=0;
         else if (slotsCount>MAX_SLOTS)
@@ -154,11 +169,20 @@ public class ItemEditorWindow: EditorWindow
         for (int i=0; i<slotsCount; i++)
             {
             EditorGUILayout.BeginHorizontal();
-            selectedTemplateTypeInEachSlot[i]=EditorGUILayout.Popup(selectedTemplateTypeInEachSlot[i],slotTypesAllowedArray,GUILayout.Width(70),GUILayout.Height(40));
-            //formulasArray[i]=EditorGUILayout.TextField("=",formulasArray[i]); 
+            selectedTemplateTypeInEachSlot[i]=EditorGUILayout.Popup(selectedTemplateTypeInEachSlot[i],slotTypesAllowedArray,GUILayout.Width(70));
+            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
+                {
+                itemTagMasks[i]=EditorGUILayout.MaskField(itemTagMasks[i],tagsInDatabaseArray,GUILayout.Width(244)); 
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
+                {
+                selectedWhenPassive[i]=EditorGUILayout.Popup(selectedWhenPassive[i],whenPassiveOptionsArray,GUILayout.Width(120));
+                selectedToWhomPassive[i]=EditorGUILayout.Popup(selectedToWhomPassive[i],toWhomPassiveOptionsArray,GUILayout.Width(120));
+                }            
             EditorGUILayout.EndHorizontal();  
             }
         EditorGUILayout.EndVertical();
+        EditorGUILayout.EndHorizontal();
         #endregion
         #region Buttons zone
         ////////////////////
@@ -168,7 +192,7 @@ public class ItemEditorWindow: EditorWindow
             if (GUILayout.Button("ADD",GUILayout.Width(80),GUILayout.Height(80)))
                 {
                 constructCurrentItemTemplate();
-                if (d./*addTemplate(currentItemTemplate)*/addModDelTemplate(currentItemTemplate,"add"))
+                if (d.addModDelTemplate(currentItemTemplate,"add"))
                     {
                     selectedItem=0;
                     loadInfoFromDatabase();
@@ -181,7 +205,7 @@ public class ItemEditorWindow: EditorWindow
             if (GUILayout.Button("MODIFY",GUILayout.Width(80),GUILayout.Height(80)))
                 {
                 constructCurrentItemTemplate();
-                if (d./*modifyTemplate(currentItemTemplate)*/addModDelTemplate(currentItemTemplate,"mod"))
+                if (d.addModDelTemplate(currentItemTemplate,"mod"))
                     {
                     selectedItem=0;
                     loadInfoFromDatabase();
@@ -191,7 +215,7 @@ public class ItemEditorWindow: EditorWindow
             if (GUILayout.Button("DELETE",GUILayout.Width(80),GUILayout.Height(80)))
                 {
                 constructCurrentItemTemplate();
-                if (d./*deleteTemplate(itemNameId)*/addModDelTemplate(currentItemTemplate,"del"))
+                if (d.addModDelTemplate(currentItemTemplate,"del"))
                     {
                     selectedItem=0;
                     loadInfoFromDatabase();
@@ -207,33 +231,40 @@ public class ItemEditorWindow: EditorWindow
     #region ItemTemplate: createEmptyItemTemplate(), loadSelectedItemTemplate(), constructCurrentItemTemplate()
     private void createEmptyItemTemplate()
         // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
-        // ADD/MODIFY/DELETE operation. Then fields and structures are ready for a new ItemTemplate
+        // ADD/MODIFY/DELETE operation. Then fields and structures are set to be ready to be filled 
+        // with data for a new ItemTemplate
         {
         // Item related
         itemNameId="Enter your item name id here";  // Info for textField
         itemDescription="Enter your item description here";  // Info for textField
         // Tags|Item related
-        tagsCount=0;
-        selectedTag=new int[MAX_TAGS];
+        tagsCount=0;  // Number of tags the ItemTemplate is managing
+        selectedTag=new int[MAX_TAGS];  // For those 'tagsCount' tags the ones selected
         // Formula|Item related
         List<Formula> itemFormulas=new List<Formula>();  // Empty list of formulas
-        formulaCount=0;
-        selectedAttribInEachFormula=new int[MAX_FORMULAS];
-        formulasArray=new string[MAX_FORMULAS];
+        formulaCount=0;  // Number of formulas the ItemTemplate is managing
+        selectedAttribInEachFormula=new int[MAX_FORMULAS];  // For those 'formulaCount' formulas the attribute they're modifying
+        formulasArray=new string[MAX_FORMULAS];  // For those 'formulaCount' formulas, the formulas themselves
         // Slot|Item related
         List<Template> itemSlots=new List<Template>();  // Empty list of slots
-        slotsCount=0;
-        selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];
+        slotsCount=0;  // Number of slots the ItemTemplate is managing
+        selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];  // For those 'slotsCount' slots, the kind of every one of them
+        // ItemSlot|Slot|Item Related
+        itemTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is ItemTemplate, the tag mask they could have
+        // PassiveSlot|Slot|Item Related       
+        selectedWhenPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, when the passive could be executed
+        selectedToWhomPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, to whom the passive could be executed
         }
 
     private void loadSelectedItemTemplate()
-        // Sets the fields according to the ItemTemplate chosen from database in the selection Popup
+        // Called when you select a stored Item on Item Popup. Then loads every Item related info from 
+        // database into local structures so GUI can show the info for selected Item
         {
-        itemNameId=d.items[itemsInDatabaseArray[selectedItem]].nameId; 
-        itemDescription=d.items[itemsInDatabaseArray[selectedItem]].description;
-        itemTags=d.items[itemsInDatabaseArray[selectedItem]].tags;
-        itemFormulas=d.items[itemsInDatabaseArray[selectedItem]].formulas;
-        itemSlots=d.items[itemsInDatabaseArray[selectedItem]].slots;
+        itemNameId=d.Items[itemsInDatabaseArray[selectedItem]].nameId; 
+        itemDescription=d.Items[itemsInDatabaseArray[selectedItem]].description;
+        itemTags=d.Items[itemsInDatabaseArray[selectedItem]].tags;
+        itemFormulas=d.Items[itemsInDatabaseArray[selectedItem]].formulas;
+        itemSlots=d.Items[itemsInDatabaseArray[selectedItem]].slots;
         }
 
     private void constructCurrentItemTemplate()
@@ -254,19 +285,22 @@ public class ItemEditorWindow: EditorWindow
             itemFormulas.Add(formula);
             }
         itemSlots=new List<Template>();
+        // ...TO DO... Incluir en los ItemTemplate una estructura que describa como estan puestos los slots
         for (int i=0; i<slotsCount; i++)
             {
-            // TO DO
+            // ...TO DO... Volcar a esa estructura la descripcion de los slots elegidos
+            //this.selectedTemplateTypeInEachSlot[i]
             }
-        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemTags,itemFormulas,itemSlots);
+        // ...TO DO... Meter esa estructura en la Template que creamos
+        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemTags,itemFormulas/*,itemSlotsConfig*/,itemSlots);
         }
     #endregion
 
     #region Database: loadInfoFromDatabase(), auxiliary methods
     private void loadInfoFromDatabase()
         // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
-        // ADD/MODIFY/DELETE operation. Then you have the updated and necessary info from database 
-        // to create a new ItemTemplate
+        // ADD/MODIFY/DELETE operation. Then you have in local variables and structures the updated and 
+        // necessary info from database to create a new ItemTemplate with the Editor
         {
         loadItemsFromDatabase();
         loadTagsFromDatabase();
@@ -303,7 +337,7 @@ public class ItemEditorWindow: EditorWindow
     private List<int> getFormulasCountForEachItem()
         {
         List<int> formulasCountForEachItem=new List<int>();
-        foreach (KeyValuePair<string,ItemTemplate> result in d.items)
+        foreach (KeyValuePair<string,ItemTemplate> result in d.Items)
             {
             formulasCountForEachItem.Add(result.Value.formulas.Count);
             }
@@ -314,9 +348,20 @@ public class ItemEditorWindow: EditorWindow
         {
         Template t=new ItemTemplate();
         slotTypesAllowedList=new List<string>(d.getAllowedSlots(t));
+        slotTypesAllowedList.Insert(0,"Choose...");
         slotTypesAllowedArray=slotTypesAllowedList.ToArray();
-        //formulasCountForEachItemList=getFormulasCountForEachItem();
-        //formulasCountForEachItemArray=formulasCountForEachItemList.ToArray();
+        whenPassiveOptionsList=new List<string>();
+        foreach (KeyValuePair<string,string> result in d.SlotsOptions.PassiveOptions["When"])
+            {
+            whenPassiveOptionsList.Add(result.Value);
+            }
+        whenPassiveOptionsArray=whenPassiveOptionsList.ToArray(); 
+        toWhomPassiveOptionsList=new List<string>();
+        foreach (KeyValuePair<string,string> result in d.SlotsOptions.PassiveOptions["To whom"])
+            {
+            toWhomPassiveOptionsList.Add(result.Value);
+            }
+        toWhomPassiveOptionsArray=toWhomPassiveOptionsList.ToArray();
         }
     #endregion
 
@@ -364,8 +409,8 @@ public class ItemEditorWindow: EditorWindow
         formulaCount=formulasCountForEachItemArray[selectedItem-1]; 
         for (int i=0; i<formulaCount; i++)
             {
-            selectedAttribInEachFormula[i]=bindFormulas(d.items[itemsInDatabaseList[selectedItem]].formulas[i].label);  // Attribute selected in each formula
-            formulasArray[i]=d.items[itemsInDatabaseList[selectedItem]].formulas[i].formula;  // Formulas themselves
+            selectedAttribInEachFormula[i]=bindFormulas(d.Items[itemsInDatabaseList[selectedItem]].formulas[i].label);  // Attribute selected in each formula
+            formulasArray[i]=d.Items[itemsInDatabaseList[selectedItem]].formulas[i].formula;  // Formulas themselves
             }
         }
 
@@ -390,8 +435,17 @@ public class ItemEditorWindow: EditorWindow
         }
 
     private void updateSlotsZone(int selectedItem)
-        {
-        // TO DO
+        {/*
+        ArrayList maGroupNames; // This is my array of options (string)
+        int mCategory; // This is my maskfield's result
+        for (int i = 0; i < maGroupNames.Count; i++)
+            {
+            int layer = 1 << i;
+            if ((mCategory & layer) != 0)
+                {
+                //This group is selected
+                }
+            }*/
         }
     #endregion
     #endregion
