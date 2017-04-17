@@ -138,6 +138,7 @@
     <Compile Include="Assets\Editor\Database\Formula.cs" />
     <Compile Include="Assets\Editor\Database\ItemTemplate.cs" />
     <Compile Include="Assets\Editor\Database\PassiveTemplate.cs" />
+    <Compile Include="Assets\Editor\Database\SlotsOpt.cs" />
     <Compile Include="Assets\Editor\Database\SpecTemplate.cs" />
     <Compile Include="Assets\Editor\Database\Template.cs" />
     <Compile Include="Assets\Editor\Skill.cs" />
