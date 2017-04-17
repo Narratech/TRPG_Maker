@@ -1,9 +1,10 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
 public class ItemEditorWindow: EditorWindow
+    #region Info
+    #endregion
     {
     #region Attributes
     // Database instance
@@ -13,11 +14,11 @@ public class ItemEditorWindow: EditorWindow
     private static int MAX_FORMULAS=10;
     private static int MAX_SLOTS=24;
     // Current item values and container for the values
-    string itemNameId;  // The name of the ItemTemplate identifies it
-    string itemDescription;  // Description of the ItemTemplate
+    string itemNameId;  // The name and unique identifier of the ItemTemplate
+    string itemDescription;  // The description of the ItemTemplate
     List<string> itemTags;  // Every tag that this ItemTemplate has
     List<Formula> itemFormulas;  // Every formula that modifies attributes for this ItemTemplate
-    List<Template> itemSlots;  // Templates which this Template has
+    SlotsConfig itemAllowedSlots;  // Every slot allowed in this ItemTemplate
     ItemTemplate currentItemTemplate;  // Temporal container for the ItemTemplate we are editing
     // Item related
     List<string> itemsInDatabaseList;  // List of item 'Item.nameId' in database
@@ -38,18 +39,22 @@ public class ItemEditorWindow: EditorWindow
     string[] formulasArray;  // Formulas themselves
     // Slot|Item related
     List<string> slotTypesAllowedList;  // List of slot types the item can add to himself 
-    string[] slotTypesAllowedArray;  // Array of slot types the item can add to himself 
+    string[] slotTypesAllowedArray;  // The same list in array format for the Editor
+    List<int> slotsCountForEachItemList;  // Number of slots each item in database has
+    int[] slotsCountForEachItemArray;  // The same list in array format for the Editor
     int slotsCount;  // Number of slots the item being added/modified/deleted currently has
     int[] selectedTemplateTypeInEachSlot;  // Position in Popup for selected Template type in each slot
+    // PassiveSlot|Slot|Item related
+    List<string> whenPassiveOptionsList;  // List of 'when' options for a passive slot
+    string[] whenPassiveOptionsArray;  // The same list in array format for the Editor
+    int[] selectedWhenPassive;  // Position in Popup for selected 'when' option in each slot
+    List<string> toWhomPassiveOptionsList;  // List of 'to whom' options for a passive slot
+    string[] toWhomPassiveOptionsArray;  // The same list in array format for the Editor
+    int[] selectedToWhomPassive;  // Position in Popup for selected 'to whom' option in each slot
     // ItemSlot|Slot|Item related
     int[] itemTagMasks;  // List of tag masks for every item slot selected
-    // PassiveSlot|Slot|Item related
-    List<string> whenPassiveOptionsList;
-    string[] whenPassiveOptionsArray;
-    int[] selectedWhenPassive;
-    List<string> toWhomPassiveOptionsList;
-    string[] toWhomPassiveOptionsArray;
-    int[] selectedToWhomPassive;
+    // SpecSlot|Slot|Item related
+    // No Spec slots in ItemTemplate!
     #endregion
 
     #region Constructor
@@ -178,7 +183,7 @@ public class ItemEditorWindow: EditorWindow
                 {
                 selectedWhenPassive[i]=EditorGUILayout.Popup(selectedWhenPassive[i],whenPassiveOptionsArray,GUILayout.Width(120));
                 selectedToWhomPassive[i]=EditorGUILayout.Popup(selectedToWhomPassive[i],toWhomPassiveOptionsArray,GUILayout.Width(120));
-                }            
+                }          
             EditorGUILayout.EndHorizontal();  
             }
         EditorGUILayout.EndVertical();
@@ -249,28 +254,31 @@ public class ItemEditorWindow: EditorWindow
         List<Template> itemSlots=new List<Template>();  // Empty list of slots
         slotsCount=0;  // Number of slots the ItemTemplate is managing
         selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];  // For those 'slotsCount' slots, the kind of every one of them
-        // ItemSlot|Slot|Item Related
-        itemTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is ItemTemplate, the tag mask they could have
         // PassiveSlot|Slot|Item Related       
         selectedWhenPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, when the passive could be executed
         selectedToWhomPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, to whom the passive could be executed
+        // ItemSlot|Slot|Item Related
+        itemTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is ItemTemplate, the tag mask they could have
+        // SpecSlot|Slot|Item Related
+        // ...TO DO...
         }
 
     private void loadSelectedItemTemplate()
         // Called when you select a stored Item on Item Popup. Then loads every Item related info from 
         // database into local structures so GUI can show the info for selected Item
         {
-        itemNameId=d.Items[itemsInDatabaseArray[selectedItem]].nameId; 
-        itemDescription=d.Items[itemsInDatabaseArray[selectedItem]].description;
-        itemTags=d.Items[itemsInDatabaseArray[selectedItem]].tags;
-        itemFormulas=d.Items[itemsInDatabaseArray[selectedItem]].formulas;
-        itemSlots=d.Items[itemsInDatabaseArray[selectedItem]].slots;
+        itemNameId=d.Items[itemsInDatabaseArray[selectedItem]].NameId; 
+        itemDescription=d.Items[itemsInDatabaseArray[selectedItem]].Description;
+        itemTags=d.Items[itemsInDatabaseArray[selectedItem]].Tags;
+        itemFormulas=d.Items[itemsInDatabaseArray[selectedItem]].Formulas;
+        itemAllowedSlots=d.Items[itemsInDatabaseArray[selectedItem]].AllowedSlots;
         }
 
     private void constructCurrentItemTemplate()
-        // Constructs a new ItemTemplate according to whatever is shown in the fields. This could really
-        // mean constructing a new ItemTemplate or just modifying one that already exists in database 
-        // (in this case destroys the old ItemTemplate in database and adds the new one)
+        // Constructs a new ItemTemplate according to whatever is shown in the fields. Afther this
+        // method is finished this ItemTemplate could be added to database as a new ItemTemplate or just 
+        // modify one that already exists (in this case destroys the old ItemTemplate in database 
+        // and adds the new one)
         {
         itemTags=new List<string>();
         for (int i=0; i<tagsCount; i++)
@@ -284,15 +292,34 @@ public class ItemEditorWindow: EditorWindow
             Formula formula=new Formula(attribsInDatabaseArray[selectedAttribInEachFormula[i]],formulasArray[i],1);
             itemFormulas.Add(formula);
             }
-        itemSlots=new List<Template>();
-        // ...TO DO... Incluir en los ItemTemplate una estructura que describa como estan puestos los slots
+        itemAllowedSlots=new SlotsConfig();
+        List<Dictionary<string,string>> passiveCfg=new List<Dictionary<string,string>>();
+        List<ItemConfig> itemCfg=new List<ItemConfig>();
+        List<SpecConfig> specCfg=new List<SpecConfig>();
         for (int i=0; i<slotsCount; i++)
             {
-            // ...TO DO... Volcar a esa estructura la descripcion de los slots elegidos
-            //this.selectedTemplateTypeInEachSlot[i]
+            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
+                {
+                Dictionary<string,string> actual=new Dictionary<string,string>();
+                actual.Add("When",whenPassiveOptionsArray[selectedWhenPassive[i]]);
+                actual.Add("To whom",toWhomPassiveOptionsArray[selectedToWhomPassive[i]]);
+                passiveCfg.Add(actual);
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
+                {
+                ItemConfig ic;
+                ic.itemMask=itemTagMasks[i];
+                ic.itemIds=tagsInDatabaseList;
+                itemCfg.Add(ic);
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Specialization")
+                {
+                }
             }
-        // ...TO DO... Meter esa estructura en la Template que creamos
-        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemTags,itemFormulas/*,itemSlotsConfig*/,itemSlots);
+        itemAllowedSlots.PassiveCfg=passiveCfg;
+        itemAllowedSlots.ItemCfg=itemCfg;
+        itemAllowedSlots.SpecCfg=specCfg;
+        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemTags,itemFormulas,itemAllowedSlots);
         }
     #endregion
 
@@ -328,8 +355,10 @@ public class ItemEditorWindow: EditorWindow
 
     private void loadAttribsFromDatabase()
         {
+        // Getting the lists of attributes in database
         attribsInDatabaseList=new List<string>(d.getAttribIdentifiers());
         attribsInDatabaseArray=attribsInDatabaseList.ToArray();
+        // Getting the number of attributes every Item has
         formulasCountForEachItemList=getFormulasCountForEachItem();
         formulasCountForEachItemArray=formulasCountForEachItemList.ToArray();
         }
@@ -339,16 +368,18 @@ public class ItemEditorWindow: EditorWindow
         List<int> formulasCountForEachItem=new List<int>();
         foreach (KeyValuePair<string,ItemTemplate> result in d.Items)
             {
-            formulasCountForEachItem.Add(result.Value.formulas.Count);
+            formulasCountForEachItem.Add(result.Value.Formulas.Count);
             }
         return formulasCountForEachItem;
         }
 
     private void loadSlotsFromDatabase()
         {
+        // Getting the list of slot types allowed (Passive, Item) for this ItemTemplate
         Template t=new ItemTemplate();
         slotTypesAllowedList=new List<string>(d.getAllowedSlots(t));
         slotTypesAllowedList.Insert(0,"Choose...");
+        // Getting the possible options for Passive slots
         slotTypesAllowedArray=slotTypesAllowedList.ToArray();
         whenPassiveOptionsList=new List<string>();
         foreach (KeyValuePair<string,string> result in d.SlotsOptions.PassiveOptions["When"])
@@ -362,6 +393,25 @@ public class ItemEditorWindow: EditorWindow
             toWhomPassiveOptionsList.Add(result.Value);
             }
         toWhomPassiveOptionsArray=toWhomPassiveOptionsList.ToArray();
+        // Getting the possible options for Item slots
+        // known from tags
+        // Getting the number of slots every ItemTemplate has
+        slotsCountForEachItemList=getSlotsCountForEachItem();
+        slotsCountForEachItemArray=slotsCountForEachItemList.ToArray();
+        }
+
+    private List<int> getSlotsCountForEachItem()
+        {
+        List<int> slotsCountForEachItem=new List<int>();
+        foreach (KeyValuePair<string,ItemTemplate> result in d.Items)
+            {
+            int passiveSlotsCount=result.Value.AllowedSlots.PassiveCfg.Count; 
+            int itemSlotsCount=result.Value.AllowedSlots.ItemCfg.Count;
+            //int specSlotsCount=0;  // No slots for Spec in ItemTemplate
+            int slotsCount=passiveSlotsCount+itemSlotsCount;
+            slotsCountForEachItem.Add(slotsCount);
+            }
+        return slotsCountForEachItem;
         }
     #endregion
 
@@ -376,6 +426,8 @@ public class ItemEditorWindow: EditorWindow
         }
 
     private void updateTagsZone(int selectedItem)
+        // Uptates the Popup tags according to the item from database selected in the Item Popup. This item
+        // is identified by the 'selectedItem' integer
         {
         tagsCount=itemTags.Count; 
         for (int i=0; i<tagsCount; i++)
@@ -405,12 +457,14 @@ public class ItemEditorWindow: EditorWindow
         }
 
     private void updateFormulasZone(int selectedItem)
+        // Uptates the Popup formulas and field formulas according to the item from database selected in the 
+        // Item Popup. This item is identified by the 'selectedItem' integer
         {
         formulaCount=formulasCountForEachItemArray[selectedItem-1]; 
         for (int i=0; i<formulaCount; i++)
             {
-            selectedAttribInEachFormula[i]=bindFormulas(d.Items[itemsInDatabaseList[selectedItem]].formulas[i].label);  // Attribute selected in each formula
-            formulasArray[i]=d.Items[itemsInDatabaseList[selectedItem]].formulas[i].formula;  // Formulas themselves
+            selectedAttribInEachFormula[i]=bindFormulas(d.Items[itemsInDatabaseList[selectedItem]].Formulas[i].label);  // Attribute selected in each formula
+            formulasArray[i]=d.Items[itemsInDatabaseList[selectedItem]].Formulas[i].formula;  // Formulas themselves
             }
         }
 
@@ -435,18 +489,91 @@ public class ItemEditorWindow: EditorWindow
         }
 
     private void updateSlotsZone(int selectedItem)
-        {/*
-        ArrayList maGroupNames; // This is my array of options (string)
-        int mCategory; // This is my maskfield's result
-        for (int i = 0; i < maGroupNames.Count; i++)
+        // Uptates the Popup slots and config slots according to the item from database selected in the 
+        // Item Popup. This item is identified by the 'selectedItem' integer
+        {
+        slotsCount=slotsCountForEachItemArray[selectedItem-1];
+        int i=0;            
+        foreach (Dictionary<string,string> result in d.Items[itemsInDatabaseList[selectedItem]].AllowedSlots.PassiveCfg)
             {
-            int layer = 1 << i;
-            if ((mCategory & layer) != 0)
+            selectedTemplateTypeInEachSlot[i]=bindSlots("Passive");
+            selectedWhenPassive[i]=bindPassives(result["When"],"When");
+            selectedToWhomPassive[i]=bindPassives(result["To whom"],"To whom");
+            i++;
+            }
+        foreach (ItemConfig result in d.Items[itemsInDatabaseList[selectedItem]].AllowedSlots.ItemCfg)
+            {
+            selectedTemplateTypeInEachSlot[i]=bindSlots("Item");
+            itemTagMasks[i]=result.itemMask;
+            i++;
+            }
+        foreach (SpecConfig result in d.Items[itemsInDatabaseList[selectedItem]].AllowedSlots.SpecCfg)
+            {
+            selectedTemplateTypeInEachSlot[i]=bindSlots("Specialization");
+            i++;
+            }
+        }      
+
+    private int bindPassives(string passiveStr, string option)
+        // Binds the 'passiveStr' which represents a concrete passive option for "When" or "To whom" with its 
+        // position in the local lists (used for the Editor) 'List<string> whenPassiveOptionsList' and 'List<string> toWhomPassiveOptionsList'
+        {
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        List<string> optionsList=new List<string>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        if (option=="When")
+            optionsList=new List<string>(whenPassiveOptionsList);
+        else if (option=="To whom")
+            optionsList=new List<string>(toWhomPassiveOptionsList);
+        while(!found && i<optionsList.Count)
+            {
+            if (optionsList[i]==passiveStr)
                 {
-                //This group is selected
+                position=i;
+                found=true;
                 }
-            }*/
+            i++;
+            }
+        return position;
+        }
+
+    private int bindSlots(string slotTypeStr)
+        // Binds the 'slotTypeStr' which represents a type of slot with its position in the local list (used for the Editor) 
+        // 'List<string> slotTypesAllowedList'
+        {
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        while(!found && i<slotTypesAllowedList.Count)
+            {
+            if (slotTypesAllowedList[i]==slotTypeStr)
+                {
+                position=i;
+                found=true;
+                }
+            i++;
+            }
+        return position;
         }
     #endregion
     #endregion
     }
+
+#region Handy
+/* TO SEE WHICH ELEMENT IS SELECTED
+    ArrayList maGroupNames; // This is my array of options (string)
+    int mCategory; // This is my maskfield's result
+    for (int i = 0; i < maGroupNames.Count; i++)
+        {
+        int layer = 1 << i;
+        if ((mCategory & layer) != 0)
+            {
+            //This group is selected
+            }
+        }
+    }
+*/
+#endregion

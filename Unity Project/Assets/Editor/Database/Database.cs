@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-// this version just uses tags with no hierarchy
-// future version should use tags in hierarchy (trees): http://stackoverflow.com/questions/942053/why-is-there-no-treet-class-in-net
 
 class Database
+    #region Info
+    // This version just uses tags with no hierarchy
+    // Future version should use tags in hierarchy (trees): http://stackoverflow.com/questions/942053/why-is-there-no-treet-class-in-net
+    #endregion
     {
     #region Attributes
     // Database elements
@@ -15,7 +15,7 @@ class Database
     public Dictionary<string,PassiveTemplate> passives;  // Every PassiveTemplate in Database
     // Info to show and relate database elements
     Dictionary<string,Dictionary<string,string>> _tags;  // Tags per template. Example: _tags["Item"]["Weapon"] returns "Weapon"
-    SlotsOpt _slotsOptions;  // Slots options  // Options per template type in slots
+    SlotsOpt _slotsOptions;  // All possible options to show in slots zone
     List<string> _templates;  // The types of 'Template' stored in database
     // Singleton
     protected static Database instance;
@@ -87,8 +87,24 @@ class Database
     #endregion
 
     #region Methods
-    #region Creating Database: createExampleDatabase(), createAbbeyDemoDatabase(), createEmptyDatabase(), fillTags()
+    #region Database management: createExampleDatabase(), createAbbeyDemoDatabase(), createEmptyDatabase(), fillTags(), fillSlotOptions(), loadDatabase(), storeDatabase()
+    private void createEmptyDatabase()
+        // Creates an empty Database with its core 'attributes'. Called from constructor
+        {
+        // Filling core core 'attributes' (exist in every RPG)
+        Attribute experience=new Attribute(true,"EXP","Experience","Experience acumulated",1,100);
+        Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
+        Attribute mp=new Attribute(true,"MPS","MagicPoints","Character magic points",0,1000);
+        attributes.Add("EXP",experience);
+        attributes.Add("HPS",hp);
+        attributes.Add("MPS",mp);
+        Debug.Log("Empty database created!");
+        }
+
     private void createExampleDatabase()
+        /////////
+        // WIP //
+        /////////
         // Creates an Example Database for testing purpouses. Typically called from constructor. It follows
         // the way an user would create things from editor.
         {
@@ -130,48 +146,8 @@ class Database
         attributes.Add("dod",dodging);
         attributes.Add("def",defense);
         attributes.Add("fdg",fireDamage);
-        // Filling '_items'
-        // Sword item
-        List<Formula> swordFormulas=new List<Formula>();
-        swordFormulas.Add(new Formula("DEX","DEX+3",1));
-        swordFormulas.Add(new Formula("dmg","6",1));
-        List<string> swordTags=new List<string>();
-        swordTags.Add("Wereable");
-        swordTags.Add("Weapon");
-        swordTags.Add("Melee");
-        ItemTemplate sword=new ItemTemplate("Sword","Common sword",swordTags,swordFormulas,null);
-        _items.Add("Sword",sword);
-        // Fire Sword item
-        List<Formula> fireSwordFormulas=new List<Formula>();
-        fireSwordFormulas.Add(new Formula("DEX","DEX+3",1));
-        fireSwordFormulas.Add(new Formula("dmg","6",1));
-        fireSwordFormulas.Add(new Formula("fdg","3",1));
-        List<string> fireSwordTags=new List<string>();
-        fireSwordTags.Add("Wereable");
-        fireSwordTags.Add("Weapon");
-        fireSwordTags.Add("Melee");
-        ItemTemplate fireSword=new ItemTemplate("Fire sword","Fire sword",fireSwordTags,fireSwordFormulas,null);
-        _items.Add("Fire sword",fireSword);
-        // Axe item
-        List<Formula> axeFormulas=new List<Formula>();
-        axeFormulas.Add(new Formula("dmg","8",1));
-        List<string> axeTags=new List<string>();
-        axeTags.Add("Wereable");
-        axeTags.Add("Weapon");
-        axeTags.Add("Melee");
-        ItemTemplate axe=new ItemTemplate("Axe","Common axe",axeTags,axeFormulas,null);
-        _items.Add("Axe",axe);
-        // Bow item
-        List<Formula> bowFormulas=new List<Formula>();
-        bowFormulas.Add(new Formula("dmg","2",1));
-        List<string> bowTags=new List<string>();
-        bowTags.Add("Wereable");
-        bowTags.Add("Weapon");
-        bowTags.Add("Ranged");
-        ItemTemplate bow=new ItemTemplate("Bow","Common bow",bowTags,bowFormulas,null);
-        _items.Add("Bow",bow);
-        /*
         // Filling 'passives'
+        /*
         // Kindness passive
         List<Formula> kindnessFormula=new List<Formula>();
         kindnessFormula.Add(new Formula("CHA","CHA+3",1));
@@ -192,6 +168,82 @@ class Database
         tenacityFormula.Add(new Formula("def","STR*2+DEX*3",1));
         PassiveTemplate tenacity=new PassiveTemplate("Tenacity","Resilence to endure strikes",tenacityFormula,null);
         passives.Add("tenacity",tenacity);
+        */
+        // Filling '_items'
+        // Sword item
+        List<Formula> swordFormulas=new List<Formula>();
+        swordFormulas.Add(new Formula("DEX","DEX+3",1));
+        swordFormulas.Add(new Formula("dmg","6",1));
+        List<string> swordTags=new List<string>();
+        swordTags.Add("Wearable");
+        swordTags.Add("Weapon");
+        swordTags.Add("Melee");
+        SlotsConfig swordSlotsConfig=new SlotsConfig();
+        List<ItemConfig> listSwordIc=new List<ItemConfig>();
+        ItemConfig swordIc;
+        swordIc.itemIds=new List<string>{ "Wearable", "Weapon", "Melee", "Addon" };
+        swordIc.itemMask=4103;
+        listSwordIc.Add(swordIc);
+        swordSlotsConfig.ItemCfg=listSwordIc;
+        ItemTemplate sword=new ItemTemplate("Sword","Common sword",swordTags,swordFormulas,swordSlotsConfig);
+        _items.Add("Sword",sword);
+        // Fire Sword item
+        List<Formula> fireSwordFormulas=new List<Formula>();
+        fireSwordFormulas.Add(new Formula("DEX","DEX+3",1));
+        fireSwordFormulas.Add(new Formula("dmg","6",1));
+        fireSwordFormulas.Add(new Formula("fdg","3",1));
+        List<string> fireSwordTags=new List<string>();
+        fireSwordTags.Add("Wearable");
+        fireSwordTags.Add("Weapon");
+        fireSwordTags.Add("Melee");
+        SlotsConfig fireSwordSlotsConfig=new SlotsConfig();
+        List<ItemConfig> listFireSwordIc=new List<ItemConfig>();
+        ItemConfig fireSwordIc;
+        fireSwordIc.itemIds=new List<string>{ "Wearable", "Weapon", "Melee", "Addon" };
+        fireSwordIc.itemMask=4103;
+        listFireSwordIc.Add(fireSwordIc);
+        fireSwordSlotsConfig.ItemCfg=listFireSwordIc;
+        List<Dictionary<string, string>> listFireSwordPc=new List<Dictionary<string, string>>();
+        Dictionary<string,string> fireSwordPc=new Dictionary<string, string>();
+        fireSwordPc.Add("When","Turn");
+        fireSwordPc.Add("To whom","Enemy");
+        listFireSwordPc.Add(fireSwordPc);
+        fireSwordSlotsConfig.PassiveCfg=listFireSwordPc;
+        ItemTemplate fireSword=new ItemTemplate("Fire sword","Fire sword",fireSwordTags,fireSwordFormulas,fireSwordSlotsConfig);
+        _items.Add("Fire sword",fireSword);
+        // Axe item
+        List<Formula> axeFormulas=new List<Formula>();
+        axeFormulas.Add(new Formula("dmg","8",1));
+        List<string> axeTags=new List<string>();
+        axeTags.Add("Wearable");
+        axeTags.Add("Weapon");
+        axeTags.Add("Melee");
+        SlotsConfig axeSlotsConfig=new SlotsConfig();
+        List<ItemConfig> listAxeIc=new List<ItemConfig>();
+        ItemConfig axeIc;
+        axeIc.itemIds=new List<string>{ "Wearable", "Weapon", "Melee", "Addon" };
+        axeIc.itemMask=4103;
+        listAxeIc.Add(axeIc);
+        axeSlotsConfig.ItemCfg=listAxeIc;
+        ItemTemplate axe=new ItemTemplate("Axe","Common axe",axeTags,axeFormulas,axeSlotsConfig);
+        _items.Add("Axe",axe);
+        // Bow item
+        List<Formula> bowFormulas=new List<Formula>();
+        bowFormulas.Add(new Formula("dmg","2",1));
+        List<string> bowTags=new List<string>();
+        bowTags.Add("Wearable");
+        bowTags.Add("Weapon");
+        bowTags.Add("Ranged");
+        SlotsConfig bowSlotsConfig=new SlotsConfig();
+        List<ItemConfig> listBowIc=new List<ItemConfig>();
+        ItemConfig bowIc;
+        bowIc.itemIds=new List<string>{ "Wearable", "Weapon", "Ranged", "Addon" };
+        bowIc.itemMask=4107;
+        listBowIc.Add(bowIc);
+        bowSlotsConfig.ItemCfg=listBowIc;
+        ItemTemplate bow=new ItemTemplate("Bow","Common bow",bowTags,bowFormulas,bowSlotsConfig);
+        _items.Add("Bow",bow);
+        /*
         // Filling basic 'specs'
         // Human spec
         List<Formula> humanFormulas=new List<Formula>();
@@ -224,12 +276,14 @@ class Database
         swordmanSlots.Add(items["sword"]);
         SpecTemplate swordman=new SpecTemplate("Swordman","Swordman is a human/elf spec in which they can use swords",swordmanFormulas,swordmanSlots);
         specs.Add("swordman",swordman);
-        */
-        // END                
+        */              
         Debug.Log("Example database created!");
         }
 
     private void createAbbeyDemoDatabase()
+        /////////
+        // WIP //
+        /////////
         // Creates a Database for the Abbey demo. Called from constructor. It follows
         // the way an user would create things from editor.
         {        
@@ -259,23 +313,13 @@ class Database
         Debug.Log("Abbey Demo database created!");
         }
 
-    private void createEmptyDatabase()
-        // Creates an empty Database with its core 'attributes'. Called from constructor
-        {
-        // Filling core core 'attributes' (exist in every RPG)
-        Attribute experience=new Attribute(true,"EXP","Experience","Experience acumulated",1,100);
-        Attribute hp=new Attribute(true,"HPS","HealthPoints","Character health points",0,1000);
-        Attribute mp=new Attribute(true,"MPS","MagicPoints","Character magic points",0,1000);
-        attributes.Add("EXP",experience);
-        attributes.Add("HPS",hp);
-        attributes.Add("MPS",mp);
-        Debug.Log("Empty database created!");
-        }
-
     private void fillTags()
+        /////////
+        // WIP //
+        /////////
         // Fills the database with the tags that can be attached to certain Template (PassiveTemplate, ItemTemplate, 
         // SpecTemplate). The tags for PassiveTemplate mean when the pasive happens and to whom is executed. The tags 
-        // for ItemTemplate mean what the item is or where it is equipped. The tags for SpecTemplate ...TO DO...
+        // for ItemTemplate mean what the item is or where it is equipped. The tags for SpecTemplate // TO DO //
         {
         // Create tags container      
         _tags=new Dictionary<string,Dictionary<string,string>>();
@@ -308,10 +352,15 @@ class Database
         _tags["Item"].Add("Special","Special");
         // Create tags for SpecTemplate
         _tags.Add("Specialization",new Dictionary<string, string>());
-        // ...TO DO...
+        ///////////
+        // TO DO //
+        ///////////
         }
 
     private void fillSlotOptions()
+        /////////
+        // WIP //
+        /////////
         // Fills the database with the options that are shown when you add a slot to a Template you
         // are editing (PassiveTemplate, ItemTemplate, SpecTemplate)
         { 
@@ -331,13 +380,35 @@ class Database
         // Create slot options for ItemTemplate
         // -Not needed (tags consulted)
         // Create slot options for SpecTemplate
-        // TO DO
+        ///////////
+        // TO DO //
+        ///////////
+        }
+
+    public void loadDatabase()
+        ///////////
+        // TO DO //
+        ///////////
+        // Retrieves the database from file to continue filling it. This file was (obviously) previously 
+        // saved by the user when he was editing from Editor
+        {
+        // AssetDatabase.FindAssets("t:Mitipo");
+        }
+
+    public void storeDatabase()
+        ///////////
+        // TO DO //
+        ///////////
+        // Stores the database into a file to continue filling it later
+        {
+        // AssetDatabase.FindAssets("t:Mitipo");
         }
     #endregion
-    
+
+    #region Typical database operations: get*(), addAttribute(), deleteAttribute(), addModDelTemplate()
     public List<string> getAttribIdentifiers()
-        {
         // Retrieves the list of identifiers for every Attribute stored in the database Dictionary 'attributes'
+        {
         List<string> attribIdentifiers=new List<string>();
         foreach (KeyValuePair<string,Attribute> result in attributes)
             {
@@ -347,201 +418,34 @@ class Database
         }
 
     public List<string> getItemNames()
-        {
         // Retrieves the list of names (identifieres) for every ItemTemplate stored in the database Dictionary '_items'
+        {
         List<string> itemIdentifiers=new List<string>();
         foreach (KeyValuePair<string,ItemTemplate> result in _items)
             {
-            itemIdentifiers.Add(result.Value.nameId);
+            itemIdentifiers.Add(result.Value.NameId);
             }
         return itemIdentifiers;
         }
 
     public List<Formula> getItemFormulas(string nameId)
-        {
         // Retrieves the list of formulas (Formula) for a ItemTemplate stored in the database Dictionary '_items'
-        return _items[nameId].formulas;
+        {
+        return _items[nameId].Formulas;
         }
 
-    public List<Template> getItemSlots(string nameId)
+    public List<string> getAllowedSlots(Template t)
+        // Returns a list with the type of slots the Template t can use. For example an ItemTemplate can only use
+        // ItemTemplate ("Item") and PassiveTemplate ("Passive") in its slots 
         {
-        // Retrieves the list of slots (Template) for a ItemTemplate stored in the database Dictionary 'items'
-        return _items[nameId].slots;
-        }
-
-    public void loadDatabase()
-        // Retrieves the database from file to continue filling it. This file was (obviously) previously 
-        // saved by the user when he was editing from Editor
-        {
-        // AssetDatabase.FindAssets("t:Mitipo");
-        }
-
-    public bool addModDelTemplate(Template t, string order)
-        // Adds/Modifies/Deletes a Template (SpecTemplate, ItemTemplate, PassiveTemplate) to/from the database. 
-        // The idea is that this method will be called from Editor when you CREATE/MODIFY/DELETE a Spec, Item 
-        // or Passive
-        {
-        bool canAct=false;
-        if (t is ItemTemplate)
-            {
-            if (order=="add")
-                {
-                canAct=_items.ContainsValue(t as ItemTemplate) ? false : true;
-                if (canAct)
-                    _items.Add(t.nameId,t as ItemTemplate);
-                }
-            else if (order=="mod")
-                {
-                canAct=_items.ContainsKey(t.nameId) ? true : false;
-                if (canAct)
-                    {
-                    _items.Remove(t.nameId);
-                    _items.Add(t.nameId,t as ItemTemplate);
-                    }
-                }
-            else if (order=="del")
-                {
-                canAct=_items.ContainsKey(t.nameId) ? true : false;
-                if (canAct)            
-                    _items.Remove(t.nameId);
-                }
-            }
+        if (t is SpecTemplate)
+            return new List<string>{ "Specialization", "Item", "Passive" };
+        else if (t is ItemTemplate)
+            return new List<string>{ "Item", "Passive" };
         else if (t is PassiveTemplate)
-            {
-            if (order=="add")
-                {
-                canAct=passives.ContainsValue(t as PassiveTemplate) ? false : true;
-                if (canAct)
-                    passives.Add(t.nameId,t as PassiveTemplate);
-                }
-            else if (order=="mod")
-                {
-                canAct=passives.ContainsKey(t.nameId) ? true : false;
-                if (canAct)
-                    {
-                    passives.Remove(t.nameId);
-                    passives.Add(t.nameId,t as PassiveTemplate);
-                    }
-                }
-            else if (order=="del")
-                {
-                canAct=passives.ContainsKey(t.nameId) ? true : false;
-                if (canAct)            
-                    passives.Remove(t.nameId);
-                }
-            }
-        else if (t is SpecTemplate)
-            {
-            if (order=="add")
-                {
-                canAct=specs.ContainsValue(t as SpecTemplate) ? false : true;
-                if (canAct)
-                    specs.Add(t.nameId,t as SpecTemplate);
-                }
-            else if (order=="mod")
-                {
-                canAct=specs.ContainsKey(t.nameId) ? true : false;
-                if (canAct)
-                    {
-                    specs.Remove(t.nameId);
-                    specs.Add(t.nameId,t as SpecTemplate);
-                    }
-                }
-            else if (order=="del")
-                {
-                canAct=specs.ContainsKey(t.nameId) ? true : false;
-                if (canAct)            
-                    specs.Remove(t.nameId);
-                }
-            }
-        return canAct;
-        }
-
-    public bool addTemplate(Template t)
-        // Adds a Template (SpecTemplate, ItemTemplate, PassiveTemplate) to the database. The idea
-        // is that this method will be called from Editor when you CREATE a Spec, Item or Passive
-        {
-        bool canAdd=false;
-        if (t is ItemTemplate)
-            {
-            canAdd=_items.ContainsValue(t as ItemTemplate) ? false : true;
-            if (canAdd)
-                _items.Add(t.nameId,t as ItemTemplate);
-            }
-        else if (t is PassiveTemplate)
-            {
-            canAdd=passives.ContainsValue(t as PassiveTemplate) ? false : true;
-            if (canAdd)
-                passives.Add(t.nameId,t as PassiveTemplate);
-            }
-        else if (t is SpecTemplate)
-            {
-            canAdd=specs.ContainsValue(t as SpecTemplate) ? false : true;
-            if (canAdd)
-                specs.Add(t.nameId,t as SpecTemplate);
-            }
-        return canAdd;
-        }
-
-    public bool modifyTemplate(Template t)
-        // Modifies a Template (SpecTemplate, ItemTemplate, PassiveTemplate) in the database. The idea
-        // is that this method will be called from Editor when you EDIT a Spec, Item or Passive
-        {
-        bool canModify=false;
-        if (t is ItemTemplate)
-            {
-            canModify=_items.ContainsKey(t.nameId) ? true : false;
-            if (canModify)
-                {
-                _items.Remove(t.nameId);
-                _items.Add(t.nameId,t as ItemTemplate);
-                }
-            }
-        else if (t is PassiveTemplate)
-            {
-            canModify=passives.ContainsKey(t.nameId) ? true : false;
-            if (canModify)
-                {
-                passives.Remove(t.nameId);
-                passives.Add(t.nameId,t as PassiveTemplate);
-                }
-            }
-        else if (t is SpecTemplate)
-            {
-            canModify=specs.ContainsKey(t.nameId) ? true : false;
-            if (canModify)
-                {
-                specs.Remove(t.nameId);
-                specs.Add(t.nameId,t as SpecTemplate);
-                }
-            }
-        return canModify;
-        }
-
-    public bool deleteTemplate(Template t)
-        {
-        // Deletes a Template (SpecTemplate, ItemTemplate, PassiveTemplate) from the database. The idea
-        // is that this method will be called from Editor when you DELETE a Spec, Item or Passive
-        bool canDelete=false;
-        if(t is ItemTemplate)
-            {
-            canDelete=_items.ContainsKey(t.nameId) ? true : false;
-            if (canDelete)            
-                _items.Remove(t.nameId);
-            }
-        else if(t is PassiveTemplate)
-            {
-            canDelete=passives.ContainsKey(t.nameId) ? true : false;
-            if (canDelete)            
-                passives.Remove(t.nameId);
-            }
-        else if(t is SpecTemplate)
-            {
-            canDelete=specs.ContainsKey(t.nameId) ? true : false;
-            if (canDelete)            
-                specs.Remove(t.nameId);
-            }
-        return false;
+            return new List<string>{ "Passive" };
+        else
+            return new List<string>{ "Template not supported" };
         }
 
     public bool addAttribute(Attribute atr)
@@ -566,21 +470,86 @@ class Database
         return canDelete;
         }
 
-    public List<string> getAllowedSlots(Template t)
+    public bool addModDelTemplate(Template t, string order)
+        // Adds/Modifies/Deletes a Template (SpecTemplate, ItemTemplate, PassiveTemplate) to/from the database. 
+        // The idea is that this method will be called from Editor when you CREATE/MODIFY/DELETE a Spec, Item 
+        // or Passive
         {
-        if (t is SpecTemplate)
-            return new List<string>{ "Specialization", "Item", "Passive" };
-        else if (t is ItemTemplate)
-            return new List<string>{ "Item", "Passive" };
+        bool canAct=false;
+        if (t is ItemTemplate)
+            {
+            if (order=="add")
+                {
+                canAct=_items.ContainsValue(t as ItemTemplate) ? false : true;
+                if (canAct)
+                    _items.Add(t.NameId,t as ItemTemplate);
+                }
+            else if (order=="mod")
+                {
+                canAct=_items.ContainsKey(t.NameId) ? true : false;
+                if (canAct)
+                    {
+                    _items.Remove(t.NameId);
+                    _items.Add(t.NameId,t as ItemTemplate);
+                    }
+                }
+            else if (order=="del")
+                {
+                canAct=_items.ContainsKey(t.NameId) ? true : false;
+                if (canAct)            
+                    _items.Remove(t.NameId);
+                }
+            }
         else if (t is PassiveTemplate)
-            return new List<string>{ "Passives" };
-        else
-            return new List<string>{ "Template not supported" };
+            {
+            if (order=="add")
+                {
+                canAct=passives.ContainsValue(t as PassiveTemplate) ? false : true;
+                if (canAct)
+                    passives.Add(t.NameId,t as PassiveTemplate);
+                }
+            else if (order=="mod")
+                {
+                canAct=passives.ContainsKey(t.NameId) ? true : false;
+                if (canAct)
+                    {
+                    passives.Remove(t.NameId);
+                    passives.Add(t.NameId,t as PassiveTemplate);
+                    }
+                }
+            else if (order=="del")
+                {
+                canAct=passives.ContainsKey(t.NameId) ? true : false;
+                if (canAct)            
+                    passives.Remove(t.NameId);
+                }
+            }
+        else if (t is SpecTemplate)
+            {
+            if (order=="add")
+                {
+                canAct=specs.ContainsValue(t as SpecTemplate) ? false : true;
+                if (canAct)
+                    specs.Add(t.NameId,t as SpecTemplate);
+                }
+            else if (order=="mod")
+                {
+                canAct=specs.ContainsKey(t.NameId) ? true : false;
+                if (canAct)
+                    {
+                    specs.Remove(t.NameId);
+                    specs.Add(t.NameId,t as SpecTemplate);
+                    }
+                }
+            else if (order=="del")
+                {
+                canAct=specs.ContainsKey(t.NameId) ? true : false;
+                if (canAct)            
+                    specs.Remove(t.NameId);
+                }
+            }
+        return canAct;
         }
-
-    public void print()
-        {
-        Debug.Log("I'm a database");
-        }
+    #endregion
     #endregion
     }

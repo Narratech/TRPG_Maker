@@ -1,35 +1,69 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Template
     {
+    #region Attributes
     // Defined in templates
-    public string nameId;  // The name of the object identifies it
-    public string description;
-    public List<string> tags;  // Every tag this Template has
-    public List<Formula> formulas;  // Every formula that modifies attributes for this Template
-    public List<Template> slots;  // Templates which this Template has
-    //public Sprite logo;
+    protected string _nameId;  // The name and unique identifier of the Template
+    protected string _description;  // The description of the Template
+    protected List<string> _tags;  // Every tag this Template has
+    protected List<Formula> _formulas;  // Every formula that modifies attributes for this Template
+    protected SlotsConfig _allowedSlots;  // Every slot allowed in this Template
+    #endregion
 
+    #region Constructor
     public Template()
         {
         }
 
-    public Template(string nameId, string description/*, Sprite logo*/, List<string> tags, List<Formula> formulas, List<Template> slots)
+    public Template(string nameId, string description, List<string> tags, List<Formula> formulas, SlotsConfig allowedSlots)
         {
         // Defined in templates
-        this.nameId=nameId;
-        this.description=description;
-        //this.logo=logo;
-        this.tags=tags;
-        this.formulas=formulas;
-        this.slots=slots;
+        _nameId=nameId;
+        _description=description;
+        _tags=tags;
+        _formulas=formulas;
+        _allowedSlots=allowedSlots;
+        }
+    #endregion
+
+    #region Properties    
+    public string NameId
+        {
+        get { return _nameId; }
+        set { _nameId=value; }
         }
 
+    public string Description
+        {
+        get { return _description; }
+        set { _description=value; }
+        }
+
+    public List<string> Tags
+        {
+        get { return _tags; }
+        set { _tags=value; }
+        }
+
+    public List<Formula> Formulas
+        {
+        get { return _formulas; }
+        set { _formulas=value; }
+        }
+
+    public SlotsConfig AllowedSlots
+        {
+        get { return _allowedSlots; }
+        set { _allowedSlots=value; }
+        }
+    #endregion
+
+    #region Methods
     public void print()
         {
         Debug.Log("I'm a generic Template");
         }
-
-	}
+    #endregion
+    }
