@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BHEditor : EditorWindow
 {
-    private static int MAX_REQUIREMENTS = 5;
+    private static int MAX_REQUIREMENTS = 100;
 
 
     private int damage = 0;
@@ -17,7 +17,7 @@ public class BHEditor : EditorWindow
 
     private bool active = true;
 
-    private string[] objective = new string[] { "Self", "Ally", "Enemy", "Objetc", "All map" };
+    private string[] objective = new string[] { "On target", "Projectile", "On Map" };
     private int selectedObjective;
     private string[] skillType = new string[] { "One Target", "All Enemies", "All Allies", "All Map", "Area" };
     private int selectedSkillType;
@@ -77,11 +77,20 @@ public class BHEditor : EditorWindow
                     // Creando una habilidad, definimos nombre, descripcion y tipo de daño que va a hacer 
                     skillName = EditorGUILayout.TextField("Skill name", skillName);
                     skillDescription = EditorGUILayout.TextField("Skill description", skillDescription);
+
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Type of skill");
+                    selectedObjective = EditorGUILayout.Popup(selectedObjective, objective);
+                    GUILayout.EndHorizontal();
+
+
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField("Skill type");
                     selectedSkillType = EditorGUILayout.Popup(selectedSkillType, skillType);
                     GUILayout.EndHorizontal();
-                  
+
+
+
                     //Segun lo que se haya escogido pueden aparecer varias opciones.
                     switch (selectedSkillType)
                     {

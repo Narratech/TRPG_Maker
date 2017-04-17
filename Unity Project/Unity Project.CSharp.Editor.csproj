@@ -132,6 +132,7 @@
     <Compile Include="Assets\Editor\Database\Attribute.cs" />
     <Compile Include="Assets\Editor\Database\Database.cs" />
     <Compile Include="Assets\Editor\Database\Editor\AttributeEditorWindow.cs" />
+    <Compile Include="Assets\Editor\Database\Editor\Data Structures\SlotsConfig.cs" />
     <Compile Include="Assets\Editor\Database\Editor\ItemEditorWindow.cs" />
     <Compile Include="Assets\Editor\Database\Editor\PassiveEditorWindow.cs" />
     <Compile Include="Assets\Editor\Database\Editor\SpecEditorWindow.cs" />
