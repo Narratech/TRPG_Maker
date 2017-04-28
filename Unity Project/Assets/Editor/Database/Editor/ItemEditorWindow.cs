@@ -5,6 +5,10 @@ using System.Collections.Generic;
 public class ItemEditorWindow: EditorWindow
     #region Info
     #endregion
+    #region Future fixes
+    // -Inhetirance from Template.cs
+    // -Masks not based in integers
+    #endregion
     {
     #region Attributes
     // Database instance
@@ -25,10 +29,10 @@ public class ItemEditorWindow: EditorWindow
     string[] itemsInDatabaseArray;  // The same list in array format for the Editor
     int selectedItem;  // Position in Popup for selected item to add/modify/delete 
     // Tags|Item related
-    List<string> tagsInDatabaseList;  // List of tags for ItemTemplate in database
-    string[] tagsInDatabaseArray;  // The same list in array format for the Editor
-    int[] selectedTag;  // Position in Popup for selected type tag in each tag
-    int tagsCount;  // Number of tags the item being added/modified/deleted currently has
+    List<string> itemTagsInDatabaseList;  // List of tags for ItemTemplate in database
+    string[] itemTagsInDatabaseArray;  // The same list in array format for the Editor
+    int[] selectedItemTag;  // Position in Popup for selected type tag in each tag
+    int itemTagsCount;  // Number of tags the item being added/modified/deleted currently has
     // Formula|Item related
     List<string> attribsInDatabaseList;  // List of existing 'Attribute.id' in database
     string[] attribsInDatabaseArray;  // The same list in array format for the Editor
@@ -45,16 +49,16 @@ public class ItemEditorWindow: EditorWindow
     int slotsCount;  // Number of slots the item being added/modified/deleted currently has
     int[] selectedTemplateTypeInEachSlot;  // Position in Popup for selected Template type in each slot
     // PassiveSlot|Slot|Item related
-    List<string> whenPassiveOptionsList;  // List of 'when' options for a passive slot
-    string[] whenPassiveOptionsArray;  // The same list in array format for the Editor
+    List<string> passiveWhenTagsInDatabaseList;  // List of tags for PassiveTemplate (When) in database
+    string[] passiveWhenTagsInDatabaseArray;  // The same list in array format for the Editor
     int[] selectedWhenPassive;  // Position in Popup for selected 'when' option in each slot
-    List<string> toWhomPassiveOptionsList;  // List of 'to whom' options for a passive slot
-    string[] toWhomPassiveOptionsArray;  // The same list in array format for the Editor
+    List<string> passiveToWhomTagsInDatabaseList;  // List of tags for PassiveTemplate (To whom) in database
+    string[] passiveToWhomTagsInDatabaseArray;  // The same list in array format for the Editor
     int[] selectedToWhomPassive;  // Position in Popup for selected 'to whom' option in each slot
     // ItemSlot|Slot|Item related
     int[] itemTagMasks;  // List of tag masks for every item slot selected
     // SpecSlot|Slot|Item related
-    // No Spec slots in ItemTemplate!
+    // No Spec slots in ItemTemplate
     #endregion
 
     #region Constructor
@@ -67,8 +71,190 @@ public class ItemEditorWindow: EditorWindow
     #endregion
 
     #region Methods
+    #region Database: loadInfoFromDatabase(), auxiliary methods
+    private void loadInfoFromDatabase()
+        // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
+        // ADD/MODIFY/DELETE operation. Then you have in local variables and structures the updated and 
+        // necessary info from database to create a new ItemTemplate with the Editor
+        {
+        loadItemsFromDatabase();
+        loadTagsFromDatabase();
+        loadAttribsFromDatabase();
+        loadSlotsFromDatabase();
+        }
+
+    private void loadItemsFromDatabase()
+        {
+        itemsInDatabaseList=new List<string>(d.getItemNames());
+        itemsInDatabaseList.Insert(0,"<NEW>");
+        itemsInDatabaseArray=itemsInDatabaseList.ToArray();
+        }
+
+    private void loadTagsFromDatabase()
+        {
+        // Tags for Item tags zone and Item slots zone
+        Dictionary<string,string> auxItemTags=d.Tags["Item"];
+        itemTagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxItemTags)
+            {
+            itemTagsInDatabaseList.Add(result.Value);
+            }
+        itemTagsInDatabaseArray=itemTagsInDatabaseList.ToArray();
+        // Tags for Passive slots zone
+        Dictionary<string,string> auxPassiveWhenTags=d.Tags["PassiveWhen"];
+        passiveWhenTagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxPassiveWhenTags)
+            {
+            passiveWhenTagsInDatabaseList.Add(result.Value);
+            }
+        passiveWhenTagsInDatabaseArray=passiveWhenTagsInDatabaseList.ToArray();
+        Dictionary<string,string> auxPassiveToWhomTags=d.Tags["PassiveToWhom"];
+        passiveToWhomTagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxPassiveToWhomTags)
+            {
+            passiveToWhomTagsInDatabaseList.Add(result.Value);
+            }
+        passiveToWhomTagsInDatabaseArray=passiveToWhomTagsInDatabaseList.ToArray();
+        }
+
+    private void loadAttribsFromDatabase()
+        {
+        // Getting the lists of attributes in database
+        attribsInDatabaseList=new List<string>(d.getAttribIdentifiers());
+        attribsInDatabaseArray=attribsInDatabaseList.ToArray();
+        // Getting the number of attributes every Item has
+        formulasCountForEachItemList=getFormulasCountForEachItem();
+        formulasCountForEachItemArray=formulasCountForEachItemList.ToArray();
+        }
+
+    private List<int> getFormulasCountForEachItem()
+        {
+        List<int> formulasCountForEachItem=new List<int>();
+        foreach (KeyValuePair<string,ItemTemplate> result in d.Items)
+            {
+            formulasCountForEachItem.Add(result.Value.Formulas.Count);
+            }
+        return formulasCountForEachItem;
+        }
+
+    private void loadSlotsFromDatabase()
+        {
+        // Getting the list of slot types allowed (Passive, Item) for this ItemTemplate
+        Template t=new ItemTemplate();
+        slotTypesAllowedList=new List<string>(d.getAllowedSlots(t));
+        slotTypesAllowedList.Insert(0,"Choose...");
+        slotTypesAllowedArray=slotTypesAllowedList.ToArray();
+        // Getting the number of slots every ItemTemplate has
+        slotsCountForEachItemList=getSlotsCountForEachItem();
+        slotsCountForEachItemArray=slotsCountForEachItemList.ToArray();
+        }
+
+    private List<int> getSlotsCountForEachItem()
+        {
+        List<int> slotsCountForEachItem=new List<int>();
+        foreach (KeyValuePair<string,ItemTemplate> result in d.Items)
+            {
+            int passiveSlotsCount=result.Value.AllowedSlots.PassiveCfg.Count; 
+            int itemSlotsCount=result.Value.AllowedSlots.ItemCfg.Count;
+            //int specSlotsCount=0;  // No slots for Spec in ItemTemplate
+            int slotsCount=passiveSlotsCount+itemSlotsCount;
+            slotsCountForEachItem.Add(slotsCount);
+            }
+        return slotsCountForEachItem;
+        }
+    #endregion
+    
+    #region ItemTemplate: createEmptyItemTemplate(), loadSelectedItemTemplate(), constructCurrentItemTemplate()
+    private void createEmptyItemTemplate()
+        // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
+        // ADD/MODIFY/DELETE operation. Then fields and structures are set to be ready to be filled 
+        // with data for a new ItemTemplate
+        {
+        // Item related
+        itemNameId="Enter your item name id here";  // Info for textField
+        itemDescription="Enter your item description here";  // Info for textField
+        // Tags|Item related
+        itemTagsCount=0;  // Number of tags the ItemTemplate is managing
+        selectedItemTag=new int[MAX_TAGS];  // For those 'itemTagsCount' tags the ones selected
+        // Formula|Item related
+        List<Formula> itemFormulas=new List<Formula>();  // Empty list of formulas
+        formulaCount=0;  // Number of formulas the ItemTemplate is managing
+        selectedAttribInEachFormula=new int[MAX_FORMULAS];  // For those 'formulaCount' formulas the attribute they're modifying
+        formulasArray=new string[MAX_FORMULAS];  // For those 'formulaCount' formulas, the formulas themselves
+        // Slot|Item related
+        List<Template> itemSlots=new List<Template>();  // Empty list of slots
+        slotsCount=0;  // Number of slots the ItemTemplate is managing
+        selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];  // For those 'slotsCount' slots, the kind of every one of them
+        // PassiveSlot|Slot|Item Related       
+        selectedWhenPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, when the passive could be executed
+        selectedToWhomPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, to whom the passive could be executed
+        // ItemSlot|Slot|Item Related
+        itemTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is ItemTemplate, the tag mask they could have
+        // SpecSlot|Slot|Item Related
+        // no SpecSlot when creating ItemTemplate
+        }
+
+    private void loadSelectedItemTemplate()
+        // Called when you select a stored Item on Item Popup. Then loads every Item related info from 
+        // database into local structures so GUI can show the info for selected Item
+        {
+        itemNameId=d.Items[itemsInDatabaseArray[selectedItem]].NameId; 
+        itemDescription=d.Items[itemsInDatabaseArray[selectedItem]].Description;
+        itemTags=d.Items[itemsInDatabaseArray[selectedItem]].Tags;
+        itemFormulas=d.Items[itemsInDatabaseArray[selectedItem]].Formulas;
+        itemAllowedSlots=d.Items[itemsInDatabaseArray[selectedItem]].AllowedSlots;
+        }
+
+    private void constructCurrentItemTemplate()
+        // Constructs a new ItemTemplate according to whatever is shown in the fields. After this
+        // method is finished this ItemTemplate could be added to database as a new ItemTemplate or just 
+        // modify one that already exists (in this case destroys the old ItemTemplate in database 
+        // and adds the new one)
+        {
+        itemTags=new List<string>();
+        for (int i=0; i<itemTagsCount; i++)
+            {
+            string tag=itemTagsInDatabaseArray[selectedItemTag[i]];
+            itemTags.Add(tag);
+            }
+        itemFormulas=new List<Formula>(); 
+        for (int i=0; i<formulaCount; i++)
+            {
+            Formula formula=new Formula(attribsInDatabaseArray[selectedAttribInEachFormula[i]],formulasArray[i],1);
+            itemFormulas.Add(formula);
+            }
+        itemAllowedSlots=new SlotsConfig();
+        List<Dictionary<string,string>> passiveCfg=new List<Dictionary<string,string>>();
+        List<ItemConfig> itemCfg=new List<ItemConfig>();
+        List<SpecConfig> specCfg=new List<SpecConfig>();
+        for (int i=0; i<slotsCount; i++)
+            {
+            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
+                {
+                Dictionary<string,string> actual=new Dictionary<string,string>();
+                actual.Add("When",passiveWhenTagsInDatabaseArray[selectedWhenPassive[i]]);
+                actual.Add("To whom",passiveToWhomTagsInDatabaseArray[selectedToWhomPassive[i]]);
+                passiveCfg.Add(actual);
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
+                {
+                ItemConfig ic;
+                ic.itemMask=itemTagMasks[i];
+                ic.itemIds=itemTagsInDatabaseList;
+                itemCfg.Add(ic);
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Specialization")
+                {
+                }
+            }
+        itemAllowedSlots.PassiveCfg=passiveCfg;
+        itemAllowedSlots.ItemCfg=itemCfg;
+        itemAllowedSlots.SpecCfg=specCfg;
+        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemTags,itemFormulas,itemAllowedSlots);
+        }
+    #endregion
+
     #region GUI: CreateWindow(), OnGUI()
-    // Unity menu
     [MenuItem("TRPG/Database/Item Editor")]
     static void CreateWindow()
         {
@@ -121,15 +307,15 @@ public class ItemEditorWindow: EditorWindow
         /////////////////
         EditorGUILayout.BeginVertical("Box");        
         EditorGUILayout.LabelField("Tags:",EditorStyles.boldLabel);
-        tagsCount=EditorGUILayout.IntField("Count",tagsCount);
-        if (tagsCount<0)
-            tagsCount=0;
-        else if (tagsCount>MAX_TAGS)
-            tagsCount=MAX_TAGS;
+        itemTagsCount=EditorGUILayout.IntField("Count",itemTagsCount);
+        if (itemTagsCount<0)
+            itemTagsCount=0;
+        else if (itemTagsCount>MAX_TAGS)
+            itemTagsCount=MAX_TAGS;
         EditorGUILayout.BeginHorizontal();
-        for (int i=0; i<tagsCount; i++)
+        for (int i=0; i<itemTagsCount; i++)
             {
-            selectedTag[i]=EditorGUILayout.Popup(selectedTag[i],tagsInDatabaseArray,GUILayout.Width(70));
+            selectedItemTag[i]=EditorGUILayout.Popup(selectedItemTag[i],itemTagsInDatabaseArray,GUILayout.Width(70));
             if ((i%5==4))
                 {
                 EditorGUILayout.EndHorizontal();
@@ -177,12 +363,12 @@ public class ItemEditorWindow: EditorWindow
             selectedTemplateTypeInEachSlot[i]=EditorGUILayout.Popup(selectedTemplateTypeInEachSlot[i],slotTypesAllowedArray,GUILayout.Width(70));
             if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
                 {
-                itemTagMasks[i]=EditorGUILayout.MaskField(itemTagMasks[i],tagsInDatabaseArray,GUILayout.Width(244)); 
+                itemTagMasks[i]=EditorGUILayout.MaskField(itemTagMasks[i],itemTagsInDatabaseArray,GUILayout.Width(244)); 
                 }
             else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
                 {
-                selectedWhenPassive[i]=EditorGUILayout.Popup(selectedWhenPassive[i],whenPassiveOptionsArray,GUILayout.Width(120));
-                selectedToWhomPassive[i]=EditorGUILayout.Popup(selectedToWhomPassive[i],toWhomPassiveOptionsArray,GUILayout.Width(120));
+                selectedWhenPassive[i]=EditorGUILayout.Popup(selectedWhenPassive[i],passiveWhenTagsInDatabaseArray,GUILayout.Width(120));
+                selectedToWhomPassive[i]=EditorGUILayout.Popup(selectedToWhomPassive[i],passiveToWhomTagsInDatabaseArray,GUILayout.Width(120));
                 }          
             EditorGUILayout.EndHorizontal();  
             }
@@ -233,188 +419,6 @@ public class ItemEditorWindow: EditorWindow
         }
     #endregion
 
-    #region ItemTemplate: createEmptyItemTemplate(), loadSelectedItemTemplate(), constructCurrentItemTemplate()
-    private void createEmptyItemTemplate()
-        // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
-        // ADD/MODIFY/DELETE operation. Then fields and structures are set to be ready to be filled 
-        // with data for a new ItemTemplate
-        {
-        // Item related
-        itemNameId="Enter your item name id here";  // Info for textField
-        itemDescription="Enter your item description here";  // Info for textField
-        // Tags|Item related
-        tagsCount=0;  // Number of tags the ItemTemplate is managing
-        selectedTag=new int[MAX_TAGS];  // For those 'tagsCount' tags the ones selected
-        // Formula|Item related
-        List<Formula> itemFormulas=new List<Formula>();  // Empty list of formulas
-        formulaCount=0;  // Number of formulas the ItemTemplate is managing
-        selectedAttribInEachFormula=new int[MAX_FORMULAS];  // For those 'formulaCount' formulas the attribute they're modifying
-        formulasArray=new string[MAX_FORMULAS];  // For those 'formulaCount' formulas, the formulas themselves
-        // Slot|Item related
-        List<Template> itemSlots=new List<Template>();  // Empty list of slots
-        slotsCount=0;  // Number of slots the ItemTemplate is managing
-        selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];  // For those 'slotsCount' slots, the kind of every one of them
-        // PassiveSlot|Slot|Item Related       
-        selectedWhenPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, when the passive could be executed
-        selectedToWhomPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, to whom the passive could be executed
-        // ItemSlot|Slot|Item Related
-        itemTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is ItemTemplate, the tag mask they could have
-        // SpecSlot|Slot|Item Related
-        // ...TO DO...
-        }
-
-    private void loadSelectedItemTemplate()
-        // Called when you select a stored Item on Item Popup. Then loads every Item related info from 
-        // database into local structures so GUI can show the info for selected Item
-        {
-        itemNameId=d.Items[itemsInDatabaseArray[selectedItem]].NameId; 
-        itemDescription=d.Items[itemsInDatabaseArray[selectedItem]].Description;
-        itemTags=d.Items[itemsInDatabaseArray[selectedItem]].Tags;
-        itemFormulas=d.Items[itemsInDatabaseArray[selectedItem]].Formulas;
-        itemAllowedSlots=d.Items[itemsInDatabaseArray[selectedItem]].AllowedSlots;
-        }
-
-    private void constructCurrentItemTemplate()
-        // Constructs a new ItemTemplate according to whatever is shown in the fields. Afther this
-        // method is finished this ItemTemplate could be added to database as a new ItemTemplate or just 
-        // modify one that already exists (in this case destroys the old ItemTemplate in database 
-        // and adds the new one)
-        {
-        itemTags=new List<string>();
-        for (int i=0; i<tagsCount; i++)
-            {
-            string tag=tagsInDatabaseArray[selectedTag[i]];
-            itemTags.Add(tag);
-            }
-        itemFormulas=new List<Formula>(); 
-        for (int i=0; i<formulaCount; i++)
-            {
-            Formula formula=new Formula(attribsInDatabaseArray[selectedAttribInEachFormula[i]],formulasArray[i],1);
-            itemFormulas.Add(formula);
-            }
-        itemAllowedSlots=new SlotsConfig();
-        List<Dictionary<string,string>> passiveCfg=new List<Dictionary<string,string>>();
-        List<ItemConfig> itemCfg=new List<ItemConfig>();
-        List<SpecConfig> specCfg=new List<SpecConfig>();
-        for (int i=0; i<slotsCount; i++)
-            {
-            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
-                {
-                Dictionary<string,string> actual=new Dictionary<string,string>();
-                actual.Add("When",whenPassiveOptionsArray[selectedWhenPassive[i]]);
-                actual.Add("To whom",toWhomPassiveOptionsArray[selectedToWhomPassive[i]]);
-                passiveCfg.Add(actual);
-                }
-            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
-                {
-                ItemConfig ic;
-                ic.itemMask=itemTagMasks[i];
-                ic.itemIds=tagsInDatabaseList;
-                itemCfg.Add(ic);
-                }
-            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Specialization")
-                {
-                }
-            }
-        itemAllowedSlots.PassiveCfg=passiveCfg;
-        itemAllowedSlots.ItemCfg=itemCfg;
-        itemAllowedSlots.SpecCfg=specCfg;
-        currentItemTemplate=new ItemTemplate(itemNameId,itemDescription,itemTags,itemFormulas,itemAllowedSlots);
-        }
-    #endregion
-
-    #region Database: loadInfoFromDatabase(), auxiliary methods
-    private void loadInfoFromDatabase()
-        // Called when you open the Editor, when you select <NEW> on Item Popup, or when you finish an 
-        // ADD/MODIFY/DELETE operation. Then you have in local variables and structures the updated and 
-        // necessary info from database to create a new ItemTemplate with the Editor
-        {
-        loadItemsFromDatabase();
-        loadTagsFromDatabase();
-        loadAttribsFromDatabase();
-        loadSlotsFromDatabase();
-        }
-
-    private void loadItemsFromDatabase()
-        {
-        itemsInDatabaseList=new List<string>(d.getItemNames());
-        itemsInDatabaseList.Insert(0,"<NEW>");
-        itemsInDatabaseArray=itemsInDatabaseList.ToArray();
-        }
-
-    private void loadTagsFromDatabase()
-        {
-        Dictionary<string,string> auxTags=d.Tags["Item"];
-        tagsInDatabaseList=new List<string>();
-        foreach (KeyValuePair<string,string> result in auxTags)
-            {
-            tagsInDatabaseList.Add(result.Value);
-            }
-        tagsInDatabaseArray=tagsInDatabaseList.ToArray();
-        }
-
-    private void loadAttribsFromDatabase()
-        {
-        // Getting the lists of attributes in database
-        attribsInDatabaseList=new List<string>(d.getAttribIdentifiers());
-        attribsInDatabaseArray=attribsInDatabaseList.ToArray();
-        // Getting the number of attributes every Item has
-        formulasCountForEachItemList=getFormulasCountForEachItem();
-        formulasCountForEachItemArray=formulasCountForEachItemList.ToArray();
-        }
-
-    private List<int> getFormulasCountForEachItem()
-        {
-        List<int> formulasCountForEachItem=new List<int>();
-        foreach (KeyValuePair<string,ItemTemplate> result in d.Items)
-            {
-            formulasCountForEachItem.Add(result.Value.Formulas.Count);
-            }
-        return formulasCountForEachItem;
-        }
-
-    private void loadSlotsFromDatabase()
-        {
-        // Getting the list of slot types allowed (Passive, Item) for this ItemTemplate
-        Template t=new ItemTemplate();
-        slotTypesAllowedList=new List<string>(d.getAllowedSlots(t));
-        slotTypesAllowedList.Insert(0,"Choose...");
-        // Getting the possible options for Passive slots
-        slotTypesAllowedArray=slotTypesAllowedList.ToArray();
-        whenPassiveOptionsList=new List<string>();
-        foreach (KeyValuePair<string,string> result in d.SlotsOptions.PassiveOptions["When"])
-            {
-            whenPassiveOptionsList.Add(result.Value);
-            }
-        whenPassiveOptionsArray=whenPassiveOptionsList.ToArray(); 
-        toWhomPassiveOptionsList=new List<string>();
-        foreach (KeyValuePair<string,string> result in d.SlotsOptions.PassiveOptions["To whom"])
-            {
-            toWhomPassiveOptionsList.Add(result.Value);
-            }
-        toWhomPassiveOptionsArray=toWhomPassiveOptionsList.ToArray();
-        // Getting the possible options for Item slots
-        // known from tags
-        // Getting the number of slots every ItemTemplate has
-        slotsCountForEachItemList=getSlotsCountForEachItem();
-        slotsCountForEachItemArray=slotsCountForEachItemList.ToArray();
-        }
-
-    private List<int> getSlotsCountForEachItem()
-        {
-        List<int> slotsCountForEachItem=new List<int>();
-        foreach (KeyValuePair<string,ItemTemplate> result in d.Items)
-            {
-            int passiveSlotsCount=result.Value.AllowedSlots.PassiveCfg.Count; 
-            int itemSlotsCount=result.Value.AllowedSlots.ItemCfg.Count;
-            //int specSlotsCount=0;  // No slots for Spec in ItemTemplate
-            int slotsCount=passiveSlotsCount+itemSlotsCount;
-            slotsCountForEachItem.Add(slotsCount);
-            }
-        return slotsCountForEachItem;
-        }
-    #endregion
-
     #region GUI zones: updateGUIZones(), auxiliary methods
     private void updateGUIZones(int selectedItem)
         // Updates the fields in the Editor according to the item from database selected in the Item Popup.
@@ -429,24 +433,24 @@ public class ItemEditorWindow: EditorWindow
         // Uptates the Popup tags according to the item from database selected in the Item Popup. This item
         // is identified by the 'selectedItem' integer
         {
-        tagsCount=itemTags.Count; 
-        for (int i=0; i<tagsCount; i++)
+        itemTagsCount=itemTags.Count; 
+        for (int i=0; i<itemTagsCount; i++)
             {
-            selectedTag[i]=bindTags(itemTags[i]);  // Attribute selected in each formula
+            selectedItemTag[i]=bindTags(itemTags[i]);  // Attribute selected in each formula
             }
         }
 
     private int bindTags(string tagStr)
         // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagStr> with its position in the local 
-        // list (used for the Editor) 'List<string> tagsInDatabaseList' returning the position itself
+        // list (used for the Editor) 'List<string> passiveTagsInDatabaseList' returning the position itself
         {
         Dictionary<string,int> bind=new Dictionary<string,int>();
         int position=0;
         int i=0;
         bool found=false;
-        while(!found && i<tagsInDatabaseList.Count)
+        while(!found && i<itemTagsInDatabaseList.Count)
             {
-            if (tagsInDatabaseList[i]==tagStr)
+            if (itemTagsInDatabaseList[i]==tagStr)
                 {
                 position=i;
                 found=true;
@@ -512,31 +516,6 @@ public class ItemEditorWindow: EditorWindow
             selectedTemplateTypeInEachSlot[i]=bindSlots("Specialization");
             i++;
             }
-        }      
-
-    private int bindPassives(string passiveStr, string option)
-        // Binds the 'passiveStr' which represents a concrete passive option for "When" or "To whom" with its 
-        // position in the local lists (used for the Editor) 'List<string> whenPassiveOptionsList' and 'List<string> toWhomPassiveOptionsList'
-        {
-        Dictionary<string,int> bind=new Dictionary<string,int>();
-        List<string> optionsList=new List<string>();
-        int position=0;
-        int i=0;
-        bool found=false;
-        if (option=="When")
-            optionsList=new List<string>(whenPassiveOptionsList);
-        else if (option=="To whom")
-            optionsList=new List<string>(toWhomPassiveOptionsList);
-        while(!found && i<optionsList.Count)
-            {
-            if (optionsList[i]==passiveStr)
-                {
-                position=i;
-                found=true;
-                }
-            i++;
-            }
-        return position;
         }
 
     private int bindSlots(string slotTypeStr)
@@ -550,6 +529,31 @@ public class ItemEditorWindow: EditorWindow
         while(!found && i<slotTypesAllowedList.Count)
             {
             if (slotTypesAllowedList[i]==slotTypeStr)
+                {
+                position=i;
+                found=true;
+                }
+            i++;
+            }
+        return position;
+        }
+
+    private int bindPassives(string passiveStr, string option)
+        // Binds the 'passiveStr' which represents a concrete passive option for "When" or "To whom" with its 
+        // position in the local lists (used for the Editor) 'List<string> whenPassiveOptionsList' and 'List<string> toWhomPassiveOptionsList'
+        {
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        List<string> optionsList=new List<string>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        if (option=="When")
+            optionsList=new List<string>(passiveWhenTagsInDatabaseList);
+        else if (option=="To whom")
+            optionsList=new List<string>(passiveToWhomTagsInDatabaseList);
+        while(!found && i<optionsList.Count)
+            {
+            if (optionsList[i]==passiveStr)
                 {
                 position=i;
                 found=true;

@@ -51,7 +51,7 @@ public class AttributeEditorWindow: EditorWindow
             if(selectedAttrib==0)  // if 'selectedAttrib' is '<NEW>' then reset the fields
                 resetFields();
             else  // else if 'selectedAttrib' exists then manage it directly from database through 'temporal' container
-                temporal=Database.Instance.attributes[attribsInDatabaseArray[selectedAttrib]];
+                temporal=Database.Instance.Attributes[attribsInDatabaseArray[selectedAttrib]];
             }
         EditorGUILayout.EndVertical();
         // Edit (add, modify and delete) zone

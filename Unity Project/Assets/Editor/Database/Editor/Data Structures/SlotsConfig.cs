@@ -1,5 +1,11 @@
 ﻿using System.Collections.Generic;
 
+public struct PassiveConfig
+    // En principio no se usa
+    {
+    List<Dictionary<string,string>> _passivePairs;
+    }
+
 public struct ItemConfig
     {  
     public int itemMask;

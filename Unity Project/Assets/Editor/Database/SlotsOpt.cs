@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct PassiveOpt
+    {
+    Dictionary<string,Dictionary<string,string>> _passiveOptions;
+    public int passiveMask;
+    public List<string> passiveIds;
+    }
+
 public struct ItemOpt
     {  
-    public int itemMask;  // The mask to show
+    public int itemMask;
     public List<string> itemIds;  
     }
 
 public struct SpecOpt
     {  
-    //int specMask;
-    //List<string> itemIds;  
+    public int specMask;
+    public List<string> specIds;  
     }
 
 public class SlotsOpt
@@ -28,6 +35,8 @@ public class SlotsOpt
         _passiveOptions=new Dictionary<string,Dictionary<string,string>>();
         _itemOptions.itemMask=0;
         _itemOptions.itemIds=new List<string>();
+        _specOptions.specMask=0;
+        _specOptions.specIds=new List<string>();
         }
     #endregion
 

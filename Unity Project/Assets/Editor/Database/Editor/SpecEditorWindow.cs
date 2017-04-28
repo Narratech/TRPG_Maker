@@ -1,263 +1,615 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
 public class SpecEditorWindow: EditorWindow
+    #region Info
+    #endregion
+    #region Future fixes
+    // -Inhetirance from Template.cs
+    // -Masks not based in integers
+    #endregion
     {
+    #region Attributes
+    // Database instance
+    Database d;
     // Constants
-    private static int MAX_FORMULAS=1000;
-    private static int MAX_SLOTS=1000;
-    // Wizard
-    private int step;
-    // Basics
-    string specName;
-    string specDescription;
-    // Formulas
-    private int formulaCount;
-    private string[] coreOptions;
-    int[] selectedCoreIndex;
-    string[] formulaArray;
-    // Slots
-    private int slotsCount;
-    private string[] slotTypes; int[] selectedSlotIndex;
-    private string[] specSlots; int[] selectedSpecIndex;
-    private string[] itemSlots; int[] selectedItemIndex;
-    private string[] passiveSlots; int[] selectedPassiveIndex;
+    private static int MAX_TAGS=30;
+    private static int MAX_FORMULAS=10;
+    private static int MAX_SLOTS=24;
+    // Current spec values and container for the values
+    string specNameId;  // The name and unique identifier of the SpecTemplate
+    string specDescription;  // The description of the SpecTemplate
+    //List<string> specTags;  // Every tag that this SpecTemplate has
+    List<Formula> specFormulas;  // Every formula that modifies attributes for this SpecTemplate
+    SlotsConfig specAllowedSlots;  // Every slot allowed in this SpecTemplate
+    SpecTemplate currentSpecTemplate;  // Temporal container for the SpecTemplate we are editing
+    // Spec related
+    List<string> specsInDatabaseList;  // List of spec 'Spec.nameId' in database
+    string[] specsInDatabaseArray;  // The same list in array format for the Editor
+    int selectedSpec;  // Position in Popup for selected spec to add/modify/delete 
+    /*
+    // Tags|Spec related
+    List<string> specTagsInDatabaseList;  // List of tags for SpecTemplate in database
+    string[] specTagsInDatabaseArray;  // The same list in array format for the Editor
+    int[] selectedSpecTag;  // Position in Popup for selected type tag in each tag
+    int specTagsCount;  // Number of tags the item being added/modified/deleted currently has
+    */
+    // Formula|Spec related
+    List<string> attribsInDatabaseList;  // List of existing 'Attribute.id' in database
+    string[] attribsInDatabaseArray;  // The same list in array format for the Editor
+    List<int> formulasCountForEachSpecList;  // Number of formulas each spec in database has
+    int[] formulasCountForEachSpecArray;  // The same list in array format for the Editor
+    int formulaCount;  // Number of formulas the spec being added/modified/deleted currently has
+    int[] selectedAttribInEachFormula;  // Position in Popup for selected Attribute in each formula
+    string[] formulasArray;  // Formulas themselves
+    // Slot|Spec related
+    List<string> slotTypesAllowedList;  // List of slot types the spec can add to himself 
+    string[] slotTypesAllowedArray;  // The same list in array format for the Editor
+    List<int> slotsCountForEachSpecList;  // Number of slots each spec in database has
+    int[] slotsCountForEachSpecArray;  // The same list in array format for the Editor
+    int slotsCount;  // Number of slots the spec being added/modified/deleted currently has
+    int[] selectedTemplateTypeInEachSlot;  // Position in Popup for selected Template type in each slot
+    // PassiveSlot|Slot|Spec related
+    List<string> passiveWhenTagsInDatabaseList;  // List of tags for PassiveTemplate (When) in database
+    string[] passiveWhenTagsInDatabaseArray;  // The same list in array format for the Editor
+    int[] selectedWhenPassive;  // Position in Popup for selected 'when' option in each slot
+    List<string> passiveToWhomTagsInDatabaseList;  // List of tags for PassiveTemplate (To whom) in database
+    string[] passiveToWhomTagsInDatabaseArray;  // The same list in array format for the Editor
+    int[] selectedToWhomPassive;  // Position in Popup for selected 'to whom' option in each slot
+    // ItemSlot|Slot|Spec related
+    List<string> itemTagsInDatabaseList;  // List of tags for ItemTemplate in database
+    string[] itemTagsInDatabaseArray;  // The same list in array format for the Editor
+    int[] itemTagMasks;  // List of tag masks for every item slot selected
+    // SpecSlot|Slot|Spec related
+    int[] specTagMasks;  // List of tag masks for every spec slot selected
+    List<string> specsInDatabaseForSlotsList;  // List of spec 'Spec.nameId' in database
+    string[] specsInDatabaseForSlotsArray;  // The same list in array format for the SpecSlot
+    #endregion
 
-    // Constructor
+    #region Constructor
     public SpecEditorWindow()
         {
-        // Wizard
-        step=0;
-        // Basics
-        specName="Enter your spec name here";
-        specDescription="Enter your spec description here";
-        // Formulas
-        formulaCount=0;
-        coreOptions=new string[] { "ATK", "DEX", "INT", "LVL" };
-        selectedCoreIndex=new int[MAX_FORMULAS];
-        formulaArray=new string[MAX_FORMULAS];
-        // Slots
-        slotsCount=0;
-        slotTypes=new string[] {"Spec","Passive","Item","Character"};
-        selectedSlotIndex=new int[MAX_SLOTS];
+        d=Database.Instance;
+        loadInfoFromDatabase();
+        createEmptySpecTemplate();
+        }
+    #endregion
 
-        /*
-        specSlots=new string[] {"Humano","Orco","Elfo","Ladron"};
-        selectedSpecIndex=0;
-        private string[] itemSlots; int[] selectedItemIndex;
-        private string[] passiveSlots; int[] selectedPassiveIndex;*/
+    #region Methods 
+    #region Database: loadInfoFromDatabase(), auxiliary methods
+    private void loadInfoFromDatabase()
+        // Called when you open the Editor, when you select <NEW> on Spec Popup, or when you finish an 
+        // ADD/MODIFY/DELETE operation. Then you have in local variables and structures the updated and 
+        // necessary info from database to create a new SpecTemplate with the Editor
+        {
+        loadSpecsFromDatabase();
+        loadTagsFromDatabase();
+        loadAttribsFromDatabase();
+        loadSlotsFromDatabase();
         }
 
-    // Methods
-    [MenuItem("TRPG/Database/Specialization Editor")]
+    private void loadSpecsFromDatabase()
+        {
+        // For Spec Popup
+        specsInDatabaseList=new List<string>(d.getSpecNames());
+        specsInDatabaseList.Insert(0,"<NEW>");
+        specsInDatabaseArray=specsInDatabaseList.ToArray();
+        // For Spec Slots
+        specsInDatabaseForSlotsList=new List<string>(d.getSpecNames());
+        specsInDatabaseForSlotsArray=specsInDatabaseForSlotsList.ToArray();
+        }
+
+    private void loadTagsFromDatabase()
+        {
+        /*
+        // Tags for Spec Popup and Spec slots
+        Dictionary<string,string> auxSpecTags=d.Tags["Specialization"];
+        specTagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxSpecTags)
+            {
+            specTagsInDatabaseList.Add(result.Value);
+            }
+        specTagsInDatabaseArray=specTagsInDatabaseList.ToArray();
+        */
+        // Tags for Item slots zone
+        Dictionary<string,string> auxItemTags=d.Tags["Item"];
+        itemTagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxItemTags)
+            {
+            itemTagsInDatabaseList.Add(result.Value);
+            }
+        itemTagsInDatabaseArray=itemTagsInDatabaseList.ToArray();
+        // Tags for Passive slots zone
+        Dictionary<string,string> auxPassiveWhenTags=d.Tags["PassiveWhen"];
+        passiveWhenTagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxPassiveWhenTags)
+            {
+            passiveWhenTagsInDatabaseList.Add(result.Value);
+            }
+        passiveWhenTagsInDatabaseArray=passiveWhenTagsInDatabaseList.ToArray();
+        Dictionary<string,string> auxPassiveToWhomTags=d.Tags["PassiveToWhom"];
+        passiveToWhomTagsInDatabaseList=new List<string>();
+        foreach (KeyValuePair<string,string> result in auxPassiveToWhomTags)
+            {
+            passiveToWhomTagsInDatabaseList.Add(result.Value);
+            }
+        passiveToWhomTagsInDatabaseArray=passiveToWhomTagsInDatabaseList.ToArray();
+        }
+
+    private void loadAttribsFromDatabase()
+        {
+        // Getting the lists of attributes in database
+        attribsInDatabaseList=new List<string>(d.getAttribIdentifiers());
+        attribsInDatabaseArray=attribsInDatabaseList.ToArray();
+        // Getting the number of attributes every Spec has
+        formulasCountForEachSpecList=getFormulasCountForEachSpec();
+        formulasCountForEachSpecArray=formulasCountForEachSpecList.ToArray();
+        }
+
+    private List<int> getFormulasCountForEachSpec()
+        {
+        List<int> formulasCountForEachSpec=new List<int>();
+        foreach (KeyValuePair<string,SpecTemplate> result in d.Specs)
+            {
+            formulasCountForEachSpec.Add(result.Value.Formulas.Count);
+            }
+        return formulasCountForEachSpec;
+        }
+
+    private void loadSlotsFromDatabase()
+        {        
+        // Getting the list of slot types allowed (Passive, Item) for this ItemTemplate
+        Template t=new SpecTemplate();
+        slotTypesAllowedList=new List<string>(d.getAllowedSlots(t));
+        slotTypesAllowedList.Insert(0,"Choose...");
+        slotTypesAllowedArray=slotTypesAllowedList.ToArray();
+        // Getting the number of slots every SpecTemplate has
+        slotsCountForEachSpecList=getSlotsCountForEachSpec();
+        slotsCountForEachSpecArray=slotsCountForEachSpecList.ToArray();
+        }
+
+    private List<int> getSlotsCountForEachSpec()
+        {
+        List<int> slotsCountForEachSpec=new List<int>();
+        foreach (KeyValuePair<string,SpecTemplate> result in d.Specs)
+            {
+            int passiveSlotsCount=result.Value.AllowedSlots.PassiveCfg.Count; 
+            int itemSlotsCount=result.Value.AllowedSlots.ItemCfg.Count;
+            int specSlotsCount=result.Value.AllowedSlots.SpecCfg.Count;
+            int slotsCount=passiveSlotsCount+itemSlotsCount+specSlotsCount;
+            slotsCountForEachSpec.Add(slotsCount);
+            }
+        return slotsCountForEachSpec;
+        }
+    #endregion
+    
+    #region SpecTemplate: createEmptySpecTemplate(), loadSelectedSpecTemplate(), constructCurrentSpecTemplate()
+    private void createEmptySpecTemplate()
+        // Called when you open the Editor, when you select <NEW> on Spec Popup, or when you finish an 
+        // ADD/MODIFY/DELETE operation. Then fields and structures are set to be ready to be filled 
+        // with data for a new SpecTemplate
+        {
+        // Spec related
+        specNameId="Enter your specialization name id here";  // Info for textField
+        specDescription="Enter your specialization description here";  // Info for textField
+        /*
+        // Tags|Spec related
+        specTagsCount=0;  // Number of tags the SpecTemplate is managing
+        selectedSpecTag=new int[MAX_TAGS];  // For those 'specTagsCount' tags the ones selected
+        */
+        // Formula|Spec related
+        List<Formula> specFormulas=new List<Formula>();  // Empty list of formulas
+        formulaCount=0;  // Number of formulas the SpecTemplate is managing
+        selectedAttribInEachFormula=new int[MAX_FORMULAS];  // For those 'formulaCount' formulas the attribute they're modifying
+        formulasArray=new string[MAX_FORMULAS];  // For those 'formulaCount' formulas, the formulas themselves
+        // Slot|Spec related
+        List<Template> specSlots=new List<Template>();  // Empty list of slots
+        slotsCount=0;  // Number of slots the SpecTemplate is managing
+        selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];  // For those 'slotsCount' slots, the kind of every one of them
+        // PassiveSlot|Slot|Spec Related       
+        selectedWhenPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, when the passive could be executed
+        selectedToWhomPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, to whom the passive could be executed
+        // ItemSlot|Slot|Spec Related
+        itemTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is ItemTemplate, the tag mask they could have
+        // SpecSlot|Slot|Spec Related
+        specTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is SpecTemplate, the tag mask they could have
+        }
+
+    private void loadSelectedSpecTemplate()
+        // Called when you select a stored Spec on Spec Popup. Then loads every Spec related info from 
+        // database into local structures so GUI can show the info for selected Spec
+        {
+        specNameId=d.Specs[specsInDatabaseArray[selectedSpec]].NameId; 
+        specDescription=d.Specs[specsInDatabaseArray[selectedSpec]].Description;
+        //specTags=d.Specs[specsInDatabaseArray[selectedSpec]].Tags;
+        specFormulas=d.Specs[specsInDatabaseArray[selectedSpec]].Formulas;
+        specAllowedSlots=d.Specs[specsInDatabaseArray[selectedSpec]].AllowedSlots;
+        }
+
+    private void constructCurrentSpecTemplate()
+        // Constructs a new SpecTemplate according to whatever is shown in the fields. After this
+        // method is finished this SpecTemplate could be added to database as a new SpecTemplate or just 
+        // modify one that already exists (in this case destroys the old SpecTemplate in database 
+        // and adds the new one)
+        {
+        /*
+        specTags=new List<string>();
+        for (int i=0; i<specTagsCount; i++)
+            {
+            string tag=specTagsInDatabaseArray[selectedSpecTag[i]];
+            specTags.Add(tag);
+            }
+        */
+        specFormulas=new List<Formula>(); 
+        for (int i=0; i<formulaCount; i++)
+            {
+            Formula formula=new Formula(attribsInDatabaseArray[selectedAttribInEachFormula[i]],formulasArray[i],1);
+            specFormulas.Add(formula);
+            }
+        specAllowedSlots=new SlotsConfig();
+        List<Dictionary<string,string>> passiveCfg=new List<Dictionary<string,string>>();
+        List<ItemConfig> itemCfg=new List<ItemConfig>();
+        List<SpecConfig> specCfg=new List<SpecConfig>();
+        for (int i=0; i<slotsCount; i++)
+            {
+            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
+                {
+                Dictionary<string,string> actual=new Dictionary<string,string>();
+                actual.Add("When",passiveWhenTagsInDatabaseArray[selectedWhenPassive[i]]);
+                actual.Add("To whom",passiveToWhomTagsInDatabaseArray[selectedToWhomPassive[i]]);
+                passiveCfg.Add(actual);
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
+                {
+                ItemConfig ic;
+                ic.itemMask=itemTagMasks[i];
+                ic.itemIds=itemTagsInDatabaseList;
+                itemCfg.Add(ic);
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Specialization")
+                {
+                SpecConfig sc;
+                sc.specMask=specTagMasks[i];
+                sc.specIds=specsInDatabaseList;
+                specCfg.Add(sc);
+                }
+            }
+        specAllowedSlots.PassiveCfg=passiveCfg;
+        specAllowedSlots.ItemCfg=itemCfg;
+        specAllowedSlots.SpecCfg=specCfg;
+        currentSpecTemplate=new SpecTemplate(specNameId,specDescription,null,specFormulas,specAllowedSlots);
+        }
+    #endregion
+
+    #region GUI: CreateWindow(), OnGUI()
+    [MenuItem("TRPG/Database/Spec Editor")]
     static void CreateWindow()
         {
-        SpecEditorWindow window = (SpecEditorWindow)EditorWindow.GetWindow(typeof(SpecEditorWindow));
+        SpecEditorWindow window=(SpecEditorWindow)EditorWindow.GetWindow(typeof(SpecEditorWindow));
         window.Show();
         }
 
     void OnGUI()
-        {
-        switch (step)
-            {
-            case 0:
-                // NEW and EDIT buttons zone
-                EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("NEW",GUILayout.Width(200),GUILayout.Height(200)))
-                    step=1;
-                else if (GUILayout.Button("EDIT",GUILayout.Width(200),GUILayout.Height(200)))
-                    step=3;
-                EditorGUILayout.EndHorizontal();
-                break;
-            case 1:
-                // Basics zone
-                EditorGUILayout.BeginVertical("Box");
-                specName=EditorGUILayout.TextField("Spec name",specName);
-                specDescription=EditorGUILayout.TextField("Spec description",specDescription,GUILayout.Height(50));
-                EditorGUILayout.EndVertical();
-                // Formulas zone
-                EditorGUILayout.BeginVertical("Box");  
-                formulaCount=EditorGUILayout.IntField("Formula count",formulaCount);
-                if (formulaCount<0)
-                    formulaCount=0;
-                else if (formulaCount>MAX_FORMULAS)
-                    formulaCount=MAX_FORMULAS;
-                for (int i=0; i<formulaCount; i++)
-                    {
-                    EditorGUILayout.BeginHorizontal();
-                    selectedCoreIndex[i]=EditorGUILayout.Popup(selectedCoreIndex[i],coreOptions,GUILayout.Width(50));
-                    formulaArray[i]=EditorGUILayout.TextField("=",formulaArray[i]);
-                    EditorGUILayout.EndHorizontal();  
-                    }
-                EditorGUILayout.EndVertical();
-                // Restart and Next buttons zone
-                EditorGUILayout.BeginHorizontal("Box");
-                if (GUILayout.Button("Restart",GUILayout.Width(100),GUILayout.Height(50)))
-                    {
-                    setDefaults();
-                    step=0;
-                    }
-                else if (GUILayout.Button("Next (slots) >",GUILayout.Width(100),GUILayout.Height(50)))
-                    step=2;
-                EditorGUILayout.EndHorizontal();
-                break;
-            case 2:
-                // Slots zone
-                EditorGUILayout.BeginVertical("Box");  
-                slotsCount=EditorGUILayout.IntField("Slots count",slotsCount);
-                if (slotsCount<0)
-                    slotsCount=0;
-                else if (slotsCount>MAX_SLOTS)
-                    slotsCount=MAX_SLOTS;
-                for (int i=0; i<slotsCount; i++)
-                    {
-                    EditorGUILayout.BeginHorizontal();
-                    selectedSlotIndex[i]=EditorGUILayout.Popup(selectedSlotIndex[i],slotTypes);
-                    //formulaArray[i]=EditorGUILayout.TextField("=",formulaArray[i]);
-                    EditorGUILayout.EndHorizontal();  
-                    }
-                EditorGUILayout.BeginHorizontal("Box");
-                EditorGUILayout.LabelField("Slots zone");
-                EditorGUILayout.BeginHorizontal("Box");
-                // Restart and Save buttons zone
-                EditorGUILayout.BeginHorizontal("Box");
-                if (GUILayout.Button("Restart", GUILayout.Width(100), GUILayout.Height(50)))
-                    {
-                    setDefaults();
-                    step=0;
-                    }
-                else if (GUILayout.Button("Save", GUILayout.Width(100), GUILayout.Height(50)))
-                    {
-                    // Mensaje de salvado! -> aceptar -> step 1
-                    saveSpecTemplate();
-                    setDefaults();
-                    step=0;
-                    }
-                EditorGUILayout.EndHorizontal();
-                break;
-            case 3:  // Slots selection
-                break;
-            default:
-                break;
-            }
-        }
-
-    void saveSpecTemplate()
-        {
-        // Salva el Template correspondiente a un SpecTemplate y actualiza 'Database'
-        }
-
-    void setDefaults()
-        {
-        // Limpia todas las variables y estructuras temporales para crear la spec y las vuelve a dejar a sus
-        // defaults
-        }
-        /*
-        EditorGUILayout.BeginHorizontal(); //BEGIN Whole Window
-
-        //Sidebar
-        EditorGUILayout.BeginVertical(GUILayout.Width(200)); // BEGIN Sidebar
-
-        EditorGUILayout.BeginHorizontal(); // BEGIN Board Size
-
-        currentData.SizeX = EditorGUILayout.IntField("Size X", currentData.SizeX);
-        currentData.SizeY = EditorGUILayout.IntField("Size Y", currentData.SizeY);
-
-        EditorGUILayout.EndHorizontal(); // END Board Size
-
-        EditorGUILayout.Space();
-
-        if (GUILayout.Button("Fill"))
-        {
-            currentData.Fill(selectedTile);
-        }
-
-        if (GUILayout.Button("Clear"))
-        {
-            currentData.Clear();
-        }
-
-        bool guiEnabled = GUI.enabled;
-        GUI.enabled = selectedObjectBoard != null;
-
-        if (GUILayout.Button("Save to Object"))
-        {
-
-            //selectedObjectBoard.Load(currentData);
-        }
-        if (GUILayout.Button("Load From Object"))
-        {
-            currentData.Load(selectedObjectBoard);
-        }
-
-        GUI.enabled = guiEnabled;
-
-        EditorGUILayout.EndVertical(); // END Sidebar
-
-        //Board Editor
-        EditorGUILayout.BeginVertical(); // BEGIN Board Editor
-
-        EditorGUILayout.BeginHorizontal(); // BEGIN selectedTile Menu
-        foreach (GameBoardTile tile in Enum.GetValues(typeof(GameBoardTile)))
-        {
-            if (GUILayout.Button(tile.ToString(), (tile == selectedTile ? selectedButton : GUI.skin.button)))
-            {
-                selectedTile = tile;
-            }
-        }
-        EditorGUILayout.EndHorizontal(); // END selectedTile Menu
-
-        EditorGUILayout.BeginHorizontal(); // BEGIN Board Layout
-
-        #region V2 Code
-
-        EditorGUILayout.BeginVertical(); // BEGIN Row Fill Column
-        GUILayout.Space(20);
-        for (int y = 0; y < currentData.SizeY; y++)
-        {
-            if (GUILayout.Button(">", GUILayout.Width(20), GUILayout.Height(50)))
-            {
-                currentData.FillRow(y, selectedTile);
-            }
-        }
-        EditorGUILayout.EndVertical(); // END Row Fill Column
-
+        { 
+        #region Events
         #endregion
-
-        for (int x = 0; x < currentData.SizeX; x++)
-        {
-
-            EditorGUILayout.BeginVertical(); // BEGIN Sub-Board Layout
-
-            #region V2 Code
-
-            if (GUILayout.Button("v", GUILayout.Width(50), GUILayout.Height(20)))
+        #region Spec selection zone
+        ///////////////////////////
+        EditorGUILayout.BeginVertical("Box");
+        EditorGUI.BeginChangeCheck();
+        selectedSpec=EditorGUILayout.Popup(selectedSpec,specsInDatabaseArray,GUILayout.Width(150));
+        if(EditorGUI.EndChangeCheck())
             {
-                currentData.FillColumn(x, selectedTile);
-            }
-
-            #endregion
-
-            for (int y = 0; y < currentData.SizeY; y++)
-            {
-                if (GUILayout.Button(currentData.GetTileValue(x, y).ToString(), GUILayout.Width(50), GUILayout.Height(50)))
+            if(selectedSpec==0)  // if 'selectedSpec' is '<NEW>' then reset the fields
                 {
-                    currentData.SetTileValue(x, y, selectedTile);
+                loadInfoFromDatabase();
+                createEmptySpecTemplate();
+                }
+            else  // else if 'selectedSpec' exists then load it from database to manage it
+                {
+                loadSelectedSpecTemplate();
+                updateGUIZones(selectedSpec);
                 }
             }
-            EditorGUILayout.EndVertical(); // END Sub-Board Layout
+        EditorGUILayout.EndVertical();
+        #endregion
+        #region Spec basics zone
+        ////////////////////////
+        EditorGUILayout.BeginHorizontal("Button");
+        EditorGUILayout.BeginVertical();
+        EditorGUILayout.BeginVertical("Box");
+        EditorGUILayout.LabelField("Basics:",EditorStyles.boldLabel);
+        if(selectedSpec==0)  // if 'selectedSpec' is '<NEW>' then allow to create a name id
+            specNameId=EditorGUILayout.TextField("Spec name id",specNameId);
+        else  // else if 'selectedAttrib' exists then do not allow to create a existing name id
+            EditorGUILayout.LabelField("Spec name id                  "+specNameId);
+        specDescription=EditorGUILayout.TextField("Spec description",specDescription,GUILayout.Height(50));
+        EditorGUILayout.EndVertical();
+        #endregion
+        #region Tags zone
+        /////////////////
+        /*
+        EditorGUILayout.BeginVertical("Box");        
+        EditorGUILayout.LabelField("Tags:",EditorStyles.boldLabel);
+        specTagsCount=EditorGUILayout.IntField("Count",specTagsCount);
+        if (specTagsCount<0)
+            specTagsCount=0;
+        else if (specTagsCount>MAX_TAGS)
+            specTagsCount=MAX_TAGS;
+        EditorGUILayout.BeginHorizontal();
+        for (int i=0; i<specTagsCount; i++)
+            {
+            selectedSpecTag[i]=EditorGUILayout.Popup(selectedSpecTag[i],specTagsInDatabaseArray,GUILayout.Width(70));
+            if ((i%5==4))
+                {
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();  
+                }
+            }
+        EditorGUILayout.EndHorizontal();  
+        EditorGUILayout.EndVertical();
+        */  
+        #endregion
+        #region Formulas zone
+        /////////////////////
+        EditorGUILayout.BeginVertical("Box");
+        EditorGUILayout.LabelField("Formulas:",EditorStyles.boldLabel);
+        formulaCount=EditorGUILayout.IntField("Count",formulaCount);
+        if (formulaCount<0)
+            formulaCount=0;
+        else if (formulaCount>MAX_FORMULAS)
+            formulaCount=MAX_FORMULAS;
+        for (int i=0; i<formulaCount; i++)
+            {
+            EditorGUILayout.BeginHorizontal();
+            selectedAttribInEachFormula[i]=EditorGUILayout.Popup(selectedAttribInEachFormula[i],attribsInDatabaseArray,GUILayout.Width(50));
+            formulasArray[i]=EditorGUILayout.TextField("=",formulasArray[i]); 
+            EditorGUILayout.EndHorizontal();  
+            }
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.EndVertical();
+        #endregion
+        #region Slots zone
+        //////////////////
+        EditorGUILayout.BeginVertical("Box",GUILayout.Width(310));
+        EditorGUILayout.LabelField("Slots:",EditorStyles.boldLabel);
+        slotsCount=EditorGUILayout.IntField("Count",slotsCount);
+        if (slotsCount<0)
+            slotsCount=0;
+        else if (slotsCount>MAX_SLOTS)
+            slotsCount=MAX_SLOTS;
+        for (int i=0; i<slotsCount; i++)
+            {
+            EditorGUILayout.BeginHorizontal();
+            selectedTemplateTypeInEachSlot[i]=EditorGUILayout.Popup(selectedTemplateTypeInEachSlot[i],slotTypesAllowedArray,GUILayout.Width(70));
+            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
+                {
+                itemTagMasks[i]=EditorGUILayout.MaskField(itemTagMasks[i],itemTagsInDatabaseArray,GUILayout.Width(244)); 
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
+                {
+                selectedWhenPassive[i]=EditorGUILayout.Popup(selectedWhenPassive[i],passiveWhenTagsInDatabaseArray,GUILayout.Width(120));
+                selectedToWhomPassive[i]=EditorGUILayout.Popup(selectedToWhomPassive[i],passiveToWhomTagsInDatabaseArray,GUILayout.Width(120));
+                }
+            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Specialization") 
+                {
+                specTagMasks[i]=EditorGUILayout.MaskField(specTagMasks[i],specsInDatabaseForSlotsArray,GUILayout.Width(244)); 
+                }         
+            EditorGUILayout.EndHorizontal();  
+            }
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.EndHorizontal();
+        #endregion
+        #region Buttons zone
+        ////////////////////
+        EditorGUILayout.BeginHorizontal("Box");
+        if(selectedSpec==0)
+            {       
+            if (GUILayout.Button("ADD",GUILayout.Width(80),GUILayout.Height(80)))
+                {
+                constructCurrentSpecTemplate();
+                if (d.addModDelTemplate(currentSpecTemplate,"add"))
+                    {
+                    selectedSpec=0;
+                    loadInfoFromDatabase();
+                    createEmptySpecTemplate();
+                    }
+                }
+            }
+        else
+            {
+            if (GUILayout.Button("MODIFY",GUILayout.Width(80),GUILayout.Height(80)))
+                {
+                constructCurrentSpecTemplate();
+                if (d.addModDelTemplate(currentSpecTemplate,"mod"))
+                    {
+                    selectedSpec=0;
+                    loadInfoFromDatabase();
+                    createEmptySpecTemplate();
+                    }
+                }
+            if (GUILayout.Button("DELETE",GUILayout.Width(80),GUILayout.Height(80)))
+                {
+                constructCurrentSpecTemplate();
+                if (d.addModDelTemplate(currentSpecTemplate,"del"))
+                    {
+                    selectedSpec=0;
+                    loadInfoFromDatabase();
+                    createEmptySpecTemplate();
+                    }
+                }
+            }
+        EditorGUILayout.EndHorizontal();
+        #endregion
         }
-        EditorGUILayout.EndHorizontal(); // END Board Layout
+    #endregion
 
-        EditorGUILayout.EndVertical(); //END Board Editor
+    #region GUI zones: updateGUIZones(), auxiliary methods
+    private void updateGUIZones(int selectedSpec)
+        // Updates the fields in the Editor according to the spec from database selected in the Spec Popup.
+        // This spec is identified by the 'selectedSpec' integer
+        {
+        updateTagsZone(selectedSpec);
+        updateFormulasZone(selectedSpec);
+        updateSlotsZone(selectedSpec);
+        }
 
-        EditorGUILayout.EndHorizontal(); //END Whole Window
+    private void updateTagsZone(int selectedSpec)
+        // Uptates the Popup tags according to the spec from database selected in the Spec Popup. This spec
+        // is identified by the 'selectedSpec' integer
+        {
+        /*
+        specTagsCount=specTags.Count; 
+        for (int i=0; i<specTagsCount; i++)
+            {
+            selectedSpecTag[i]=bindTags(specTags[i]);  // Attribute selected in each formula
+            }
+        */
+        }
+
+    private int bindTags(string tagStr)
+        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagStr> with its position in the local 
+        // list (used for the Editor) 'List<string> specTagsInDatabaseList' returning the position itself
+        {
+        /*
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        while(!found && i<specTagsInDatabaseList.Count)
+            {
+            if (specTagsInDatabaseList[i]==tagStr)
+                {
+                position=i;
+                found=true;
+                }
+            i++;
+            }
+        return position;
+        */
+        return 0;
+        }
+
+    private void updateFormulasZone(int selectedSpec)
+        // Uptates the Popup formulas and field formulas according to the spec from database selected in the 
+        // Spec Popup. This spec is identified by the 'selectedSpec' integer
+        {
+        formulaCount=formulasCountForEachSpecArray[selectedSpec-1]; 
+        for (int i=0; i<formulaCount; i++)
+            {
+            selectedAttribInEachFormula[i]=bindFormulas(d.Specs[specsInDatabaseList[selectedSpec]].Formulas[i].label);  // Attribute selected in each formula
+            formulasArray[i]=d.Specs[specsInDatabaseList[selectedSpec]].Formulas[i].formula;  // Formulas themselves
+            }
+        }
+
+    private int bindFormulas(string attrStr)
+        // Binds the 'attrStr' which represents an 'Attribute.id' (LVL, HPS, MPS...) with its position in the local 
+        // list (used for the Editor) 'List<string> attribsInDatabaseList' returning the position itself
+        {
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        while(!found && i<attribsInDatabaseList.Count)
+            {
+            if (attribsInDatabaseList[i]==attrStr)
+                {
+                position=i;
+                found=true;
+                }
+            i++;
+            }
+        return position;
+        }
+
+    private void updateSlotsZone(int selectedSpec)
+        // Uptates the Popup slots and config slots according to the spec from database selected in the 
+        // Spec Popup. This spec is identified by the 'selectedSpec' integer
+        {
+        slotsCount=slotsCountForEachSpecArray[selectedSpec-1];
+        int i=0;            
+        foreach (Dictionary<string,string> result in d.Specs[specsInDatabaseList[selectedSpec]].AllowedSlots.PassiveCfg)
+            {
+            selectedTemplateTypeInEachSlot[i]=bindSlots("Passive");
+            selectedWhenPassive[i]=bindPassives(result["When"],"When");
+            selectedToWhomPassive[i]=bindPassives(result["To whom"],"To whom");
+            i++;
+            }
+        foreach (ItemConfig result in d.Specs[specsInDatabaseList[selectedSpec]].AllowedSlots.ItemCfg)
+            {
+            selectedTemplateTypeInEachSlot[i]=bindSlots("Item");
+            itemTagMasks[i]=result.itemMask;
+            i++;
+            }
+        foreach (SpecConfig result in d.Specs[specsInDatabaseList[selectedSpec]].AllowedSlots.SpecCfg)
+            {
+            selectedTemplateTypeInEachSlot[i]=bindSlots("Specialization");
+            specTagMasks[i]=result.specMask;
+            i++;
+            }
+        }      
+
+    private int bindSlots(string slotTypeStr)
+        // Binds the 'slotTypeStr' which represents a type of slot with its position in the local list (used for the Editor) 
+        // 'List<string> slotTypesAllowedList'
+        {
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        while(!found && i<slotTypesAllowedList.Count)
+            {
+            if (slotTypesAllowedList[i]==slotTypeStr)
+                {
+                position=i;
+                found=true;
+                }
+            i++;
+            }
+        return position;
+        }
+
+    private int bindPassives(string passiveStr, string option)
+        // Binds the 'passiveStr' which represents a concrete passive option for "When" or "To whom" with its 
+        // position in the local lists (used for the Editor) 'List<string> passiveWhenTagsInDatabaseList' and 'List<string> passiveToWhomTagsInDatabaseList'
+        {
+        Dictionary<string,int> bind=new Dictionary<string,int>();
+        List<string> optionsList=new List<string>();
+        int position=0;
+        int i=0;
+        bool found=false;
+        if (option=="When")
+            optionsList=new List<string>(passiveWhenTagsInDatabaseList);
+        else if (option=="To whom")
+            optionsList=new List<string>(passiveToWhomTagsInDatabaseList);
+        while(!found && i<optionsList.Count)
+            {
+            if (optionsList[i]==passiveStr)
+                {
+                position=i;
+                found=true;
+                }
+            i++;
+            }
+        return position;
+        }
+    #endregion
+    #endregion
     }
 
-
+#region Handy
+/* TO SEE WHICH ELEMENT IS SELECTED
+    ArrayList maGroupNames; // This is my array of options (string)
+    int mCategory; // This is my maskfield's result
+    for (int i = 0; i < maGroupNames.Count; i++)
+        {
+        int layer = 1 << i;
+        if ((mCategory & layer) != 0)
+            {
+            //This group is selected
+            }
+        }
+    }
 */
-}
-
-//    new List<string>(coreOptions).ToArray()
+#endregion
