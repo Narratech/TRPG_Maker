@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BHEditor : EditorWindow
 {
-    private static int MAX_REQUIREMENTS = 5;
+    private static int MAX_REQUIREMENTS = 100;
 
 
     private int damage = 0;
@@ -17,7 +17,7 @@ public class BHEditor : EditorWindow
 
     private bool active = true;
 
-    private string[] objective = new string[] { "Self", "Ally", "Enemy", "Objetc", "All map" };
+    private string[] objective = new string[] { "On target", "Projectile", "On Map" };
     private int selectedObjective;
     private string[] skillType = new string[] { "One Target", "All Enemies", "All Allies", "All Map", "Area" };
     private int selectedSkillType;
@@ -77,11 +77,20 @@ public class BHEditor : EditorWindow
                     // Creando una habilidad, definimos nombre, descripcion y tipo de daño que va a hacer 
                     skillName = EditorGUILayout.TextField("Skill name", skillName);
                     skillDescription = EditorGUILayout.TextField("Skill description", skillDescription);
+
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Type of skill");
+                    selectedObjective = EditorGUILayout.Popup(selectedObjective, objective);
+                    GUILayout.EndHorizontal();
+
+
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField("Skill type");
                     selectedSkillType = EditorGUILayout.Popup(selectedSkillType, skillType);
                     GUILayout.EndHorizontal();
-                  
+
+
+
                     //Segun lo que se haya escogido pueden aparecer varias opciones.
                     switch (selectedSkillType)
                     {
@@ -184,6 +193,53 @@ public class BHEditor : EditorWindow
                             EditorGUILayout.LabelField("Damage:");
                             damage = EditorGUILayout.IntField(damage);
                             EditorGUILayout.EndHorizontal();
+
+
+                            //requisitos para la habilidad
+                            activeRequirements = EditorGUILayout.Foldout(activeRequirements, "Requirements");
+
+                            if (activeRequirements)
+                            {
+
+                                if (GUILayout.Button("Add Requirement"))
+                                    numberRequirements = numberRequirements + 1;
+
+                                if (numberRequirements > 0)
+                                {
+
+                                    for (int i = 0; i < numberRequirements; i++)
+                                    {
+                                        EditorGUILayout.BeginHorizontal();
+                                        selectedRequirement[i] = EditorGUILayout.Popup(selectedRequirement[i], requirements);
+                                        requisitos[i] = EditorGUILayout.TextField(requisitos[i]);
+
+                                        SkillRequirement require = new SkillRequirement(selectedRequirement[i], requisitos[i]);
+
+
+                                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
+                                        {
+                                            //Ha pulsado borrar boton
+                                            skillRequirements.Remove(require);
+                                            numberRequirements--;
+                                        }
+
+                                        if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(30)))
+                                        {
+                                            skillRequirements.Add(require);
+
+                                        }
+
+
+
+                                        EditorGUILayout.EndHorizontal();
+
+                                    }
+                                }
+
+                            }
+
+
+
                             break;
 
                         //Se ha escogido una habilidad que selecciona a todos los aliados
@@ -192,6 +248,50 @@ public class BHEditor : EditorWindow
                             EditorGUILayout.LabelField("Healing:");
                             damage = EditorGUILayout.IntField(damage);
                             EditorGUILayout.EndHorizontal();
+
+                            //requisitos para la habilidad
+                            activeRequirements = EditorGUILayout.Foldout(activeRequirements, "Requirements");
+
+                            if (activeRequirements)
+                            {
+
+                                if (GUILayout.Button("Add Requirement"))
+                                    numberRequirements = numberRequirements + 1;
+
+                                if (numberRequirements > 0)
+                                {
+
+                                    for (int i = 0; i < numberRequirements; i++)
+                                    {
+                                        EditorGUILayout.BeginHorizontal();
+                                        selectedRequirement[i] = EditorGUILayout.Popup(selectedRequirement[i], requirements);
+                                        requisitos[i] = EditorGUILayout.TextField(requisitos[i]);
+
+                                        SkillRequirement require = new SkillRequirement(selectedRequirement[i], requisitos[i]);
+
+
+                                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
+                                        {
+                                            //Ha pulsado borrar boton
+                                            skillRequirements.Remove(require);
+                                            numberRequirements--;
+                                        }
+
+                                        if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(30)))
+                                        {
+                                            skillRequirements.Add(require);
+
+                                        }
+
+
+
+                                        EditorGUILayout.EndHorizontal();
+
+                                    }
+                                }
+
+                            }
+
                             break;
 
                         //Se ha escogido una habilidad que selecciona a todos los objetivos (amigos o enemigos del mapa)
@@ -200,6 +300,50 @@ public class BHEditor : EditorWindow
                             EditorGUILayout.LabelField("Damage:");
                             damage = EditorGUILayout.IntField(damage);
                             EditorGUILayout.EndHorizontal();
+
+
+                            //requisitos para la habilidad
+                            activeRequirements = EditorGUILayout.Foldout(activeRequirements, "Requirements");
+
+                            if (activeRequirements)
+                            {
+
+                                if (GUILayout.Button("Add Requirement"))
+                                    numberRequirements = numberRequirements + 1;
+
+                                if (numberRequirements > 0)
+                                {
+
+                                    for (int i = 0; i < numberRequirements; i++)
+                                    {
+                                        EditorGUILayout.BeginHorizontal();
+                                        selectedRequirement[i] = EditorGUILayout.Popup(selectedRequirement[i], requirements);
+                                        requisitos[i] = EditorGUILayout.TextField(requisitos[i]);
+
+                                        SkillRequirement require = new SkillRequirement(selectedRequirement[i], requisitos[i]);
+
+
+                                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
+                                        {
+                                            //Ha pulsado borrar boton
+                                            skillRequirements.Remove(require);
+                                            numberRequirements--;
+                                        }
+
+                                        if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(30)))
+                                        {
+                                            skillRequirements.Add(require);
+
+                                        }
+
+
+
+                                        EditorGUILayout.EndHorizontal();
+
+                                    }
+                                }
+
+                            }
                             break;
 
                         //Se ha escogido una habilidad que selecciona en area
@@ -266,6 +410,50 @@ public class BHEditor : EditorWindow
                                     EditorGUILayout.EndHorizontal();
                                 }
                                 GUI.backgroundColor = Color.white;
+                            }
+
+
+                            //requisitos para la habilidad
+                            activeRequirements = EditorGUILayout.Foldout(activeRequirements, "Requirements");
+
+                            if (activeRequirements)
+                            {
+
+                                if (GUILayout.Button("Add Requirement"))
+                                    numberRequirements = numberRequirements + 1;
+
+                                if (numberRequirements > 0)
+                                {
+
+                                    for (int i = 0; i < numberRequirements; i++)
+                                    {
+                                        EditorGUILayout.BeginHorizontal();
+                                        selectedRequirement[i] = EditorGUILayout.Popup(selectedRequirement[i], requirements);
+                                        requisitos[i] = EditorGUILayout.TextField(requisitos[i]);
+
+                                        SkillRequirement require = new SkillRequirement(selectedRequirement[i], requisitos[i]);
+
+
+                                        if (GUILayout.Button("X", GUILayout.Width(30), GUILayout.Height(30)))
+                                        {
+                                            //Ha pulsado borrar boton
+                                            skillRequirements.Remove(require);
+                                            numberRequirements--;
+                                        }
+
+                                        if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(30)))
+                                        {
+                                            skillRequirements.Add(require);
+
+                                        }
+
+
+
+                                        EditorGUILayout.EndHorizontal();
+
+                                    }
+                                }
+
                             }
 
                             break;
