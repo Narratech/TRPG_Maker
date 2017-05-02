@@ -301,7 +301,7 @@ class Database
         humanIc10.itemMask=4113;
         listHumanIc.Add(humanIc10);
         humanSlotsConfig.ItemCfg=listHumanIc;
-        SpecTemplate human=new SpecTemplate("Human","Humans are flesh and bones",null,humanFormulas,humanSlotsConfig);
+        SpecTemplate human=new SpecTemplate("Human","Humans are flesh and bones",true,humanFormulas,humanSlotsConfig);
         _specs.Add("Human",human);
         // Elf spec
         List<Formula> elfFormulas=new List<Formula>();
@@ -350,7 +350,7 @@ class Database
         elfIc10.itemMask=4113;
         listElfIc.Add(elfIc10);
         elfSlotsConfig.ItemCfg=listElfIc;
-        SpecTemplate elf=new SpecTemplate("Elf","Elves have pointy ears",null,elfFormulas,elfSlotsConfig);
+        SpecTemplate elf=new SpecTemplate("Elf","Elves have pointy ears",true,elfFormulas,elfSlotsConfig);
         _specs.Add("Elf",elf);
         // Orc spec
         List<Formula> orcFormulas=new List<Formula>();
@@ -399,7 +399,7 @@ class Database
         orcIc10.itemMask=4113;
         listOrcIc.Add(orcIc10);
         orcSlotsConfig.ItemCfg=listOrcIc;
-        SpecTemplate orc=new SpecTemplate("Orc","Orcs are typically green and ugly",null,orcFormulas,orcSlotsConfig);
+        SpecTemplate orc=new SpecTemplate("Orc","Orcs are typically green and ugly",true,orcFormulas,orcSlotsConfig);
         _specs.Add("Orc",orc);
         // Filling derived 'specs'
         // Swordman spec
@@ -412,7 +412,7 @@ class Database
         swordmanIc1.itemMask=65543;
         listSwordmanIc.Add(swordmanIc1);
         swordmanSlotsConfig.ItemCfg=listSwordmanIc;
-        SpecTemplate swordman=new SpecTemplate("Swordman","Swordman is a human/elf spec in which they can use swords",null,swordmanFormulas,swordmanSlotsConfig);
+        SpecTemplate swordman=new SpecTemplate("Swordman","Swordman is a human/elf spec in which they can use swords",false,swordmanFormulas,swordmanSlotsConfig);
         _specs.Add("Swordman",swordman);
         Debug.Log("Test database created!");
         }

@@ -24,7 +24,7 @@ public class PassiveEditorWindow: EditorWindow
     List<string> passiveTags;  // Every tag that this SpecTemplate has
     List<Formula> passiveFormulas;  // Every formula that modifies attributes for this SpecTemplate
     SlotsConfig passiveAllowedSlots;  // Every slot allowed in this SpecTemplate
-    SpecTemplate currentPassiveTemplate;  // Temporal container for the SpecTemplate we are editing
+    Template currentPassiveTemplate;  // Temporal container for the SpecTemplate we are editing
     // Passive related
     List<string> passivesInDatabaseList;  // List of spec 'Spec.nameId' in database
     string[] passivesInDatabaseArray;  // The same list in array format for the Editor
@@ -96,16 +96,16 @@ public class PassiveEditorWindow: EditorWindow
         {
         // Tags for Passive tags zone and Passive slots zone
         passiveTagsInDatabaseList=new List<string>();
-        Dictionary<string,string> auxPassiveWhenTags=d.Tags["PassiveWhen"];
         passiveWhenTagsInDatabaseList=new List<string>();
+        Dictionary<string,string> auxPassiveWhenTags=d.Tags["PassiveWhen"];
         foreach (KeyValuePair<string,string> result in auxPassiveWhenTags)
             {
             passiveWhenTagsInDatabaseList.Add(result.Value);
             passiveTagsInDatabaseList.Add(result.Value);
             }
         passiveWhenTagsInDatabaseArray=passiveWhenTagsInDatabaseList.ToArray();
-        Dictionary<string,string> auxPassiveToWhomTags=d.Tags["PassiveToWhom"];
         passiveToWhomTagsInDatabaseList=new List<string>();
+        Dictionary<string,string> auxPassiveToWhomTags=d.Tags["PassiveToWhom"];
         foreach (KeyValuePair<string,string> result in auxPassiveToWhomTags)
             {
             passiveToWhomTagsInDatabaseList.Add(result.Value);
@@ -137,12 +137,12 @@ public class PassiveEditorWindow: EditorWindow
 
     private void loadSlotsFromDatabase()
         {        
-        // Getting the list of slot types allowed (Passive, Item) for this ItemTemplate
+        // Getting the list of slot types allowed (Passive) for this PassiveTemplate
         Template t=new PassiveTemplate();
         slotTypesAllowedList=new List<string>(d.getAllowedSlots(t));
         slotTypesAllowedList.Insert(0,"Choose...");
         slotTypesAllowedArray=slotTypesAllowedList.ToArray();
-        // Getting the number of slots every SpecTemplate has
+        // Getting the number of slots every PassiveTemplate has
         slotsCountForEachPassiveList=getSlotsCountForEachPassive();
         slotsCountForEachPassiveArray=slotsCountForEachPassiveList.ToArray();
         }
@@ -162,58 +162,58 @@ public class PassiveEditorWindow: EditorWindow
         }
     #endregion
     
-    #region SpecTemplate: createEmptyPassiveTemplate(), loadselectedPassiveTemplate(), constructcurrentPassiveTemplate()
+    #region PassiveTemplate: createEmptyPassiveTemplate(), loadselectedPassiveTemplate(), constructcurrentPassiveTemplate()
     private void createEmptyPassiveTemplate()
-        // Called when you open the Editor, when you select <NEW> on Spec Popup, or when you finish an 
+        // Called when you open the Editor, when you select <NEW> on Passive Popup, or when you finish an 
         // ADD/MODIFY/DELETE operation. Then fields and structures are set to be ready to be filled 
-        // with data for a new SpecTemplate
+        // with data for a new PassiveTemplate
         {
         // Passive related
-        passiveNameId="Enter your specialization name id here";  // Info for textField
-        passiveDescription="Enter your specialization description here";  // Info for textField
+        passiveNameId="Enter your passive name id here";  // Info for textField
+        passiveDescription="Enter your passive description here";  // Info for textField
         // Tags|Passive related
-        passiveTagsCount=0;  // Number of tags the SpecTemplate is managing
+        passiveTagsCount=0;  // Number of tags the PassiveTemplate is managing
         selectedPassiveTag=new int[MAX_TAGS];  // For those 'passiveTagsCount' tags the ones selected
         // Formula|Passive related
         List<Formula> passiveFormulas=new List<Formula>();  // Empty list of formulas
-        formulaCount=0;  // Number of formulas the SpecTemplate is managing
+        formulaCount=0;  // Number of formulas the PassiveTemplate is managing
         selectedAttribInEachFormula=new int[MAX_FORMULAS];  // For those 'formulaCount' formulas the attribute they're modifying
         formulasArray=new string[MAX_FORMULAS];  // For those 'formulaCount' formulas, the formulas themselves
         // Slot|Passive related
         List<Template> passiveSlots=new List<Template>();  // Empty list of slots
-        slotsCount=0;  // Number of slots the SpecTemplate is managing
+        slotsCount=0;  // Number of slots the PassiveTemplate is managing
         selectedTemplateTypeInEachSlot=new int[MAX_SLOTS];  // For those 'slotsCount' slots, the kind of every one of them
         // PassiveSlot|Slot|Passive Related       
         selectedWhenPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, when the passive could be executed
         selectedToWhomPassive=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is PassiveTemplate, to whom the passive could be executed
         // ItemSlot|Slot|Passive Related
-        //itemTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is ItemTemplate, the tag mask they could have
+        // -No ItemSlot in Passive
         // SpecSlot|Slot|Passive Related
-        //specTagMasks=new int[MAX_SLOTS];  // For those 'slotsCount' slots, if the slot is SpecTemplate, the tag mask they could have
+        // -No SpecSlot in Passive
         }
 
     private void loadselectedPassiveTemplate()
-        // Called when you select a stored Spec on Spec Popup. Then loads every Spec related info from 
-        // database into local structures so GUI can show the info for selected Spec
+        // Called when you select a stored Passive on Passive Popup. Then loads every Passive related info from 
+        // database into local structures so GUI can show the info for selected Passive
         {
-        passiveNameId=d.Specs[passivesInDatabaseArray[selectedPassive]].NameId; 
-        passiveDescription=d.Specs[passivesInDatabaseArray[selectedPassive]].Description;
-        passiveTags=d.Specs[passivesInDatabaseArray[selectedPassive]].Tags;
-        passiveFormulas=d.Specs[passivesInDatabaseArray[selectedPassive]].Formulas;
-        passiveAllowedSlots=d.Specs[passivesInDatabaseArray[selectedPassive]].AllowedSlots;
+        passiveNameId=d.Passives[passivesInDatabaseArray[selectedPassive]].NameId; 
+        passiveDescription=d.Passives[passivesInDatabaseArray[selectedPassive]].Description;
+        passiveTags=d.Passives[passivesInDatabaseArray[selectedPassive]].Tags; 
+        passiveFormulas=d.Passives[passivesInDatabaseArray[selectedPassive]].Formulas;
+        passiveAllowedSlots=d.Passives[passivesInDatabaseArray[selectedPassive]].AllowedSlots;
         }
 
     private void constructcurrentPassiveTemplate()
-        // Constructs a new SpecTemplate according to whatever is shown in the fields. After this
-        // method is finished this SpecTemplate could be added to database as a new SpecTemplate or just 
-        // modify one that already exists (in this case destroys the old SpecTemplate in database 
+        // Constructs a new PassiveTemplate according to whatever is shown in the fields. After this
+        // method is finished this PassiveTemplate could be added to database as a new PassiveTemplate or just 
+        // modify one that already exists (in this case destroys the old PassiveTemplate in database 
         // and adds the new one)
         {
         passiveTags=new List<string>();
         for (int i=0; i<passiveTagsCount; i++)
             {
             string tag=passiveTagsInDatabaseArray[selectedPassiveTag[i]];
-            passiveTags.Add(tag);
+            passiveTags.Add(tag); 
             }
         passiveFormulas=new List<Formula>(); 
         for (int i=0; i<formulaCount; i++)
@@ -234,29 +234,11 @@ public class PassiveEditorWindow: EditorWindow
                 actual.Add("To whom",passiveToWhomTagsInDatabaseArray[selectedToWhomPassive[i]]);
                 passiveCfg.Add(actual);
                 }
-            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
-                {
-                /*
-                ItemConfig ic;
-                ic.itemMask=itemTagMasks[i];
-                ic.itemIds=passiveTagsInDatabaseList;
-                itemCfg.Add(ic);
-                */
-                }
-            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Specialization")
-                {
-                /*
-                SpecConfig sc;
-                sc.specMask=specTagMasks[i];
-                sc.specIds=passivesInDatabaseList;
-                specCfg.Add(sc);
-                */
-                }
             }
         passiveAllowedSlots.PassiveCfg=passiveCfg;
         passiveAllowedSlots.ItemCfg=itemCfg;
         passiveAllowedSlots.SpecCfg=specCfg;
-        currentPassiveTemplate=new SpecTemplate(passiveNameId,passiveDescription,null,passiveFormulas,passiveAllowedSlots);
+        currentPassiveTemplate=new PassiveTemplate(passiveNameId,passiveDescription,passiveTags,passiveFormulas,passiveAllowedSlots);
         }
     #endregion
 
@@ -272,8 +254,8 @@ public class PassiveEditorWindow: EditorWindow
         { 
         #region Events
         #endregion
-        #region Spec selection zone
-        ///////////////////////////
+        #region Passive selection zone
+        //////////////////////////////
         EditorGUILayout.BeginVertical("Box");
         EditorGUI.BeginChangeCheck();
         selectedPassive=EditorGUILayout.Popup(selectedPassive,passivesInDatabaseArray,GUILayout.Width(150));
@@ -292,8 +274,8 @@ public class PassiveEditorWindow: EditorWindow
             }
         EditorGUILayout.EndVertical();
         #endregion
-        #region Spec basics zone
-        ////////////////////////
+        #region Passive basics zone
+        ///////////////////////////
         EditorGUILayout.BeginHorizontal("Button");
         EditorGUILayout.BeginVertical();
         EditorGUILayout.BeginVertical("Box");
@@ -301,7 +283,7 @@ public class PassiveEditorWindow: EditorWindow
         if(selectedPassive==0)  // if 'selectedPassive' is '<NEW>' then allow to create a name id
             passiveNameId=EditorGUILayout.TextField("Passive name id",passiveNameId);
         else  // else if 'selectedAttrib' exists then do not allow to create a existing name id
-            EditorGUILayout.LabelField("Passive name id                  "+passiveNameId);
+            EditorGUILayout.LabelField("Passive name id              "+passiveNameId);
         passiveDescription=EditorGUILayout.TextField("Passive description",passiveDescription,GUILayout.Height(50));
         EditorGUILayout.EndVertical();
         #endregion
@@ -359,17 +341,11 @@ public class PassiveEditorWindow: EditorWindow
             {
             EditorGUILayout.BeginHorizontal();
             selectedTemplateTypeInEachSlot[i]=EditorGUILayout.Popup(selectedTemplateTypeInEachSlot[i],slotTypesAllowedArray,GUILayout.Width(70));
-            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Item")
-                {
-                }
-            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
+            if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Passive") 
                 {
                 selectedWhenPassive[i]=EditorGUILayout.Popup(selectedWhenPassive[i],passiveWhenTagsInDatabaseArray,GUILayout.Width(120));
                 selectedToWhomPassive[i]=EditorGUILayout.Popup(selectedToWhomPassive[i],passiveToWhomTagsInDatabaseArray,GUILayout.Width(120));
-                }
-            else if (slotTypesAllowedArray[selectedTemplateTypeInEachSlot[i]]=="Specialization") 
-                {
-                }         
+                }     
             EditorGUILayout.EndHorizontal();  
             }
         EditorGUILayout.EndVertical();
@@ -421,8 +397,8 @@ public class PassiveEditorWindow: EditorWindow
 
     #region GUI zones: updateGUIZones(), auxiliary methods
     private void updateGUIZones(int selectedPassive)
-        // Updates the fields in the Editor according to the spec from database selected in the Spec Popup.
-        // This spec is identified by the 'selectedPassive' integer
+        // Updates the fields in the Editor according to the passive from database selected in the Passive Popup.
+        // This passive is identified by the 'selectedPassive' integer
         {
         updateTagsZone(selectedPassive);
         updateFormulasZone(selectedPassive);
@@ -430,18 +406,18 @@ public class PassiveEditorWindow: EditorWindow
         }
 
     private void updateTagsZone(int selectedPassive)
-        // Uptates the Popup tags according to the spec from database selected in the Spec Popup. This spec
+        // Updates the Popup tags according to the passive from database selected in the Passive Popup. This passive
         // is identified by the 'selectedPassive' integer
         {
-        passiveTagsCount=passiveTags.Count; 
+        passiveTagsCount=passiveTags.Count;
         for (int i=0; i<passiveTagsCount; i++)
             {
-            selectedPassiveTag[i]=bindTags(passiveTags[i]);  // Attribute selected in each formula
+            selectedPassiveTag[i]=bindTags(passiveTags[i]);
             }
         }
 
     private int bindTags(string tagStr)
-        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagStr> with its position in the local 
+        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagInt> with its position in the local 
         // list (used for the Editor) 'List<string> passiveTagsInDatabaseList' returning the position itself
         {
         Dictionary<string,int> bind=new Dictionary<string,int>();
@@ -461,8 +437,8 @@ public class PassiveEditorWindow: EditorWindow
         }
 
     private void updateFormulasZone(int selectedPassive)
-        // Uptates the Popup formulas and field formulas according to the spec from database selected in the 
-        // Spec Popup. This spec is identified by the 'selectedPassive' integer
+        // Uptates the Popup formulas and field formulas according to the passive from database selected in the 
+        // Passive Popup. This passive is identified by the 'selectedPassive' integer
         {
         formulaCount=formulasCountForEachPassiveArray[selectedPassive-1]; 
         for (int i=0; i<formulaCount; i++)
@@ -493,8 +469,8 @@ public class PassiveEditorWindow: EditorWindow
         }
 
     private void updateSlotsZone(int selectedPassive)
-        // Uptates the Popup slots and config slots according to the spec from database selected in the 
-        // Spec Popup. This spec is identified by the 'selectedPassive' integer
+        // Updates the Popup slots and config slots according to the passive from database selected in the 
+        // Passive Popup. This passive is identified by the 'selectedPassive' integer
         {
         slotsCount=slotsCountForEachPassiveArray[selectedPassive-1];
         int i=0;            

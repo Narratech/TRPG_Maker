@@ -20,6 +20,7 @@ public class SpecEditorWindow: EditorWindow
     // Current spec values and container for the values
     string specNameId;  // The name and unique identifier of the SpecTemplate
     string specDescription;  // The description of the SpecTemplate
+    bool specIsBasicClass;  // Says if this is a basic class (not a derived spec)
     //List<string> specTags;  // Every tag that this SpecTemplate has
     List<Formula> specFormulas;  // Every formula that modifies attributes for this SpecTemplate
     SlotsConfig specAllowedSlots;  // Every slot allowed in this SpecTemplate
@@ -223,6 +224,7 @@ public class SpecEditorWindow: EditorWindow
         specNameId=d.Specs[specsInDatabaseArray[selectedSpec]].NameId; 
         specDescription=d.Specs[specsInDatabaseArray[selectedSpec]].Description;
         //specTags=d.Specs[specsInDatabaseArray[selectedSpec]].Tags;
+        specIsBasicClass=d.Specs[specsInDatabaseArray[selectedSpec]].IsBasicClass;
         specFormulas=d.Specs[specsInDatabaseArray[selectedSpec]].Formulas;
         specAllowedSlots=d.Specs[specsInDatabaseArray[selectedSpec]].AllowedSlots;
         }
@@ -278,7 +280,7 @@ public class SpecEditorWindow: EditorWindow
         specAllowedSlots.PassiveCfg=passiveCfg;
         specAllowedSlots.ItemCfg=itemCfg;
         specAllowedSlots.SpecCfg=specCfg;
-        currentSpecTemplate=new SpecTemplate(specNameId,specDescription,null,specFormulas,specAllowedSlots);
+        currentSpecTemplate=new SpecTemplate(specNameId,specDescription,specIsBasicClass,specFormulas,specAllowedSlots);
         }
     #endregion
 
@@ -325,6 +327,7 @@ public class SpecEditorWindow: EditorWindow
         else  // else if 'selectedAttrib' exists then do not allow to create a existing name id
             EditorGUILayout.LabelField("Spec name id                  "+specNameId);
         specDescription=EditorGUILayout.TextField("Spec description",specDescription,GUILayout.Height(50));
+        specIsBasicClass=EditorGUILayout.Toggle("Is basic class?",specIsBasicClass);
         EditorGUILayout.EndVertical();
         #endregion
         #region Tags zone
@@ -456,7 +459,7 @@ public class SpecEditorWindow: EditorWindow
         }
 
     private void updateTagsZone(int selectedSpec)
-        // Uptates the Popup tags according to the spec from database selected in the Spec Popup. This spec
+        // Updates the Popup tags according to the spec from database selected in the Spec Popup. This spec
         // is identified by the 'selectedSpec' integer
         {
         /*
@@ -469,7 +472,7 @@ public class SpecEditorWindow: EditorWindow
         }
 
     private int bindTags(string tagStr)
-        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagStr> with its position in the local 
+        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagInt> with its position in the local 
         // list (used for the Editor) 'List<string> specTagsInDatabaseList' returning the position itself
         {
         /*

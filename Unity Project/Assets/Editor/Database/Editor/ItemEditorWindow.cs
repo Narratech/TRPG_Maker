@@ -430,7 +430,7 @@ public class ItemEditorWindow: EditorWindow
         }
 
     private void updateTagsZone(int selectedItem)
-        // Uptates the Popup tags according to the item from database selected in the Item Popup. This item
+        // Updates the Popup tags according to the item from database selected in the Item Popup. This item
         // is identified by the 'selectedItem' integer
         {
         itemTagsCount=itemTags.Count; 
@@ -441,7 +441,7 @@ public class ItemEditorWindow: EditorWindow
         }
 
     private int bindTags(string tagStr)
-        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagStr> with its position in the local 
+        // Binds the 'tagStr' which represents a tag Dictionary<tagStr,tagInt> with its position in the local 
         // list (used for the Editor) 'List<string> passiveTagsInDatabaseList' returning the position itself
         {
         Dictionary<string,int> bind=new Dictionary<string,int>();
