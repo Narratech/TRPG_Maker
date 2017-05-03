@@ -52,17 +52,14 @@ public class CharacterEditorWindow: EditorWindow
     #endregion
 
     #region Methods
-    #region Database: loadInfoFromDatabase(), auxiliary methods
-    void loadInfoFromDatabase()        
+    #region Load info
+    void loadInfoFromDatabase()
         // Called when you open the Editor, when you select <NEW> on Character Popup, or when you finish an 
-        // ADD/MODIFY/DELETE operation. Then you have in local variables and structures the updated and 
-        // necessary info from database to create a new SpecTemplate with the Editor
+        // ADD/MODIFY/DELETE operation. 
         {
         loadCoreAttribs();
         loadInfoForClass();
         loadInfoForSpec();
-        loadInfoForItems();
-        loadInfoForPassives();
         }
 
     void loadCoreAttribs()
@@ -102,30 +99,37 @@ public class CharacterEditorWindow: EditorWindow
         _specArray=_specList.ToArray();
         _selectedSpec=0;
         }
-
-    void loadInfoForItems()
+    #endregion
+   
+    #region Update info
+    void updateInfoForSpec()
+        // Called when you select a class in the Class Popup in the Class/Specialization zone
         {
-
-        }
-
-    void loadInfoForPassives()
-        {
-
-        }
-
-    void loadInfoForSpec2()
-        {
+        _selectedSpec=0;
         _specList=new List<string>();
         _specList.Insert(0,"Choose Specialization...");
         foreach (SpecConfig result in d.Specs[_classList[_selectedClass]].AllowedSlots.SpecCfg)
             {
-            foreach (string result2 in result.specIds)
-                {                
-                _specList.Add(result2);
+            List<string> specIds=new List<string>(result.specIds);
+            int specMask=result.specMask;
+            for (int i=0; i<specIds.Count; i++)
+                 {
+                 int layer = 1 << i;
+                 if ((specMask & layer) != 0)
+                    _specList.Add(specIds[i]);
                 }
             }
         _specArray=_specList.ToArray();  // List of 'Spec.nameId' for classes (have no father)
-        _selectedSpec=0;  // Position in Popup for selected class
+        }
+
+    void updateInfoForItems()
+        {
+          // NEXT TO CODE
+        }
+
+    void updateInfoForPassives()
+        {
+          // NEXT TO CODE
         }
     #endregion
 
@@ -206,8 +210,25 @@ public class CharacterEditorWindow: EditorWindow
         {
         EditorGUILayout.BeginVertical("Box");
         EditorGUILayout.LabelField("Class / Specialization:",EditorStyles.boldLabel);
+        EditorGUI.BeginChangeCheck();
         _selectedClass=EditorGUILayout.Popup(_selectedClass,_classArray,GUILayout.Width(150));
-        _selectedSpec=EditorGUILayout.Popup(_selectedSpec,_specArray,GUILayout.Width(150)); 
+        if(EditorGUI.EndChangeCheck())
+            {
+            if (_selectedClass==0)
+                loadInfoForSpec();
+            else if (_selectedClass!=0)
+                updateInfoForSpec();
+            }
+        EditorGUI.BeginChangeCheck();
+        _selectedSpec=EditorGUILayout.Popup(_selectedSpec,_specArray,GUILayout.Width(150));
+        if(EditorGUI.EndChangeCheck())
+            {
+            if (_selectedSpec!=0)
+                {
+                updateInfoForItems();  // NEXT TO CODE
+                updateInfoForPassives();  // NEXT TO CODE
+                }
+            }
         EditorGUILayout.EndVertical();
         }
 

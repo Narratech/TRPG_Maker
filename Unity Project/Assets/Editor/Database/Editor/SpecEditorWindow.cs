@@ -273,7 +273,7 @@ public class SpecEditorWindow: EditorWindow
                 {
                 SpecConfig sc;
                 sc.specMask=specTagMasks[i];
-                sc.specIds=specsInDatabaseList;
+                sc.specIds=specsInDatabaseForSlotsList;
                 specCfg.Add(sc);
                 }
             }
