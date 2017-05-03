@@ -61,6 +61,8 @@ public class CharacterEditorWindow: EditorWindow
         loadCoreAttribs();
         loadInfoForClass();
         loadInfoForSpec();
+        loadInfoForItems();
+        loadInfoForPassives();
         }
 
     void loadCoreAttribs()
@@ -83,7 +85,7 @@ public class CharacterEditorWindow: EditorWindow
     void loadInfoForClass()
         {
         _classList=new List<string>();
-        _classList.Insert(0,"Choose...");
+        _classList.Insert(0,"Choose Class...");
         foreach (SpecTemplate result in d.Specs.Values)
             {
             if (result.IsBasicClass)
@@ -96,15 +98,25 @@ public class CharacterEditorWindow: EditorWindow
     void loadInfoForSpec()
         {
         _specList=new List<string>();
-        _specList.Insert(0,"...");
+        _specList.Insert(0,"Choose Specialization...");
         _specArray=_specList.ToArray();
         _selectedSpec=0;
+        }
+
+    void loadInfoForItems()
+        {
+
+        }
+
+    void loadInfoForPassives()
+        {
+
         }
 
     void loadInfoForSpec2()
         {
         _specList=new List<string>();
-        _specList.Insert(0,"Choose...");
+        _specList.Insert(0,"Choose Specialization...");
         foreach (SpecConfig result in d.Specs[_classList[_selectedClass]].AllowedSlots.SpecCfg)
             {
             foreach (string result2 in result.specIds)
@@ -193,22 +205,25 @@ public class CharacterEditorWindow: EditorWindow
     void onGUIClassSpecialization()
         {
         EditorGUILayout.BeginVertical("Box");
-        EditorGUILayout.LabelField("Class > Specialization:",EditorStyles.boldLabel);
-        EditorGUILayout.BeginHorizontal();
-        _selectedClass=EditorGUILayout.Popup(_selectedClass,_classArray,GUILayout.Width(100));
-        //EditorGUILayout.LabelField(" > ");
-        _selectedSpec=EditorGUILayout.Popup(_selectedSpec,_specArray,GUILayout.Width(100)); 
-        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.LabelField("Class / Specialization:",EditorStyles.boldLabel);
+        _selectedClass=EditorGUILayout.Popup(_selectedClass,_classArray,GUILayout.Width(150));
+        _selectedSpec=EditorGUILayout.Popup(_selectedSpec,_specArray,GUILayout.Width(150)); 
         EditorGUILayout.EndVertical();
         }
 
     void onGUIItems()
         {
+        EditorGUILayout.BeginVertical("Box");
+        EditorGUILayout.LabelField("Items:",EditorStyles.boldLabel);
+        EditorGUILayout.EndVertical();
 
         }
 
     void onGUIPassives()
         {
+        EditorGUILayout.BeginVertical("Box");
+        EditorGUILayout.LabelField("Passives:",EditorStyles.boldLabel);
+        EditorGUILayout.EndVertical();
 
         }
     #endregion
