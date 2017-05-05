@@ -124,7 +124,17 @@ public class CharacterEditorWindow: EditorWindow
 
     void updateInfoForItems()
         {
-          // NEXT TO CODE
+        // NEXT TO CODE
+        _itemTagsList=new List<List<string>>();
+        foreach (ItemConfig result in d.Specs[_classList[_selectedClass]].AllowedSlots.ItemCfg)
+            {
+            // Rellenar _itemTagsList
+            }
+        foreach (ItemConfig result in d.Specs[_specList[_selectedSpec]].AllowedSlots.ItemCfg)
+            {
+            // Rellenar _itemTagsList
+            }
+        // Rellenar _possibleItemsList mirando los tags de _itemTagsList
         }
 
     void updateInfoForPassives()
