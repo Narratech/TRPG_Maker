@@ -20,6 +20,10 @@ public class Skill {
 
     //Definir el tipo de habilidad, ya sea area, unitarget...
     private string type;
+    //definir el tipo de casteo de habilidad
+    private string cast;
+    //effect
+    private string effect;
 
     private int TypeSkill;
 
@@ -38,11 +42,13 @@ public class Skill {
 
 
     //Constructora básica 
-    public Skill(string name, string description, string skillType, int damage, int distance, List<SkillRequirement> requirements, int requirementsCreated)
+    public Skill(string name, string description, string spellType, string skillType, string skillEffect, int damage, int distance, List<SkillRequirement> requirements, int requirementsCreated)
     {
         this.name = name;
         this.description = description;
-        this.type = skillType;
+        this.type = spellType;
+        this.cast = skillType;
+        this.effect = skillEffect;
         this.damage = damage;
         this.distance = distance;
         this.requirement = requirements;
@@ -90,15 +96,41 @@ public class Skill {
         return this.description;
     }
 
-    public int getTypeDamage()
+    public int getTypeCast()
     {
-        if(type.Equals("One Target"))
+        if(type.Equals("Linear Projectile"))
             return 0;
-        else if (type.Equals("All Enemies"))
+        else if (type.Equals("Parabolic Projectile"))
             return 1;
-        else if (type.Equals("All Allies"))
+        else if (type.Equals("On Ground"))
             return 2;
-        else if (type.Equals("All Map"))
+        else
+            return 3;
+    }
+
+    public int getCastCharacter()
+    {
+        if (cast.Equals("Self Character"))
+            return 0;
+        else if (cast.Equals("Self Character with direction"))
+            return 1;
+        else if (cast.Equals("Ranged place"))
+            return 2;
+        else if (cast.Equals("Global"))
+            return 3;
+        else
+            return 4;
+    }
+
+    public int getSkillEffect()
+    {
+        if (effect.Equals("Single target"))
+            return 0;
+        else if (effect.Equals("Area"))
+            return 1;
+        else if (effect.Equals("Area in objective"))
+            return 2;
+        else if (effect.Equals("Global"))
             return 3;
         else
             return 4;
@@ -154,19 +186,57 @@ public class Skill {
         switch (type)
         {
             case 0:
-                this.type = "One Target";
+                this.type = "Linear Projectile";
                 break;
             case 1:
-                this.type = "All Enemies";
+                this.type = "Parabolic Projectile";
                 break;
             case 2:
-                this.type = "All Allies";
+                this.type = "On Ground";
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    public void changeCastSkill(int type)
+    {
+        switch (type)
+        {
+            case 0:
+                this.cast = "Self Character";
+                break;
+            case 1:
+                this.cast = "Self Character with direction";
+                break;
+            case 2:
+                this.cast = "Ranged place";
                 break;
             case 3:
-                this.type = "All Map";
+                this.cast = "Global";
                 break;
-            case 4:
-                this.type = "Area";
+            default:
+                break;
+
+        }
+    }
+
+    public void changeSkillEffect(int type)
+    {
+        switch (type)
+        {
+            case 0:
+                this.effect = "Single target";
+                break;
+            case 1:
+                this.effect = "Area";
+                break;
+            case 2:
+                this.effect = "Area in objective";
+                break;
+            case 3:
+                this.effect = "Global";
                 break;
             default:
                 break;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BHEditor : EditorWindow
 {
-    private static int MAX_REQUIREMENTS = 100;
+    private static int MAX_REQUIREMENTS = 50;
 
 
     private int damage = 0;
@@ -17,18 +17,23 @@ public class BHEditor : EditorWindow
 
     private bool active = true;
 
-    private string[] objective = new string[] { "On target", "Projectile", "On Map" };
-    private int selectedObjective;
-    private string[] skillType = new string[] { "One Target", "All Enemies", "All Allies", "All Map", "Area" };
+    private string[] spelltype = new string[] { "Linear Projectile", "Parabolic Projectile", "On Ground" };
+    private int selectedSpellType;
+    private string[] skillType = new string[] { "Self Character", "Self Character with direction", "Ranged place", "Global"};
     private int selectedSkillType;
+    private string[] skillEffect = new string[] { "Single target", "Area", "Area in objective", "Global" };
+    private int selectedEffect;
     private string[] skillType1 = new string[] { "Healing", "Damage", "Both" };
     //para la creacion de habilidad
     int selectedSkillType1;
     //para la edicion de habilidades
     int[] selectedSkillTypes;
+    int[] selectedCastTypes;
+    int[] selectedSpellEffect;
 
 
-    
+
+
     private string[] requirements = new string[] { "Level Requirement", "Specialization Requirement", "Class Requirement" };
     private int[] selectedRequirement = new int[MAX_REQUIREMENTS];
     private List<SkillRequirement> skillRequirements = new List<SkillRequirement>();
@@ -50,7 +55,7 @@ public class BHEditor : EditorWindow
     }
 
     // Add menu named "My Window" to the Window menu
-    [MenuItem("TRPG/Banco de habilidades")]
+    [MenuItem("TRPG/Skill Set")]
     static void Init()
     {
         // Get existing open window or if none, make a new one:
@@ -66,9 +71,9 @@ public class BHEditor : EditorWindow
                 case 0:
                     
                    
-                    if (GUILayout.Button("Nueva Habilidad", GUILayout.Height(40)))
+                    if (GUILayout.Button("New Skill", GUILayout.Height(40)))
                         step = 1;
-                    else if (GUILayout.Button("Borrar/Editar Habilidad", GUILayout.Height(40)))
+                    else if (GUILayout.Button("Delete/Edit Skill", GUILayout.Height(40)))
                         step = 2;
                     
                     break;
@@ -80,13 +85,18 @@ public class BHEditor : EditorWindow
 
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField("Type of skill");
-                    selectedObjective = EditorGUILayout.Popup(selectedObjective, objective);
+                    selectedSpellType = EditorGUILayout.Popup(selectedSpellType, spelltype);
                     GUILayout.EndHorizontal();
 
 
                     GUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("Skill type");
+                    EditorGUILayout.LabelField("Skill cast type");
                     selectedSkillType = EditorGUILayout.Popup(selectedSkillType, skillType);
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Skill effect type");
+                    selectedEffect = EditorGUILayout.Popup(selectedEffect, skillEffect);
                     GUILayout.EndHorizontal();
 
 
@@ -485,13 +495,18 @@ public class BHEditor : EditorWindow
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField("Name");
                     EditorGUILayout.LabelField("Description");
-                    EditorGUILayout.LabelField("Skill Type");
+                    EditorGUILayout.LabelField("Type of skill");
+                    EditorGUILayout.LabelField("Skill cast type");
+                    EditorGUILayout.LabelField("Spell Effect");
                     EditorGUILayout.LabelField("Damage");
                     EditorGUILayout.LabelField("Distance");
                     EditorGUILayout.EndHorizontal();
 
                     Skill[] savedSkills = SkillsDB.Instance.getSavedSkills();
                     selectedSkillTypes = new int[savedSkills.Length];
+                    selectedCastTypes = new int[savedSkills.Length];
+                    selectedSpellEffect = new int[savedSkills.Length];
+
                     int[,] selectedRequirements = new int[savedSkills.Length, MAX_REQUIREMENTS];
                     string[,] descriptionRequirements = new string[savedSkills.Length, MAX_REQUIREMENTS];
                     for (int i = 0; i < savedSkills.Length; i++)
@@ -504,9 +519,20 @@ public class BHEditor : EditorWindow
                         //changing the description
                         string skillDescription1 = EditorGUILayout.TextField(skill.getDescription());
                         skill.changeDescription(skillDescription1);
-                        //changingtype of damage
-                        selectedSkillTypes[i] = EditorGUILayout.Popup(skill.getTypeDamage(), skillType);
+                      
+                        //changing type of skill type
+                        selectedSkillTypes[i] = EditorGUILayout.Popup(skill.getTypeCast(), spelltype);
                         skill.changeTypeSkill(selectedSkillTypes[i]);
+
+                        //changing casting character
+                        selectedCastTypes[i] = EditorGUILayout.Popup(skill.getCastCharacter(), skillType);
+                        skill.changeCastSkill(selectedCastTypes[i]);
+
+                        //changing the spell effect:
+                        selectedSpellEffect[i] = EditorGUILayout.Popup(skill.getSkillEffect(), skillEffect);
+                        skill.changeSkillEffect(selectedSpellEffect[i]);
+
+
                         //changing amount of damage
                         int damage1 = EditorGUILayout.IntField(skill.getDamage());
                         skill.changeSkillDamage(damage1);
@@ -618,8 +644,9 @@ private void selectColor(bool active)
         area = 0;
         skillName = "";
         skillDescription = "";
-        selectedObjective = 0;
+        selectedSpellType = 0;
         selectedSkillType = 0;
+        selectedEffect = 0;
         selectedSkillType1 = 0;
         selectedSkillTypes = new int[0];
         requisitos = new string[MAX_REQUIREMENTS];
@@ -634,7 +661,7 @@ private void selectColor(bool active)
 
     private void saveSkill()
     {
-        Skill skill = new Skill(this.skillName, this.skillDescription, this.skillType[this.selectedSkillType], this.damage,this.distance, this.skillRequirements, numberRequirements);
+        Skill skill = new Skill(this.skillName, this.skillDescription, this.spelltype[this.selectedSpellType], this.skillType[this.selectedSkillType], this.skillEffect[this.selectedEffect], this.damage,this.distance, this.skillRequirements, numberRequirements);
         this.skills.add(skill);
 
         SkillsDB.Instance.addSkill(skill);
