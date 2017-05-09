@@ -136,6 +136,7 @@
     <Compile Include="Assets\Editor\Database\Editor\ItemEditorWindow.cs" />
     <Compile Include="Assets\Editor\Database\Editor\PassiveEditorWindow.cs" />
     <Compile Include="Assets\Editor\Database\Editor\SpecEditorWindow.cs" />
+    <Compile Include="Assets\Editor\Database\Editor\TemplateEditorWindow.cs" />
     <Compile Include="Assets\Editor\Database\Formula.cs" />
     <Compile Include="Assets\Editor\Database\ItemTemplate.cs" />
     <Compile Include="Assets\Editor\Database\PassiveTemplate.cs" />
