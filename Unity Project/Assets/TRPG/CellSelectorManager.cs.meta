@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d0d01fc6e9fc5c94486278441cbfed63
+timeCreated: 1495466768
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - flechaDecotarion: {instanceID: 0}
+  - celda: {instanceID: 0}
+  - selectingIsoTexture: {fileID: 11400000, guid: f459e21eaff52644497b9189fd5a2e7f,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
