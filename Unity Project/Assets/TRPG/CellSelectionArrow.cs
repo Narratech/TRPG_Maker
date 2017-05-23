@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using IsoUnity;
 using UnityEngine;
 
 public class CellSelectionArrow: IsoUnity.Entities.EntityScript
@@ -106,19 +107,19 @@ public class CellSelectionArrow: IsoUnity.Entities.EntityScript
 
 
                 
-                IsoUnity.GameEvent ge = new IsoUnity.GameEvent();
+                GameEvent ge = new GameEvent();
                 ge.setParameter("mover", this.Entity.mover);
                 ge.setParameter("cell", cell);
                 ge.Name = "teleport";
-                IsoUnity.Game.main.enqueueEvent(ge);
+                Game.main.enqueueEvent(ge);
 
 
-                IsoUnity.IGameEvent evento = new IsoUnity.GameEvent();
+                IGameEvent evento = new GameEvent();
                 evento.Name = "select cell";
                 evento.setParameter("cell", cell);
-                Skill habilidad = new Skill("bola de fuego", "", "", "", "", 2200, 2, null, 0);
+                Skill habilidad = new Skill("bola de fuego", "", "", "", "", 0, 2200,  2, null, 0);
                 evento.setParameter("skill", habilidad);
-                IsoUnity.Game.main.enqueueEvent(evento);
+                Game.main.enqueueEvent(evento);
 
 
             }

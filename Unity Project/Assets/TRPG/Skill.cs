@@ -25,7 +25,7 @@ public class Skill {
     //effect
     private string effect;
 
-    private int TypeSkill;
+    private int TypeOfDamage;
 
 
     private List<SkillRequirement> requirement = new List<SkillRequirement>();
@@ -42,13 +42,14 @@ public class Skill {
 
 
     //Constructora básica 
-    public Skill(string name, string description, string spellType, string skillType, string skillEffect, int damage, int distance, List<SkillRequirement> requirements, int requirementsCreated)
+    public Skill(string name, string description, string spellType, string skillType, string skillEffect, int typeOfDamage, int damage, int distance, List<SkillRequirement> requirements, int requirementsCreated)
     {
         this.name = name;
         this.description = description;
         this.type = spellType;
         this.cast = skillType;
         this.effect = skillEffect;
+        this.TypeOfDamage = typeOfDamage;
         this.damage = damage;
         this.distance = distance;
         this.requirement = requirements;
@@ -136,6 +137,11 @@ public class Skill {
             return 4;
     }
 
+    public int getTypeOfDamage()
+    {
+        return this.TypeOfDamage;
+    }
+
     public int getDamage()
     {
         return this.damage;
@@ -179,6 +185,11 @@ public class Skill {
     public void changeDistance(int distance)
     {
         this.distance = distance;
+    }
+
+    public void changeTypeOfDamage(int type)
+    {
+        this.TypeOfDamage = type;
     }
 
     public void changeTypeSkill(int type)
