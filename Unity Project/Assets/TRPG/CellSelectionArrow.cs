@@ -112,15 +112,7 @@ public class CellSelectionArrow: IsoUnity.Entities.EntityScript
                 ge.setParameter("cell", cell);
                 ge.Name = "teleport";
                 Game.main.enqueueEvent(ge);
-
-
-                IGameEvent evento = new GameEvent();
-                evento.Name = "select cell";
-                evento.setParameter("cell", cell);
-                Skill habilidad = new Skill("bola de fuego", "", "", "", "", 0, 2200,  2, null, 0);
-                evento.setParameter("skill", habilidad);
-                Game.main.enqueueEvent(evento);
-
+               
 
             }
             // Otherwise, the controller event should contain keys pressed

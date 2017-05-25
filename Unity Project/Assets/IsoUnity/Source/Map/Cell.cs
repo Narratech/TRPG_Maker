@@ -496,6 +496,8 @@ namespace IsoUnity
         public List<SolidBody> SolidBodies {
             get
             {
+                influences.RemoveAll(i => i == null);
+
                 var bodies = influences.ConvertAll(i => i.GetComponent<SolidBody>());
                 bodies.AddRange(GetComponentsInChildren<SolidBody>());
                 return bodies;
