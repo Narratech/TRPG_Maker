@@ -193,6 +193,7 @@
     <Compile Include="Assets\TRPG\Painter.cs" />
     <Compile Include="Assets\TRPG\Skill.cs" />
     <Compile Include="Assets\TRPG\SkillRequirement\SkillRequirement.cs" />
+    <Compile Include="Assets\TRPG\SkillsDB.cs" />
     <Compile Include="Assets\TRPG\TRPGCharacter.cs" />
     <Compile Include="Assets\TRPG\TipoHabilidad.cs" />
     <Compile Include="Assets\TRPG\Turn.cs" />

@@ -45,26 +45,28 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
 
         // Wait until selection
         //if(celdaSeleccionada esta en la zona pintada, si no retornamos null
-        yield return new WaitUntil(() => cellSelected != null);
-
-
-        
-        paint.removePaint(cell, skill);
-        
-        Game.main.eventFinished(ge, new Dictionary<string, object>()
+        while (!paint.accesibleCell(cellSelected))
         {
-            {"cellSelected", cellSelected }
-        });
-
-        cellSelected = null;
-
-        //Destroy the arrow and create a new one
-        if (arrow != null)
-        {
-            Cell selectedCell = arrow.Entity.Position;
-            arrow.Entity.Position.Map.unRegisterEntity(arrow.Entity);
-            GameObject.DestroyImmediate(arrow.gameObject);
+            yield return new WaitUntil(() => cellSelected != null);
         }
+     
+            paint.removePaint(cell, skill);
+
+            Game.main.eventFinished(ge, new Dictionary<string, object>()
+            {
+                {"cellSelected", cellSelected }
+            });
+ 
+            cellSelected = null;
+
+            //Destroy the arrow and create a new one
+            if (arrow != null)
+            {
+                Cell selectedCell = arrow.Entity.Position;
+                arrow.Entity.Position.Map.unRegisterEntity(arrow.Entity);
+                GameObject.DestroyImmediate(arrow.gameObject);
+            }
+
     }
 
 

@@ -149,7 +149,6 @@
     <Compile Include="Assets\Editor\Database\SlotsOpt.cs" />
     <Compile Include="Assets\Editor\Database\SpecTemplate.cs" />
     <Compile Include="Assets\Editor\Database\Template.cs" />
-    <Compile Include="Assets\Editor\SkillsDB.cs" />
     <Compile Include="Assets\Editor\SkillsEditor\BHEditor.cs" />
     <Compile Include="Assets\IsoUnity\Editor\CellEditor.cs" />
     <Compile Include="Assets\IsoUnity\Editor\Drawing.cs" />

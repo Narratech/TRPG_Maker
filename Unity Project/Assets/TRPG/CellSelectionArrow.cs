@@ -51,51 +51,6 @@ public class CellSelectionArrow: IsoUnity.Entities.EntityScript
         // Multiple controller events only give one launch result per tick
         if (toLaunch == null)
         {
-            // If options received (from entities)
-
-            /*if (args.options != null)
-            {
-                
-                // If there's only one, proceed to launch
-                if (args.options.Length == 1)
-                {
-                    // The action is the event we have to launch, 
-                    // so in order to know who's launching, we put a mark
-                    if (args.options[0].Action != null)
-                        args.options[0].Action.setParameter("Executer", this.Entity);
-
-                    actionCell = args.cell;
-                    actionEntity = args.entity;
-
-                    // If we've to move to perform the action
-                    if (args.options[0].HasToMove)
-                    {
-                        IsoUnity.GameEvent ge = new IsoUnity.GameEvent();
-                        ge.setParameter("mover", this.Entity.mover);
-                        ge.setParameter("follow", args.entity);
-                        ge.setParameter("distance", args.options[0].Distance);
-                        ge.setParameter("synchronous", true);
-                        ge.Name = "follow";
-                        movement = ge;
-                        movingArrow = false;
-                        IsoUnity.Game.main.enqueueEvent(ge);
-
-                        // Here we've launched the movement. As it's synchronous, we'll receive 
-                        // the movement finished when the Mover considers it's done.
-                    }
-
-                    toLaunch = args.options[0].Action;
-                }
-                // If there're multiple actions we have to display a menu so player can choose
-                else if (args.options.Length > 1)
-                {
-                    IsoUnity.OptionsGUI gui = ScriptableObject.CreateInstance<IsoUnity.OptionsGUI>();
-                    gui.init(args, Camera.main.WorldToScreenPoint(args.entity.transform.position), args.options);
-                    IsoUnity.GUIManager.addGUI(gui, 100);
-                }
-            }
-            // If the argument doesn't contain options but it has a cell, we'll try to move over there
-            else */
 
             if (args.cell != null)
             {

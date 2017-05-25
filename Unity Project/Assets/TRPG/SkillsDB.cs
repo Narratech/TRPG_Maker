@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-class SkillsDB
+ public class SkillsDB
 {
     // Data
     public Dictionary<string, Skill> skills;
@@ -12,7 +12,7 @@ class SkillsDB
     protected static SkillsDB instance;
 
     // Constructor
-    protected SkillsDB()
+    public SkillsDB()
     {
         // Initializing structures
         skills = new Dictionary<string, Skill>();
@@ -35,15 +35,13 @@ class SkillsDB
     // the way an user would create things from editor.
     {
         Debug.Log("Creating Skill database!");
-        // Filling core core 'attributes' (exist in every RPG)
-        /*
-        Skill skill1 = new Skill("Bola de fuego", "Lanza una bola de fuego a un enemigo", "Unitarget", 200, 2);
-        Skill skill2 = new Skill("Bola de hielo", "Lanza una bola de fuego a un enemigo", "Unitarget", 200, 2);
-        Skill skill3 = new Skill("Cura", "cura a un aliado", "Unitarget", 200, 3);
-        skills.Remove("Bola de fuego");
-        skills.Remove("Bola de hielo");
-        skills.Remove("Cura");
-        */
+
+        Skill skill1 = new Skill("Bola de fuego", "Lanza una bola de fuego", "Linear Projectile", "Self Character", "Single target", 1, 20, 4, null, 0);
+        addSkill(skill1);
+        Skill skill2 = new Skill("Lanza de Hielo", "Lanza una lanza de hielo", "Parabolic Projectile", "Self Character", "Area", 1, 30, 3, null, 0);
+        addSkill(skill2);
+        Skill skill3 = new Skill("Curaga", "Sana a un aliado", "On Ground", "Ranged Place", "Single target", 0, 30, 4, null, 0);
+        addSkill(skill3);
 
 
         Debug.Log("Database created!");

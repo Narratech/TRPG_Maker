@@ -85,4 +85,20 @@ public class Painter{
         }
     }
 
+
+    public bool accesibleCell(Cell cell)
+    {
+        bool accesible = false;
+        int count = 0;
+
+        while(!accesible && count < changedCells.Length)
+        {
+            if(changedCells[count] != null) { 
+                if (cell == changedCells[count]) accesible = true;
+            }
+            count++;
+        }
+
+        return accesible;
+    }
 }
