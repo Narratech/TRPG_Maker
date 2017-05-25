@@ -45,7 +45,7 @@ public class Turn: EventedEventManager
                     IGameEvent evento = new GameEvent();
                     evento.Name = "select cell";
                     evento.setParameter("cell", characters[i].Entity.Position);
-                    Skill habilidad = new Skill("bola de fuego", "", "", "", "", 2, 2200, 2, null, 0);
+                    Skill habilidad = new Skill("bola de fuego", "", "", "", "", 2, 2200, 3, null, 0);
                     evento.setParameter("skill", habilidad);
                     evento.setParameter("synchronous", true);
                     Game.main.enqueueEvent(evento);

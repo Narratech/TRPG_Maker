@@ -26,7 +26,6 @@ public class Painter{
         //busqueda directa
         float xcentral = position.x;
         float ycentral = position.y;
-        float coordCentral = xcentral + ycentral;
         //Vamos a marcar todas las casillas que esten en la distancia de la habilidad
         for (float i = position.x - skill.getDistance(); i <= position.x + skill.getDistance(); i++)
         {
@@ -36,15 +35,10 @@ public class Painter{
 
                 IsoUnity.Cell celdaAPintar = cell.Map.getCell(new Vector2(i, j));
                 if (celdaAPintar != null)
-                {
-                    Vector2 actual = new Vector2(i, j);
-                    Vector2 centro = new Vector2(xcentral, ycentral);
-                   
-
-                    float prueba = Mathf.Abs((i - xcentral) + (j - ycentral));
+                {           
 
 
-                    if (Mathf.Abs((i - xcentral) + (ycentral - ycentral)) < skill.getDistance() * 2) 
+                    if ((int)Mathf.Abs(Mathf.Abs(i - xcentral) + Mathf.Abs(j - ycentral)) <= skill.getDistance()) 
                     {
                         changedCells[contador] = celdaAPintar;
                         oldTextures[contador] = celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].TextureMapping;
@@ -58,6 +52,7 @@ public class Painter{
 
             }
         }
+        
 
     }
 
@@ -66,6 +61,8 @@ public class Painter{
     {
         Vector2 position = cell.Map.getCoords(cell.gameObject);
         int contador = 0;
+        float xcentral = position.x;
+        float ycentral = position.y;
 
         //busqueda directa
         //Vamos a marcar todas las casillas que esten en la distancia de la habilidad
@@ -76,7 +73,7 @@ public class Painter{
             {
 
                 Cell celdaAPintar = cell.Map.getCell(new Vector2(i, j));
-                if (celdaAPintar != null)
+                if (celdaAPintar != null && ((int)Mathf.Abs(Mathf.Abs(i - xcentral) + Mathf.Abs(j - ycentral)) <= skill.getDistance()))       
                 {
                     celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].TextureMapping = oldTextures[contador];
                     celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].Texture = oldTextures[contador].getTexture();
@@ -87,4 +84,5 @@ public class Painter{
             }
         }
     }
+
 }

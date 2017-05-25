@@ -44,6 +44,7 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
         cell.Map.registerEntity(ent);
 
         // Wait until selection
+        //if(celdaSeleccionada esta en la zona pintada, si no retornamos null
         yield return new WaitUntil(() => cellSelected != null);
 
 
