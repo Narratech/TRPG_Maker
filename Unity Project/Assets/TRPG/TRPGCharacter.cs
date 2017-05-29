@@ -9,6 +9,17 @@ public class TRPGCharacter : EntityScript {
 
 
     public bool playable = true;
+    private bool finishedTurn = false;
+
+    public bool turnFinished()
+    {
+        return finishedTurn;
+    }
+
+    public void finishTurn(bool finished)
+    {
+        this.finishedTurn = finished;
+    }
 
     public override void eventHappened(IGameEvent ge)
     {
@@ -18,6 +29,7 @@ public class TRPGCharacter : EntityScript {
     {
         return null;
     }
+
 
     public override void tick()
     {

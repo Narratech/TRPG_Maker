@@ -188,6 +188,9 @@
     <Compile Include="Assets\IsoUnity\Source\Util\JSONObject\JSONSerializer.cs" />
     <Compile Include="Assets\IsoUnity\Source\Util\JSONObject\JSONTemplates.cs" />
     <Compile Include="Assets\IsoUnity\Source\Util\JSONObject\VectorTemplates.cs" />
+    <Compile Include="Assets\TRPG\ButtonScripts\AttackEvent.cs" />
+    <Compile Include="Assets\TRPG\ButtonScripts\DeffendEvent.cs" />
+    <Compile Include="Assets\TRPG\ButtonScripts\MoveEvent.cs" />
     <Compile Include="Assets\TRPG\CellSelectionArrow.cs" />
     <Compile Include="Assets\TRPG\CellSelectorManager.cs" />
     <Compile Include="Assets\TRPG\Painter.cs" />
@@ -197,6 +200,7 @@
     <Compile Include="Assets\TRPG\TRPGCharacter.cs" />
     <Compile Include="Assets\TRPG\TipoHabilidad.cs" />
     <Compile Include="Assets\TRPG\Turn.cs" />
+    <Compile Include="Assets\TRPG\TurnState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\IsoUnity\Source\Util\JSONObject\readme.txt" />

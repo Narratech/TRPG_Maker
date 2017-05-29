@@ -1,0 +1,31 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using IsoUnity;
+using IsoUnity.Entities;
+using UnityEngine;
+
+public class AttackEvent : EventedEventManager
+{
+
+    public void onClick()
+    {
+        Debug.Log("boton move funciona");
+        //se salta este metodo despues de poner el mensaje en el Log
+        StartCoroutine(throwEvent());
+    }
+
+
+    //Nunca entra aqui
+    public IEnumerator throwEvent()
+    {
+        //Evento de prueba
+
+        Game.main.enqueueEvent(new GameEvent("change state", new Dictionary<string, object>() {
+            {"state", TurnState.Action},
+              {"synchronized", true}
+        }));
+        yield return null;
+
+
+    }
+}
