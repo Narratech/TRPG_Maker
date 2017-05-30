@@ -1,0 +1,1940 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bccdd886641c7734584a5a6b4743a8a6, type: 3}
+  m_Name: database
+  m_EditorClassIdentifier: 
+  _attributesList:
+  - isCore: 1
+    id: EXP
+    name: Experience
+    description: Experience acumulated
+    maxValue: 100000000
+    minValue: 1
+    value: 1
+  - isCore: 1
+    id: HPS
+    name: HealthPoints
+    description: Character health points
+    maxValue: 1000
+    minValue: 0
+    value: 0
+  - isCore: 1
+    id: MPS
+    name: MagicPoints
+    description: Character magic points
+    maxValue: 1000
+    minValue: 0
+    value: 0
+  - isCore: 1
+    id: STR
+    name: Strength
+    description: Strength necessary to fisical strikes
+    maxValue: 100
+    minValue: 1
+    value: 1
+  - isCore: 1
+    id: INT
+    name: Intelligence
+    description: Intelligence to trade and find things
+    maxValue: 100
+    minValue: 1
+    value: 1
+  - isCore: 1
+    id: WIS
+    name: Wisdom
+    description: Wisdom helps you interacting and upgrading things
+    maxValue: 100
+    minValue: 1
+    value: 1
+  - isCore: 1
+    id: DEX
+    name: Dexterity
+    description: Dexterity helps in a lot of things
+    maxValue: 100
+    minValue: 1
+    value: 1
+  - isCore: 1
+    id: CON
+    name: Constitution
+    description: Constitution is for wearing things
+    maxValue: 100
+    minValue: 1
+    value: 1
+  - isCore: 1
+    id: CHA
+    name: Charisma
+    description: Charisma could save you without using a weapon
+    maxValue: 100
+    minValue: 1
+    value: 1
+  - isCore: 0
+    id: lvl
+    name: Level
+    description: Character level
+    maxValue: 100
+    minValue: 1
+    value: 1
+  - isCore: 0
+    id: dmg
+    name: Damage
+    description: Base damage points
+    maxValue: 10000
+    minValue: 1
+    value: 1
+  - isCore: 0
+    id: fdg
+    name: Fire damage
+    description: Fire damage points
+    maxValue: 10000
+    minValue: 1
+    value: 1
+  - isCore: 0
+    id: idg
+    name: Ice damage
+    description: Ice damage points
+    maxValue: 10000
+    minValue: 1
+    value: 1
+  - isCore: 0
+    id: def
+    name: Defense
+    description: Defense points
+    maxValue: 10000
+    minValue: 1
+    value: 1
+  - isCore: 0
+    id: fdf
+    name: Fire defense
+    description: Fire defense points
+    maxValue: 10000
+    minValue: 1
+    value: 1
+  - isCore: 0
+    id: idf
+    name: Ice defense
+    description: Ice defense points
+    maxValue: 10000
+    minValue: 1
+    value: 1
+  _specsKeys:
+  - Human
+  - Orc
+  - Dummy
+  - Swordman
+  - Broadswordman
+  - Bowman
+  - Heavy Carrier
+  - Light Carrier
+  _specsValues:
+  - {fileID: 114071340271193732}
+  - {fileID: 114536571125543388}
+  - {fileID: 114688760104467936}
+  - {fileID: 114033778137646772}
+  - {fileID: 114885027430615716}
+  - {fileID: 114989535995907954}
+  - {fileID: 114695078326397098}
+  - {fileID: 114718546565312078}
+  _itemsKeys:
+  - Shield
+  - Club
+  - Big Club
+  - Stone
+  - Sword
+  - Fire sword
+  - Broadsword
+  - Bow
+  - Ice bow
+  - Trousers
+  - Shirt
+  - Boots
+  - Iron helmet
+  - Iron armor
+  - Iron armbands
+  - Iron gloves
+  - Iron legbands
+  - Iron boots
+  - Light helmet
+  - Light armor
+  - Light armbands
+  - Light gloves
+  - Light legbands
+  - Light boots
+  _itemsValues:
+  - {fileID: 114630484308041920}
+  - {fileID: 114547497702757182}
+  - {fileID: 114910236116631960}
+  - {fileID: 114076955994081938}
+  - {fileID: 114653409672195224}
+  - {fileID: 114688809765195418}
+  - {fileID: 114518254891204234}
+  - {fileID: 114239494197717332}
+  - {fileID: 114690410925572512}
+  - {fileID: 114662248759823978}
+  - {fileID: 114908796151325206}
+  - {fileID: 114314122693879748}
+  - {fileID: 114466901766219434}
+  - {fileID: 114841749224250266}
+  - {fileID: 114877673899029410}
+  - {fileID: 114886080094201526}
+  - {fileID: 114257106402653386}
+  - {fileID: 114303325505509618}
+  - {fileID: 114178511575739154}
+  - {fileID: 114262554897221964}
+  - {fileID: 114370636769585298}
+  - {fileID: 114282507962226806}
+  - {fileID: 114415156495490746}
+  - {fileID: 114944691234915138}
+  _passivesKeys:
+  - Extra Attack
+  - Regeneration
+  _passivesValues:
+  - {fileID: 114972293847471978}
+  - {fileID: 114165576732524174}
+  _tagKeys:
+  - PassiveWhen
+  - PassiveToWhom
+  - Item
+  - Specialization
+  _tagValues:
+  - myList:
+    - Permanent
+    - Turn
+    - Time
+  - myList:
+    - Self
+    - Enemy
+    - Friend
+    - Enemy Group
+    - Friend Group
+  - myList:
+    - Carryable
+    - Wearable
+    - Shield
+    - Weapon
+    - Melee
+    - Ranged
+    - Cloth
+    - Head
+    - Chest
+    - Neck
+    - Arms
+    - Hands
+    - Finger
+    - Legs
+    - Feet
+    - No Addon
+    - Addon
+    - No Magic
+    - Fire
+    - Ice
+    - Size For All
+    - Heavy
+    - Light
+    - No Weapon Spec
+    - Sword
+    - Bow
+    - One Hand
+    - Two Hand
+    - No Weak
+    - Weak Fire
+    - Weak Ice
+  - myList: []
+--- !u!114 &114010197833796534
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114033778137646772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Swordman
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Swordman
+  _description: Swordman is a spec in which you can use swords
+  _tags: []
+  _formulas:
+  - label: CON
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114742285016855150}
+  isBasicClass: 0
+--- !u!114 &114071340271193732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Human
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Human
+  _description: Humans are flesh and bones
+  _tags: []
+  _formulas:
+  - label: INT
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114501401954817986}
+  isBasicClass: 1
+--- !u!114 &114074416390768020
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114076955994081938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Stone
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Stone
+  _description: Common ranged weapon
+  _tags:
+  - Wearable
+  - Weapon
+  - Ranged
+  - No Addon
+  - No Magic
+  - No Weapon Spec
+  - Size For All
+  - One Hand
+  _formulas:
+  - label: dmg
+    formula: 1
+    priority: 1
+  _allowedSlots: {fileID: 114694369180193828}
+--- !u!114 &114080183829714642
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg:
+  - itemMask: 153255962
+    itemIds:
+    - Wearable
+    - Weapon
+    - Melee
+    - No Addon
+    - Sword
+    - No Magic
+    - Heavy
+    - Two Hand
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114116323055478804
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114138596451145730
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114165576732524174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39d3ccebd929de844a9a7d5d237d0771, type: 3}
+  m_Name: Regeneration
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Regeneration
+  _description: The character will increase its HPs at the end of every turn
+  _tags:
+  - Turn
+  - Self
+  _formulas:
+  - label: HPS
+    formula: 10
+    priority: 1
+  _allowedSlots: {fileID: 114074416390768020}
+--- !u!114 &114178511575739154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Light helmet
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Light helmet
+  _description: Light helmet
+  _tags:
+  - Wearable
+  - Cloth
+  - Head
+  - No Addon
+  - No Magic
+  - Light
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 3
+    priority: 1
+  _allowedSlots: {fileID: 114568510888815048}
+--- !u!114 &114192912582769118
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114239494197717332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Bow
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Bow
+  _description: Normal bow for bowmen
+  _tags:
+  - Wearable
+  - Weapon
+  - Ranged
+  - No Addon
+  - No Magic
+  - Bow
+  - Size For All
+  - Two Hand
+  _formulas:
+  - label: dmg
+    formula: 4
+    priority: 1
+  _allowedSlots: {fileID: 114405063836579518}
+--- !u!114 &114247145970896084
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg:
+  - itemMask: 270696642
+    itemIds:
+    - Wearable
+    - Cloth
+    - Head
+    - No Addon
+    - No Magic
+    - Heavy
+    - No Weak
+  - itemMask: 270696770
+    itemIds:
+    - Wearable
+    - Cloth
+    - Chest
+    - No Addon
+    - No Magic
+    - Heavy
+    - No Weak
+  - itemMask: 270697538
+    itemIds:
+    - Wearable
+    - Cloth
+    - Arms
+    - No Addon
+    - No Magic
+    - Heavy
+    - No Weak
+  - itemMask: 270698562
+    itemIds:
+    - Wearable
+    - Cloth
+    - Hands
+    - No Addon
+    - No Magic
+    - Heavy
+    - No Weak
+  - itemMask: 270704706
+    itemIds:
+    - Wearable
+    - Cloth
+    - Legs
+    - No Addon
+    - No Magic
+    - Heavy
+    - No Weak
+  - itemMask: 270712898
+    itemIds:
+    - Wearable
+    - Cloth
+    - Feet
+    - No Addon
+    - No Magic
+    - Heavy
+    - No Weak
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114256803953833818
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114257106402653386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Iron legbands
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Iron legbands
+  _description: Heavy legbands
+  _tags:
+  - Wearable
+  - Cloth
+  - Legs
+  - No Addon
+  - No Magic
+  - Heavy
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 2
+    priority: 1
+  _allowedSlots: {fileID: 114010197833796534}
+--- !u!114 &114262554897221964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Light armor
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Light armor
+  _description: Light armor
+  _tags:
+  - Wearable
+  - Cloth
+  - Chest
+  - No Addon
+  - No Magic
+  - Light
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 7
+    priority: 1
+  _allowedSlots: {fileID: 114602881843887376}
+--- !u!114 &114282507962226806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Light gloves
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Light gloves
+  _description: Light gloves
+  _tags:
+  - Wearable
+  - Cloth
+  - Hands
+  - No Addon
+  - No Magic
+  - Light
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 1
+    priority: 1
+  _allowedSlots: {fileID: 114192912582769118}
+--- !u!114 &114290942810824072
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114292444551032750
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114299286275630368
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg:
+  - itemMask: 143818778
+    itemIds:
+    - Wearable
+    - Weapon
+    - Melee
+    - No Addon
+    - No Magic
+    - No Weapon Spec
+    - Size For All
+    - Two Hand
+  - itemMask: 76709930
+    itemIds:
+    - Wearable
+    - Weapon
+    - Ranged
+    - No Addon
+    - No Magic
+    - No Weapon Spec
+    - Size For All
+    - One Hand
+  - itemMask: 269648066
+    itemIds:
+    - Wearable
+    - Cloth
+    - Head
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269648194
+    itemIds:
+    - Wearable
+    - Cloth
+    - Chest
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269648450
+    itemIds:
+    - Wearable
+    - Cloth
+    - Neck
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269648962
+    itemIds:
+    - Wearable
+    - Cloth
+    - Arms
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269649986
+    itemIds:
+    - Wearable
+    - Cloth
+    - Hands
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269656130
+    itemIds:
+    - Wearable
+    - Cloth
+    - Legs
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114303325505509618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Iron boots
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Iron boots
+  _description: Heavy boots
+  _tags:
+  - Wearable
+  - Cloth
+  - Feet
+  - No Addon
+  - No Magic
+  - Heavy
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 3
+    priority: 1
+  _allowedSlots: {fileID: 114969290857965132}
+--- !u!114 &114314122693879748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Boots
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Boots
+  _description: Common boots
+  _tags:
+  - Wearable
+  - Cloth
+  - Feet
+  - No Addon
+  - No Magic
+  - Size For All
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 1
+    priority: 1
+  _allowedSlots: {fileID: 114382565312920754}
+--- !u!114 &114343365676674316
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114361662985895272
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114370636769585298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Light armbands
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Light armbands
+  _description: Light armbands
+  _tags:
+  - Wearable
+  - Cloth
+  - Arms
+  - No Addon
+  - No Magic
+  - Light
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 3
+    priority: 1
+  _allowedSlots: {fileID: 114256803953833818}
+--- !u!114 &114382565312920754
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114405063836579518
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114415156495490746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Light legbands
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Light legbands
+  _description: Light legbands
+  _tags:
+  - Wearable
+  - Cloth
+  - Legs
+  - No Addon
+  - No Magic
+  - Light
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 1
+    priority: 1
+  _allowedSlots: {fileID: 114138596451145730}
+--- !u!114 &114417552588742328
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114428436799613944
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg:
+  - itemMask: 168984618
+    itemIds:
+    - Wearable
+    - Weapon
+    - Ranged
+    - No Addon
+    - Bow
+    - No Magic
+    - Size For All
+    - Two Hand
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114432078759157000
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114466901766219434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Iron helmet
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Iron helmet
+  _description: Heavy helmet
+  _tags:
+  - Wearable
+  - Cloth
+  - Head
+  - No Addon
+  - No Magic
+  - Heavy
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114534679895823296}
+--- !u!114 &114501401954817986
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg:
+  - itemMask: 269615110
+    itemIds:
+    - Wearable
+    - Shield
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 76709914
+    itemIds:
+    - Wearable
+    - Weapon
+    - Melee
+    - No Addon
+    - No Magic
+    - No Weapon Spec
+    - Size For All
+    - One Hand
+  - itemMask: 76709930
+    itemIds:
+    - Wearable
+    - Weapon
+    - Ranged
+    - No Addon
+    - No Magic
+    - No Weapon Spec
+    - Size For All
+    - One Hand
+  - itemMask: 269648066
+    itemIds:
+    - Wearable
+    - Cloth
+    - Head
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269648194
+    itemIds:
+    - Wearable
+    - Cloth
+    - Chest
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269648450
+    itemIds:
+    - Wearable
+    - Cloth
+    - Neck
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269648962
+    itemIds:
+    - Wearable
+    - Cloth
+    - Arms
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269649986
+    itemIds:
+    - Wearable
+    - Cloth
+    - Hands
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269652034
+    itemIds:
+    - Wearable
+    - Cloth
+    - Finger
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269664322
+    itemIds:
+    - Wearable
+    - Cloth
+    - Feet
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  - itemMask: 269656130
+    itemIds:
+    - Wearable
+    - Cloth
+    - Legs
+    - No Addon
+    - No Magic
+    - Size For All
+    - No Weak
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114518254891204234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Broadsword
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Broadsword
+  _description: Broadsword for heavy, two-handed sword specialists
+  _tags:
+  - Wearable
+  - Weapon
+  - Melee
+  - No Addon
+  - No Magic
+  - Sword
+  - Heavy
+  - Two Hand
+  _formulas:
+  - label: dmg
+    formula: 10
+    priority: 1
+  _allowedSlots: {fileID: 114343365676674316}
+--- !u!114 &114525262108634722
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114534679895823296
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114536571125543388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Orc
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Orc
+  _description: Orcs are typically green, ugly and do not wear any shoes, nor rings,
+    nor shields. Use two handed weapons
+  _tags: []
+  _formulas:
+  - label: STR
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114299286275630368}
+  isBasicClass: 1
+--- !u!114 &114547497702757182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Club
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Club
+  _description: Common melee weapon
+  _tags:
+  - Wearable
+  - Weapon
+  - Melee
+  - No Addon
+  - No Magic
+  - No Weapon Spec
+  - Size For All
+  - One Hand
+  _formulas:
+  - label: dmg
+    formula: 2
+    priority: 1
+  _allowedSlots: {fileID: 114525262108634722}
+--- !u!114 &114568510888815048
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114602881843887376
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114611891760947598
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114620758013545588
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114624277151967676
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114630484308041920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Shield
+  _description: Common shield
+  _tags:
+  - Wearable
+  - Shield
+  - No Magic
+  - Size For All
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114624277151967676}
+--- !u!114 &114653409672195224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Sword
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Sword
+  _description: Normal sword for swordmen
+  _tags:
+  - Wearable
+  - Weapon
+  - Melee
+  - No Addon
+  - No Magic
+  - Sword
+  - Size For All
+  - One Hand
+  _formulas:
+  - label: dmg
+    formula: 6
+    priority: 1
+  _allowedSlots: {fileID: 114843138301786736}
+--- !u!114 &114662248759823978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Trousers
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Trousers
+  _description: Common trousers
+  _tags:
+  - Wearable
+  - Cloth
+  - Legs
+  - No Addon
+  - No Magic
+  - Size For All
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 2
+    priority: 1
+  _allowedSlots: {fileID: 114432078759157000}
+--- !u!114 &114688760104467936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Dummy
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Dummy
+  _description: Dummies are empty training objects
+  _tags: []
+  _formulas: []
+  _allowedSlots: {fileID: 114292444551032750}
+  isBasicClass: 1
+--- !u!114 &114688809765195418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Fire sword
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Fire sword
+  _description: Fire sword for swordmen
+  _tags:
+  - Wearable
+  - Weapon
+  - Melee
+  - No Addon
+  - Fire
+  - Sword
+  - Size For All
+  - One Hand
+  _formulas:
+  - label: dmg
+    formula: 6
+    priority: 1
+  - label: fdg
+    formula: 3
+    priority: 1
+  _allowedSlots: {fileID: 114611891760947598}
+--- !u!114 &114690410925572512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Ice bow
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Ice bow
+  _description: Ice bow for bowmen
+  _tags:
+  - Wearable
+  - Weapon
+  - Ranged
+  - No Addon
+  - Ice
+  - Bow
+  - Size For All
+  - Two Hand
+  _formulas:
+  - label: dmg
+    formula: 4
+    priority: 1
+  - label: idg
+    formula: 2
+    priority: 1
+  _allowedSlots: {fileID: 114290942810824072}
+--- !u!114 &114694369180193828
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114695078326397098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Heavy Carrier
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Heavy Carrier
+  _description: Heavy Carrier is a spec in which you can wear heavy objects
+  _tags: []
+  _formulas:
+  - label: CON
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114247145970896084}
+  isBasicClass: 0
+--- !u!114 &114718546565312078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Light Carrier
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Light Carrier
+  _description: Light Carrier is a spec in which you can wear slightly heavy objects
+  _tags: []
+  _formulas:
+  - label: CON
+    formula: 2
+    priority: 1
+  _allowedSlots: {fileID: 114731884889390566}
+  isBasicClass: 0
+--- !u!114 &114731884889390566
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg:
+  - itemMask: 272793794
+    itemIds:
+    - Wearable
+    - Cloth
+    - Head
+    - No Addon
+    - No Magic
+    - Light
+    - No Weak
+  - itemMask: 272793922
+    itemIds:
+    - Wearable
+    - Cloth
+    - Chest
+    - No Addon
+    - No Magic
+    - Light
+    - No Weak
+  - itemMask: 272794690
+    itemIds:
+    - Wearable
+    - Cloth
+    - Arms
+    - No Addon
+    - No Magic
+    - Light
+    - No Weak
+  - itemMask: 272795714
+    itemIds:
+    - Wearable
+    - Cloth
+    - Hands
+    - No Addon
+    - No Magic
+    - Light
+    - No Weak
+  - itemMask: 272801858
+    itemIds:
+    - Wearable
+    - Cloth
+    - Legs
+    - No Addon
+    - No Magic
+    - Light
+    - No Weak
+  - itemMask: 272810050
+    itemIds:
+    - Wearable
+    - Cloth
+    - Feet
+    - No Addon
+    - No Magic
+    - Light
+    - No Weak
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114741764284523806
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114742285016855150
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg:
+  - itemMask: 85098522
+    itemIds:
+    - Wearable
+    - Weapon
+    - Melee
+    - No Addon
+    - Sword
+    - No Magic
+    - Size For All
+    - One Hand
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114805552881019110
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114841749224250266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Iron armor
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Iron armor
+  _description: Heavy armor
+  _tags:
+  - Wearable
+  - Cloth
+  - Chest
+  - No Addon
+  - No Magic
+  - Heavy
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 10
+    priority: 1
+  _allowedSlots: {fileID: 114741764284523806}
+--- !u!114 &114843138301786736
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114877673899029410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Iron armbands
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Iron armbands
+  _description: Heavy armbands
+  _tags:
+  - Wearable
+  - Cloth
+  - Arms
+  - No Addon
+  - No Magic
+  - Heavy
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 3
+    priority: 1
+  _allowedSlots: {fileID: 114417552588742328}
+--- !u!114 &114885027430615716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Broadswordman
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Broadswordman
+  _description: Broadswordman is a spec in which you can use broadswords
+  _tags: []
+  _formulas:
+  - label: CON
+    formula: 10
+    priority: 1
+  _allowedSlots: {fileID: 114080183829714642}
+  isBasicClass: 0
+--- !u!114 &114886080094201526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Iron gloves
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Iron gloves
+  _description: Heavy gloves
+  _tags:
+  - Wearable
+  - Cloth
+  - Hands
+  - No Addon
+  - No Magic
+  - Heavy
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 2
+    priority: 1
+  _allowedSlots: {fileID: 114950051461474472}
+--- !u!114 &114908796151325206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Shirt
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Shirt
+  _description: Common shirt
+  _tags:
+  - Wearable
+  - Cloth
+  - Chest
+  - No Addon
+  - No Magic
+  - Size For All
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 3
+    priority: 1
+  _allowedSlots: {fileID: 114805552881019110}
+--- !u!114 &114910236116631960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Big Club
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Big Club
+  _description: Common melee weapon for two hands
+  _tags:
+  - Wearable
+  - Weapon
+  - Melee
+  - No Addon
+  - No Magic
+  - No Weapon Spec
+  - Size For All
+  - Two Hand
+  _formulas:
+  - label: dmg
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114620758013545588}
+--- !u!114 &114944691234915138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee581a0de903dd4681d92f78e91fcd7, type: 3}
+  m_Name: Light boots
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Light boots
+  _description: Light boots
+  _tags:
+  - Wearable
+  - Cloth
+  - Feet
+  - No Addon
+  - No Magic
+  - Light
+  - No Weak
+  _formulas:
+  - label: def
+    formula: 1
+    priority: 1
+  _allowedSlots: {fileID: 114361662985895272}
+--- !u!114 &114950051461474472
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114969290857965132
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f4da9a27297c604cad86e0d9c5052f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCfg: []
+  _specCfg: []
+  _passiveCfgKeys: []
+  _passiveCfgVals: []
+--- !u!114 &114972293847471978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39d3ccebd929de844a9a7d5d237d0771, type: 3}
+  m_Name: Extra Attack
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Extra Attack
+  _description: The character will make an extra attack at the end of every turn
+  _tags:
+  - Turn
+  - Enemy
+  _formulas:
+  - label: dmg
+    formula: 6
+    priority: 1
+  _allowedSlots: {fileID: 114116323055478804}
+--- !u!114 &114989535995907954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ea45d683f1650428b8305877671f6b, type: 3}
+  m_Name: Bowman
+  m_EditorClassIdentifier: 
+  _image: {fileID: 0}
+  _nameId: Bowman
+  _description: Bowman is a spec in which you can use bows
+  _tags: []
+  _formulas:
+  - label: DEX
+    formula: 5
+    priority: 1
+  _allowedSlots: {fileID: 114428436799613944}
+  isBasicClass: 0
