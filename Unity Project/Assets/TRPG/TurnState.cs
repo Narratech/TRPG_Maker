@@ -2,4 +2,4 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TurnState {Move, Action, Deffense, Idle, Finalize, }
+public enum TurnState {Move, Attack, Skill, Deffense, Idle, Finalize, }

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using IsoUnity;
-using IsoUnity.Entities;
 using UnityEngine;
+using IsoUnity.Entities;
+using IsoUnity;
 
-public class MoveEvent : EventedEventManager
+public class SkillButton : EventedEventManager
 {
 
     public void onClick()
@@ -18,9 +18,9 @@ public class MoveEvent : EventedEventManager
     public IEnumerator throwEvent()
     {
         //Evento de prueba
-        
+
         Game.main.enqueueEvent(new GameEvent("change state", new Dictionary<string, object>() {
-            {"state", TurnState.Move},
+            {"state", TurnState.Skill},
               {"synchronized", true}
         }));
         yield return null;

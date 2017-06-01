@@ -44,7 +44,6 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
         cell.Map.registerEntity(ent);
 
         // Wait until selection
-        //if(celdaSeleccionada esta en la zona pintada, si no retornamos null
         while (!paint.accesibleCell(cellSelected))
         {
             yield return new WaitUntil(() => cellSelected != null);
@@ -79,7 +78,7 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
     {
         if (Input.GetButtonDown("Fire2") && arrow)
         {
-            Debug.Log("cell selected");
+
             cellSelected = arrow.Entity.Position;
         }
     }

@@ -9,7 +9,6 @@ public class DeffendEvent : EventedEventManager
 
     public void onClick()
     {
-        Debug.Log("boton move funciona");
         //se salta este metodo despues de poner el mensaje en el Log
         StartCoroutine(throwEvent());
     }

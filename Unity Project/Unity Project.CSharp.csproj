@@ -191,6 +191,7 @@
     <Compile Include="Assets\TRPG\ButtonScripts\AttackEvent.cs" />
     <Compile Include="Assets\TRPG\ButtonScripts\DeffendEvent.cs" />
     <Compile Include="Assets\TRPG\ButtonScripts\MoveEvent.cs" />
+    <Compile Include="Assets\TRPG\ButtonScripts\SkillButton.cs" />
     <Compile Include="Assets\TRPG\CellSelectionArrow.cs" />
     <Compile Include="Assets\TRPG\CellSelectorManager.cs" />
     <Compile Include="Assets\TRPG\Painter.cs" />

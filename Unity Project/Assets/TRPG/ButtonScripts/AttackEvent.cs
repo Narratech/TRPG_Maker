@@ -9,7 +9,6 @@ public class AttackEvent : EventedEventManager
 
     public void onClick()
     {
-        Debug.Log("boton move funciona");
         //se salta este metodo despues de poner el mensaje en el Log
         StartCoroutine(throwEvent());
     }
@@ -21,7 +20,7 @@ public class AttackEvent : EventedEventManager
         //Evento de prueba
 
         Game.main.enqueueEvent(new GameEvent("change state", new Dictionary<string, object>() {
-            {"state", TurnState.Action},
+            {"state", TurnState.Attack},
               {"synchronized", true}
         }));
         yield return null;

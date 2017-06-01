@@ -6,11 +6,12 @@ using IsoUnity.Entities;
 
 public class Turn: EventedEventManager
 {
-    
-    private TRPGCharacter[] characters;
-    private SkillsDB skillsDataBase = new SkillsDB();
     public Transform canvas;
 
+    private TRPGCharacter[] characters;
+    private SkillsDB skillsDataBase = new SkillsDB();
+    private TRPGCharacter character;
+    private int playableCharacters = 0;
 
     private bool moved = false;
     private bool attacked = false;
@@ -36,11 +37,12 @@ public class Turn: EventedEventManager
         //todo dentro de un bucle, hasta que todos los enemigos esten derrotados, sigue dando vueltas
         characters = IsoUnity.Map.FindObjectsOfType<TRPGCharacter>();
         
+        foreach (TRPGCharacter charac in characters)
+            if (charac.playable) playableCharacters++;
 
-        while (true)
+        while (playableCharacters > 1)
         {
-            yield return new WaitForSeconds(1);
-
+            Debug.Log(playableCharacters);
             //Ordenar la lista de characters segun su "velocidad" o agilidad...
             turnOrder();
             //Turn of every playable character in game
@@ -48,170 +50,262 @@ public class Turn: EventedEventManager
 
             if (turnFinished()) restartTurn();
 
-            TRPGCharacter character = selectNextCharacter();
+            this.character = selectNextCharacter();
+            if (character != null){
+                if (character.playable){
+                    activateButtons();
+                    StartCoroutine(Game.FindObjectOfType<CameraManager>().LookTo(character.gameObject, false));
 
-
-            if(character != null)
-            {
                     yield return new WaitWhile(() => this.state == TurnState.Idle);
-                    switch (this.state)
-                    {
-                       /* case "elquesea":
-                            ---lo que sea
-                    ChangeState(TurnState.Finalize);
-                    */
+                   
+                    if(this.state == TurnState.Finalize){
+                        //set direction of the character
+                        this.moved = false;
+                        this.attacked = false;
+                        this.deffended = false;
+                        character.finishTurn(true);
+                        canvas.gameObject.SetActive(true);
+                        this.state = TurnState.Idle;
                     }
+                }
+            }
+        }
+    }
+
+
+
+    [GameEvent(true, false)]
+    public void ChangeState(TurnState state)
+    {
+
+        if (!canvas.gameObject.activeInHierarchy)
+        {
+            //activa y desactiva los 4 botones de acciones al empezar el turno
+            canvas.gameObject.SetActive(true);
+        }
+
+        //pressed mvoe button
+        if (state == TurnState.Move && !moved)
+        {
+            if(this.character != null)
+            {
+                if (canvas.gameObject.activeInHierarchy) canvas.gameObject.SetActive(false);
                 
+                GameObject move = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonMove").gameObject;
+                move.SetActive(false);
+                StartCoroutine(moveState());
+      
+            }
+
+            //ahora mismo aqui no entra por lanzar el evento como corutina
+            if (moved && attacked)
+            {
+                state = TurnState.Finalize;
+                GameObject attack = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonAttack").gameObject;
+                attack.SetActive(false);
+                GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
+                skillb.SetActive(false);
+            }
 
 
+        }
+          
+         //pressed attack button
+        else if (state == TurnState.Attack && !attacked)
+        {
+            if (this.character != null)
+            {
+                if (canvas.gameObject.activeInHierarchy) canvas.gameObject.SetActive(false);
+                StartCoroutine(attackState());
+                GameObject attack = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonAttack").gameObject;
+                attack.SetActive(false);
+                GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
+                skillb.SetActive(false);
+            }
 
+            //ahora mismo aqui no entra por lanzar el evento como corutina
+            if (moved && attacked) {
+                state = TurnState.Finalize;
+                GameObject attack = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonAttack").gameObject;
+                attack.SetActive(false);
+                GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
+                skillb.SetActive(false);
+            }
+        }
 
-
-                bool moved = false;
-                bool attacked = false;
-                bool finished = false;
-                if (character.playable)
+        //pressed skill list
+        else if (state == TurnState.Skill && !attacked)
+        {
+            if (this.character != null)
+            {
+                if (canvas.GetComponentInChildren<UnityEngine.UI.Image>().IsActive())
                 {
-                    while(!moved && !attacked && !finished)
-                    {
-                        if (!canvas.gameObject.activeInHierarchy)
-                        {
-                            //activa y desactiva los 4 botones de acciones al empezar el turno
-                            canvas.gameObject.SetActive(true);
-                        }
-                        //if the character hasnt moved yet, he can do it, only one time.
-                        //SI HA PULSADO MOVE, ENTRAMOS A ESTE IF
-                        if (!moved)
-                        {
+                    unactivateButtons();
+                    canvas.GetComponentInChildren<UnityEngine.UI.Image>().enabled = false;
+                }
+                
+                StartCoroutine(skillState());
+                GameObject attack = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonAttack").gameObject;
+                attack.SetActive(false);
+                GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
+                skillb.SetActive(false);
+            }
+
+            //ahora mismo aqui no entra por lanzar el evento como corutina
+            if (moved && attacked)
+            {
+                state = TurnState.Finalize;
+                GameObject attack = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonAttack").gameObject;
+                attack.SetActive(false);
+                GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
+                skillb.SetActive(false);
+            }
+        }
+
+        //pressed deffend button
+        else if (state == TurnState.Deffense && !deffended)
+        {
+            if (this.character != null)
+            {
+                state = TurnState.Finalize;
+            deffendState();
+            deffended = true;
+            }
+        }
+            
+        //if turn is finished
+        if (state == TurnState.Finalize && ((moved && attacked) || deffended))
+        {
+            this.state = TurnState.Finalize;
+        }
+                  
+    }
 
 
+    //functionallity of moveButton
+    private IEnumerator moveState()
+    {
+        //colocamos la flecha en la posicion del personaje
+        IGameEvent evento = new GameEvent();
+        evento.Name = "select cell";
+        evento.setParameter("cell", character.Entity.Position);
 
-                            //colocamos la flecha en la posicion del personaje
-                            IGameEvent evento = new GameEvent();
-                            evento.Name = "select cell";
-                            evento.setParameter("cell", character.Entity.Position);
+        //recalcular la distancia de movimiento según la "agilidad" del personaje, 2 por defecto
+        int movement = 2;
+        Skill habilidad = new Skill("Mover", "", "", "", "", 2, 0, movement, null, 0);
+        evento.setParameter("skill", habilidad);
+        evento.setParameter("synchronous", true);
+        Game.main.enqueueEvent(evento);
+        IGameEvent eventFinished;
+        yield return new WaitForEventFinished(evento, out eventFinished);
 
-                            //recalcular la distancia de movimiento según la "agilidad" del personaje, 2 por defecto
-                            int movement = 2;
-                            Skill habilidad = new Skill("Mover", "", "", "", "", 2, 0, movement, null, 0);
-                            evento.setParameter("skill", habilidad);
-                            evento.setParameter("synchronous", true);
-                            Game.main.enqueueEvent(evento);
-                            IGameEvent eventFinished;
-                            yield return new WaitForEventFinished(evento, out eventFinished);
-                            Debug.Log("Selected received");
+        var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
 
-                            var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
-
-                            //primero marcamos el move 
-                            evento = new GameEvent("move", new Dictionary<string, object>() {
+        //primero marcamos el move 
+        evento = new GameEvent("move", new Dictionary<string, object>() {
                                  {"mover", character.Entity.mover },
                                  {"cell", selectedCell },
                                  {"synchronous", true }
                             });
 
-                            Game.main.enqueueEvent(evento);
+        Game.main.enqueueEvent(evento);
 
-                            yield return new WaitForEventFinished(evento);
+        if (!canvas.gameObject.activeInHierarchy) canvas.gameObject.SetActive(true);  
 
-                            moved = true;
-
-
-
-
-                        }
-
-                        //if the character hasnt attacked yet, he can do it (attacking or using a skill), only one time.
-                        if (!attacked)
-                        {
-
-                          
+        yield return new WaitForEventFinished(evento);
+        moved = true;
+    }
 
 
+    //functionallity of attackButton
+    private IEnumerator attackState()
+    {
+        Skill attack = new Skill("Attack", "Attack with main weapon", "", "", "", 1, 100, 1, null, 0);
+        
 
-                            canvas.gameObject.SetActive(true);
-                            //mostrar lista de habilidades disponibles para las caracteristicas del personaje
-                            Skill[] skills = skillsDataBase.getSavedSkills();
-                            for(int j = 0; j < skills.Length; j++)
-                            {
+        //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
+        IGameEvent evento = new GameEvent();
+        evento.Name = "select cell";
+        evento.setParameter("cell", character.Entity.Position);
+        evento.setParameter("skill", attack);
+        evento.setParameter("synchronous", true);
+        Game.main.enqueueEvent(evento);
+        IGameEvent eventFinished;
 
-                            }
-                            //Seleccionar una   
-                            Skill selectedSkill = skills[2];
+        yield return new WaitForEventFinished(evento, out eventFinished);
 
-                            
-                            GameObject newGO = new GameObject("Skill-List");
-                            newGO.transform.position = new Vector3(60, 320, 0);
-                            newGO.AddComponent <UnityEngine.UI.Text>();
-                            newGO.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-                            newGO.GetComponent<UnityEngine.UI.Text>().text = skillOnString();
-                            newGO.GetComponent<UnityEngine.UI.Text>().font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-                            newGO.transform.SetParent(canvas);
-                            
-                          
-
-                            //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
-                            //OJO QUE AHORA MISMO SI SE SELECCIONA UNA CELDA CON UN ENTITY DENTRO DA ERROR PORQUE ESTA USANDO EL MOVER (creo)
-                            IGameEvent evento = new GameEvent();
-                            evento.Name = "select cell";
-                            evento.setParameter("cell", character.Entity.Position);
-                            evento.setParameter("skill", selectedSkill);
-                            evento.setParameter("synchronous", true);
-                            Game.main.enqueueEvent(evento);
-                            IGameEvent eventFinished;
-                            yield return new WaitForEventFinished(evento, out eventFinished);
-                            Debug.Log("Selected received");
-
-                            var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
-
-                            //Realizar animaciones
-
-                            //terminar ronda de ataque, quitar puntos de daño, pm...
-                            attacked = true;
-                               Destroy(newGO);
-                        }
+        var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
+        doDamage(selectedCell, attack);
 
 
-                        //The character can finish his turn without attacking or moving 
-                        if (!finished)
-                        {
-                            //set direction of the character
-                            character.finishTurn(true);
-                            canvas.gameObject.SetActive(false);
-                            moved = true;
-                            attacked = true;
-                            finished = true;
-                        }
+        //Realizar animaciones
 
+        //terminar ronda de ataque, quitar puntos de daño, pm...
+        attacked = true;
+        if (!canvas.gameObject.activeInHierarchy) canvas.gameObject.SetActive(true);
 
-                    }
-                    
+    }
 
-                    //segundo definimos habilidad
+    //functionallity of SkillButton
+    private IEnumerator skillState()
+    {
+        GameObject newGO = new GameObject("Skill-List");
+        //mostrar lista de habilidades disponibles para las caracteristicas del personaje
+        Skill[] skills = skillsDataBase.getSavedSkills();
+        UnityEngine.UI.Button[] buttons = new UnityEngine.UI.Button[skills.Length];
+        //Seleccionar una   
+        /*
+        for(int i = 0; i < skills.Length; i++)
+        {
+          
+        }*/
+        Skill attack = skills[2];
 
-                    //terminamos turno del personaje
+        newGO.transform.position = new Vector3(60, 320, 0);
+        newGO.AddComponent<UnityEngine.UI.Text>();
+        newGO.GetComponent<UnityEngine.UI.Text>().color = Color.black;
+        newGO.GetComponent<UnityEngine.UI.Text>().text = skillOnString();
+        newGO.GetComponent<UnityEngine.UI.Text>().font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        newGO.transform.SetParent(canvas);
+        
 
-                }
-            }
+        //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
+        IGameEvent evento = new GameEvent();
+        evento.Name = "select cell";
+        evento.setParameter("cell", character.Entity.Position);
+        evento.setParameter("skill", attack);
+        evento.setParameter("synchronous", true);
+        Game.main.enqueueEvent(evento);
+        IGameEvent eventFinished;
+
+        yield return new WaitForEventFinished(evento, out eventFinished);
+
+        var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
+        doDamage(selectedCell, attack);
+
+        //Realizar animaciones
+        //terminar ronda de ataque, quitar puntos de daño, pm...
+        attacked = true;
+        Destroy(newGO);
+        canvas.GetComponentInChildren<UnityEngine.UI.Image>().enabled = true;
+        if (!moved)
+        {
+            GameObject move = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonMove").gameObject;
+            move.SetActive(true);
         }
 
-        
+        GameObject deffend = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonDeffend").gameObject;
+        deffend.SetActive(true);
     }
 
-    [GameEvent(true, false)]
-    public void ChangeState(TurnState state)
+
+    //functionallity of deffendButton
+    private void deffendState()
     {
-        if (state == TurnState.Move && !moved)
-            this.state = TurnState.Move;
-        else if (state == TurnState.Action && !attacked)
-            this.state = TurnState.Action;
-        else if (state == TurnState.Deffense && !deffended)
-            this.state = TurnState.Deffense;
-        else if (state == TurnState.Finalize && ((moved && attacked) || deffended))
-            this.state = TurnState.Finalize;
-        else this.state = TurnState.Idle;
+
     }
 
+    //returns next playable character;
     private TRPGCharacter selectNextCharacter()
     {
         TRPGCharacter character = null;
@@ -227,11 +321,15 @@ public class Turn: EventedEventManager
         return character;
     }
 
+    //restarts the turn for every character playable in game
     private void restartTurn()
     {
-        foreach (TRPGCharacter charact in characters) charact.finishTurn(false);
+        foreach (TRPGCharacter charact in characters) {
+            if(charact.playable) charact.finishTurn(false);
+        }
     }
 
+    //return true if the turn has finished
     private bool turnFinished()
     {
         bool finished = true;
@@ -251,6 +349,7 @@ public class Turn: EventedEventManager
 
     }
 
+    //returns a string with all the names of the skills
     private string skillOnString()
     {
         string skillsNames = "";
@@ -259,6 +358,73 @@ public class Turn: EventedEventManager
         }
 
         return skillsNames;
+    }
+
+    //activates all the ui buttons
+    private void activateButtons()
+    {
+        GameObject move = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonMove").gameObject;
+        move.SetActive(true);
+        GameObject deffend = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonDeffend").gameObject;
+        deffend.SetActive(true);
+        GameObject attack = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonAttack").gameObject;
+        attack.SetActive(true);
+        GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
+        skillb.SetActive(true);
+    }
+
+    //unactivates all the ui buttons
+    private void unactivateButtons()
+    {
+        GameObject move = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonMove").gameObject;
+        move.SetActive(false);
+        GameObject deffend = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonDeffend").gameObject;
+        deffend.SetActive(false);
+        GameObject attack = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonAttack").gameObject;
+        attack.SetActive(false);
+        GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
+        skillb.SetActive(false);
+    }
+
+
+    //metodo de prueba que genera un boton
+    private static UnityEngine.UI.Button CreateButton(UnityEngine.UI.Button buttonPrefab, Skill skill)
+    {
+        var button = Object.Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as UnityEngine.UI.Button;
+ /*       var rectTransform = button.GetComponent<RectTransform>();
+        rectTransform.SetParent(canvas.transform);
+        rectTransform.anchorMax = cornerTopRight;
+        rectTransform.anchorMin = cornerBottomLeft;
+        rectTransform.offsetMax = Vector2.zero;
+        rectTransform.offsetMin = Vector2.zero;*/
+        return button;
+    }
+
+
+    //deals the damage of the skill in the selected character;
+    private void doDamage(Cell cell, Skill skill)
+    {
+        bool damageDone = false;
+        foreach (TRPGCharacter ch in characters)
+        {
+            if (ch.Entity.Position == cell)
+            {
+                ch.receibeDamage(skill);
+                damageDone = true;
+                if (ch.isDead())
+                {
+                    ch.playable = false;
+                    Debug.Log("El enemigo ha muerto");
+                    playableCharacters--;
+                    //cambiar la textura a muerto.
+                }
+            }
+        }
+
+        if (!damageDone)
+        {
+            Debug.Log("La habilidad ha fallado");
+        }
     }
 
 
