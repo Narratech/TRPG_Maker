@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using IsoUnity;
 using UnityEngine;
+using IsoUnity.Entities;
 
 public class Painter{
 
@@ -14,7 +15,7 @@ public class Painter{
 
     }
 
-    public void paintCells(Cell cell, Skill skill, IsoTexture color)
+    public void paintCells(Cell cell, Skill skill, IsoTexture color, Entity entity = null)
     {
         Vector2 position = cell.Map.getCoords(cell.gameObject);
 
@@ -36,7 +37,23 @@ public class Painter{
                 IsoUnity.Cell celdaAPintar = cell.Map.getCell(new Vector2(i, j));
                 if (celdaAPintar != null)
                 {           
+                    if(entity != null){
+                        if(RoutePlanifier.planifyRoute(entity.mover, celdaAPintar))
+                        {
+                            int distance = 0;
+                            Cell measuring;
+                            while (distance <= skill.getDistance() && (measuring = RoutePlanifier.next(entity.mover)))
+                            {
+                                entity.Position = measuring;
+                                distance++;
+                            }
+                            entity.Position = cell;
+                            
+                            RoutePlanifier.cancelRoute(entity.mover);
 
+                            if (distance > skill.getDistance()) continue;
+                        }else continue;
+                    }
 
                     if ((int)Mathf.Abs(Mathf.Abs(i - xcentral) + Mathf.Abs(j - ycentral)) <= skill.getDistance()) 
                     {
@@ -57,7 +74,7 @@ public class Painter{
     }
 
 
-    public void removePaint(Cell cell, Skill skill)
+    public void removePaint(Cell cell, Skill skill, Entity entity = null)
     {
         Vector2 position = cell.Map.getCoords(cell.gameObject);
         int contador = 0;
@@ -73,14 +90,37 @@ public class Painter{
             {
 
                 Cell celdaAPintar = cell.Map.getCell(new Vector2(i, j));
-                if (celdaAPintar != null && ((int)Mathf.Abs(Mathf.Abs(i - xcentral) + Mathf.Abs(j - ycentral)) <= skill.getDistance()))       
-                {
-                    celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].TextureMapping = oldTextures[contador];
-                    celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].Texture = oldTextures[contador].getTexture();
-                    celdaAPintar.forceRefresh();
-                    contador++;
-                }
 
+                if(celdaAPintar != null)
+                {
+                    if (entity != null)
+                    {
+                        if (RoutePlanifier.planifyRoute(entity.mover, celdaAPintar))
+                        {
+                            int distance = 0;
+                            Cell measuring;
+                            while (distance <= skill.getDistance() && (measuring = RoutePlanifier.next(entity.mover)))
+                            {
+                                entity.Position = measuring;
+                                distance++;
+                            }
+                            entity.Position = cell;
+
+                            RoutePlanifier.cancelRoute(entity.mover);
+
+                            if (distance > skill.getDistance()) continue;
+                        }
+                        else continue;
+                    }
+
+                    if ((int)Mathf.Abs(Mathf.Abs(i - xcentral) + Mathf.Abs(j - ycentral)) <= skill.getDistance())
+                    {
+                        celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].TextureMapping = oldTextures[contador];
+                        celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].Texture = oldTextures[contador].getTexture();
+                        celdaAPintar.forceRefresh();
+                        contador++;
+                    }
+                }
             }
         }
     }

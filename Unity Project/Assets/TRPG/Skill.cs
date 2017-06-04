@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
-
+[Serializable]
 //heredará de Slot?
 public class Skill {
 
@@ -33,11 +34,6 @@ public class Skill {
     
     
 
-
-    //Dependiendo de como vaya desarrollandose
-    private Animation preparing;
-    private Animation attacking;
-    private Animation ending;
 
 
 

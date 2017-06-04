@@ -2,9 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
  public class SkillsDB
 {
+    private bool loaded = false;
+
     // Data
     public Dictionary<string, Skill> skills;
 
@@ -17,7 +21,9 @@ using UnityEngine;
         // Initializing structures
         skills = new Dictionary<string, Skill>();
         // Creating example database
-        createExampleDatabase();
+        if(!loaded)
+        Load();
+        //createExampleDatabase();
     }
 
     // Properties    
@@ -96,7 +102,11 @@ using UnityEngine;
         
         bool canAdd = skills.ContainsValue(skill) ? false : true;
         if (canAdd)
+        {
             skills.Add(skill.getName(), skill);
+            Save();
+        }
+           
         return canAdd;
 
     }
@@ -141,4 +151,37 @@ using UnityEngine;
         Debug.Log("I'm a database");
     }
 
+    public void Save()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/savedSkills.dat");
+
+        SkillData savedData = new SkillData();
+        savedData.skillsSaved = skills;
+
+        bf.Serialize(file, savedData);
+        file.Close();
+    }
+
+    public void Load()
+    {
+        loaded = true;
+        Debug.Log(Application.persistentDataPath);
+        if(File.Exists(Application.persistentDataPath + "/savedSkills.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/savedSkills.dat", FileMode.Open);
+
+            SkillData savedData = (SkillData)bf.Deserialize(file);
+            file.Close();
+
+            this.skills = savedData.skillsSaved;
+        }
+    }
+}
+
+[Serializable]
+class SkillData
+{
+    public Dictionary<string, Skill> skillsSaved;
 }

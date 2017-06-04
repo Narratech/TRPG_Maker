@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using IsoUnity;
 using UnityEngine;
-
+using IsoUnity.Entities;
 
 public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
 {
@@ -17,17 +17,20 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
     [IsoUnity.Entities.GameEvent(false, false)]
     //crear una clase abstracta en vez de Skill, que permita todas las dif posibilidades de seleccion de movimiento, ataque, habilidades...
     //Cambiar void a IEnumerator por si nos interesa que el vento no termine nada mas seleccionar la casilla. Importante
-    public IEnumerator SelectCell(Cell cell , Skill skill){
+    public IEnumerator SelectCell(Cell cell , Skill skill, Entity entity = null){
 
         var ge = Current;
 
         Painter paint = new Painter();
         //painting the accesible cells for the used skill
-        paint.paintCells(cell, skill, colorTextures[skill.getTypeOfDamage()]);
+        paint.paintCells(cell, skill, colorTextures[skill.getTypeOfDamage()], entity);
 
 
 
         //busqueda recursiva
+        //Usar el trazador de rutas de IsoUnity
+        //si devuelve null es que el personaje no puede llegar a la celda,
+        //si devuelv
         // IsoUnity.Cell[] vecinos = cell.Map.getNeightbours(cell);
         //sistema nativo de isounity para bloqueos
             // vecinos[0].isAccesibleBy()
@@ -40,6 +43,7 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
         GameObject obj = cell.addDecoration(cell.transform.position +  new Vector3(0, cell.WalkingHeight, 0), 0, false, true, arrowDecoration);
         arrow = obj.AddComponent<CellSelectionArrow>();
         IsoUnity.Entities.Entity ent = obj.AddComponent<IsoUnity.Entities.Entity>();
+        ent.mover.blocks = false;
         ent.Position = cell;
         cell.Map.registerEntity(ent);
 
@@ -49,7 +53,7 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
             yield return new WaitUntil(() => cellSelected != null);
         }
      
-            paint.removePaint(cell, skill);
+            paint.removePaint(cell, skill, entity);
 
             Game.main.eventFinished(ge, new Dictionary<string, object>()
             {

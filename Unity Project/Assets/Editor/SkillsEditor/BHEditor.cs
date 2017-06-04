@@ -436,7 +436,6 @@ private void selectColor(bool active)
     {
         Skill skill = new Skill(this.skillName, this.skillDescription, this.spelltype[this.selectedSpellType], this.skillType[this.selectedSkillType], this.skillEffect[this.selectedEffect], this.selectedSkillType1, this.damage,this.distance, this.skillRequirements, numberRequirements);
         this.skills.add(skill);
-
         SkillsDB.Instance.addSkill(skill);
     }
 

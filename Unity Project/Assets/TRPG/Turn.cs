@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using IsoUnity;
 using UnityEngine;
 using IsoUnity.Entities;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Turn: EventedEventManager
 {
     public Transform canvas;
+    public Transform skillScroll;
+    public Transform skillContent;
+    public GameObject skillButton;
 
     private TRPGCharacter[] characters;
-    private SkillsDB skillsDataBase = new SkillsDB();
+    private SkillsDB skillsDataBase;
     private TRPGCharacter character;
     private int playableCharacters = 0;
 
@@ -33,7 +38,7 @@ public class Turn: EventedEventManager
     // Use this for initialization
     IEnumerator Start()
     {
-
+        //skillsDataBase.Load();
         //todo dentro de un bucle, hasta que todos los enemigos esten derrotados, sigue dando vueltas
         characters = IsoUnity.Map.FindObjectsOfType<TRPGCharacter>();
         
@@ -42,7 +47,6 @@ public class Turn: EventedEventManager
 
         while (playableCharacters > 1)
         {
-            Debug.Log(playableCharacters);
             //Ordenar la lista de characters segun su "velocidad" o agilidad...
             turnOrder();
             //Turn of every playable character in game
@@ -194,6 +198,7 @@ public class Turn: EventedEventManager
         int movement = 2;
         Skill habilidad = new Skill("Mover", "", "", "", "", 2, 0, movement, null, 0);
         evento.setParameter("skill", habilidad);
+        evento.setParameter("entity", character.Entity);
         evento.setParameter("synchronous", true);
         Game.main.enqueueEvent(evento);
         IGameEvent eventFinished;
@@ -245,35 +250,48 @@ public class Turn: EventedEventManager
         if (!canvas.gameObject.activeInHierarchy) canvas.gameObject.SetActive(true);
 
     }
+    private Skill selected = null;
+    public UnityAction createLamdaFor(Skill s)
+    {
+        return () => selected = s;
+    }
 
     //functionallity of SkillButton
     private IEnumerator skillState()
     {
-        GameObject newGO = new GameObject("Skill-List");
+        skillScroll.gameObject.SetActive(true);
+
         //mostrar lista de habilidades disponibles para las caracteristicas del personaje
+        skillsDataBase = new SkillsDB();
         Skill[] skills = skillsDataBase.getSavedSkills();
+
         UnityEngine.UI.Button[] buttons = new UnityEngine.UI.Button[skills.Length];
         //Seleccionar una   
-        /*
-        for(int i = 0; i < skills.Length; i++)
+
+        List<GameObject> toDestroy = new List<GameObject>();
+        selected = null;
+        for (int i = 0; i < skills.Length; i++)
         {
-          
-        }*/
-        Skill attack = skills[2];
+            Skill s = skills[i];
 
-        newGO.transform.position = new Vector3(60, 320, 0);
-        newGO.AddComponent<UnityEngine.UI.Text>();
-        newGO.GetComponent<UnityEngine.UI.Text>().color = Color.black;
-        newGO.GetComponent<UnityEngine.UI.Text>().text = skillOnString();
-        newGO.GetComponent<UnityEngine.UI.Text>().font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        newGO.transform.SetParent(canvas);
+            var newGO = GameObject.Instantiate(skillButton, skillContent);
+            var rt = skillContent.gameObject.GetComponent<RectTransform>();
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x, newGO.GetComponent<RectTransform>().rect.height * i+1);
+            toDestroy.Add(newGO);
+            newGO.GetComponentInChildren<Text>().text = s.getName();
+            newGO.GetComponent<Button>().onClick.AddListener(createLamdaFor(s));
+        }
         
+        yield return new WaitUntil(() => selected != null);
 
+        toDestroy.ForEach(go => DestroyImmediate(go));
+
+        skillScroll.gameObject.SetActive(false);
         //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
         IGameEvent evento = new GameEvent();
         evento.Name = "select cell";
         evento.setParameter("cell", character.Entity.Position);
-        evento.setParameter("skill", attack);
+        evento.setParameter("skill", selected);
         evento.setParameter("synchronous", true);
         Game.main.enqueueEvent(evento);
         IGameEvent eventFinished;
@@ -281,12 +299,11 @@ public class Turn: EventedEventManager
         yield return new WaitForEventFinished(evento, out eventFinished);
 
         var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
-        doDamage(selectedCell, attack);
+        doDamage(selectedCell, selected);
 
         //Realizar animaciones
         //terminar ronda de ataque, quitar puntos de daño, pm...
         attacked = true;
-        Destroy(newGO);
         canvas.GetComponentInChildren<UnityEngine.UI.Image>().enabled = true;
         if (!moved)
         {
