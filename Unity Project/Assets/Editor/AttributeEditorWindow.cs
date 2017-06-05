@@ -12,7 +12,7 @@ public class AttributeEditorWindow: EditorWindow
     string attribDescription;  // Description of the attribute
     int attribMinValue;  // Minimum value the attribute can have
     int attribMaxValue;  // Maximum value the attribute can have
-    Attribute temporal;  // Temporal container for the Attribute
+    AttributeTRPG temporal;  // Temporal container for the Attribute
     // Attributes from database
     List<string> attribsInDatabaseList;  // List of attributes identifiers (string) loaded from database
     string[] attribsInDatabaseArray;  // The same list in aray format for the Editor
@@ -106,7 +106,7 @@ public class AttributeEditorWindow: EditorWindow
         attribDescription="Enter your attribute description here";
         attribMinValue=1;
         attribMaxValue=100;
-        temporal=new Attribute(attribIsCore,attribId,attribName,attribDescription,attribMinValue,attribMaxValue);
+        temporal=new AttributeTRPG(attribIsCore,attribId,attribName,attribDescription,attribMinValue,attribMaxValue);
         // Attributes from database
         loadAttribsFromDatabase();
         attribCount=attribsInDatabaseList.Count;

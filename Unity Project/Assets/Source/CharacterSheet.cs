@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class CharacterSheet
     {
-    #region Attributes
+    #region AttributeTRPG
     // Basic info
     string _nameId;
     string _description;
         //Sprite _avatar;
     // Attributes (basic, core, derived)
-    Dictionary<string,Attribute> _baseAttributes;
-    Dictionary<string,Attribute> _realAttributes;
+    Dictionary<string,AttributeTRPG> _baseAttributes;
+    Dictionary<string, AttributeTRPG> _realAttributes;
     SpecTemplate _class;  // Identifies the character class
     SpecTemplate _specialization;  // Identifies the character specialization
     List<ItemTemplate> _items;  // Identifies the item slots (could exist empty slots).
@@ -23,7 +23,7 @@ public class CharacterSheet
     #endregion
 
     #region Constructor
-    public CharacterSheet(string nameId, string description, Dictionary<string,Attribute> attributes, 
+    public CharacterSheet(string nameId, string description, Dictionary<string, AttributeTRPG> attributes, 
         SpecTemplate classs, SpecTemplate specialization, List<ItemTemplate> items, List<PassiveTemplate> passives)
         // Constructs the CharacterSheet
         {
@@ -50,7 +50,7 @@ public class CharacterSheet
         get { return _description; }
         }
 
-    public Dictionary<string,Attribute> Attributes
+    public Dictionary<string, AttributeTRPG> Attributes
         {
         get { return _realAttributes; }
         }
@@ -123,7 +123,7 @@ public class CharacterSheet
                 }
             }
         // Modify _realAttributes starting from the _baseAttributes
-        _realAttributes=new Dictionary<string, Attribute>(_baseAttributes); 
+        _realAttributes=new Dictionary<string, AttributeTRPG>(_baseAttributes); 
         foreach (Formula copiedFormula in _tier1Formulas)
             {
             int formulaValue=0;

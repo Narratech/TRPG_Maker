@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Attribute
+public class AttributeTRPG
     {
     // Defined in editor
     public bool isCore;  // 'true' if is a basic or core attribute
@@ -15,7 +15,7 @@ public class Attribute
     // Defined in game (now just default values)
     public int value;
 
-    public Attribute(bool isCore, string id, string name, string description, int minValue, int maxValue)
+    public AttributeTRPG(bool isCore, string id, string name, string description, int minValue, int maxValue)
         {
         // Defined in editor
         this.isCore=isCore;
