@@ -129,27 +129,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\AttributeEditorWindow.cs" />
     <Compile Include="Assets\Editor\BancoHabilidades.cs" />
-    <Compile Include="Assets\Editor\Character\CharacterConstructor.cs" />
-    <Compile Include="Assets\Editor\Character\CharacterSheet.cs" />
-    <Compile Include="Assets\Editor\Character\Editor\CharacterEditorWindow.cs" />
-    <Compile Include="Assets\Editor\Character\FormulaManager.cs" />
-    <Compile Include="Assets\Editor\Character\FormulaPool.cs" />
-    <Compile Include="Assets\Editor\Database\Attribute.cs" />
-    <Compile Include="Assets\Editor\Database\Database.cs" />
-    <Compile Include="Assets\Editor\Database\Editor\AttributeEditorWindow.cs" />
-    <Compile Include="Assets\Editor\Database\Editor\Data Structures\SlotsConfig.cs" />
-    <Compile Include="Assets\Editor\Database\Editor\ItemEditorWindow.cs" />
-    <Compile Include="Assets\Editor\Database\Editor\PassiveEditorWindow.cs" />
-    <Compile Include="Assets\Editor\Database\Editor\SpecEditorWindow.cs" />
-    <Compile Include="Assets\Editor\Database\Editor\TemplateEditorWindow.cs" />
-    <Compile Include="Assets\Editor\Database\Formula.cs" />
-    <Compile Include="Assets\Editor\Database\ItemTemplate.cs" />
-    <Compile Include="Assets\Editor\Database\PassiveTemplate.cs" />
-    <Compile Include="Assets\Editor\Database\SlotsOpt.cs" />
-    <Compile Include="Assets\Editor\Database\SpecTemplate.cs" />
-    <Compile Include="Assets\Editor\Database\Template.cs" />
+    <Compile Include="Assets\Editor\CharacterEditorWindow.cs" />
+    <Compile Include="Assets\Editor\DatabaseMenu.cs" />
+    <Compile Include="Assets\Editor\FormulaEditorWindow.cs" />
+    <Compile Include="Assets\Editor\ItemEditorWindow.cs" />
+    <Compile Include="Assets\Editor\PassiveEditorWindow.cs" />
     <Compile Include="Assets\Editor\SkillsEditor\BHEditor.cs" />
+    <Compile Include="Assets\Editor\SpecEditorWindow.cs" />
+    <Compile Include="Assets\Editor\TagEditorWindow.cs" />
     <Compile Include="Assets\IsoUnity\Editor\CellEditor.cs" />
     <Compile Include="Assets\IsoUnity\Editor\Drawing.cs" />
     <Compile Include="Assets\IsoUnity\Editor\Inspector\DialogEditor.cs" />

@@ -31,9 +31,6 @@ public class Skill {
 
     private List<SkillRequirement> requirement = new List<SkillRequirement>();
     private int requirements = 0;
-    
-    
-
 
 
 

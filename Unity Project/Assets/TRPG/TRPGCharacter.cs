@@ -12,6 +12,7 @@ public class TRPGCharacter : EntityScript {
     private bool finishedTurn = false;
     public int hp = new int();
     public int deffense = new int();
+    
 
     //has finished the turn?
     public bool turnFinished()
@@ -51,7 +52,19 @@ public class TRPGCharacter : EntityScript {
     //deals damage to this character
     public void receibeDamage(Skill skill)
     {
-        if(skill.getTypeOfDamage() == 0)
+        CharacterManager cm = CharacterManager.Instance;// Obtiene el gestor de 'CharaceterSheet' que es un singleton (solo hay uno)
+        List<CharacterSheet> charList = cm.Everyone;  // Obtiene la lista de 'CharacterSheet'
+        // -Buscar el o las fichas de personaje que intervienen el la accion que estes haciendo. Las fichas se
+        // buscan por su nameId
+        // -Hacer la accion que sea (ataque, defensa, habilidad...)
+        // -Guardar nuevos valores del atributo en un diccionario estilo Dictionary<string,int> y hacer update
+        // en las fichas que sean necesarias
+        //charList[1].updateSheet(diccionario_con_atributos_modificados)
+        cm.Everyone = charList;
+
+
+
+        if (skill.getTypeOfDamage() == 0)
         {
             this.hp = this.hp + skill.getDamage();
             Debug.Log("Actual health points: " + hp + ". Healing receibed: " + skill.getDamage());

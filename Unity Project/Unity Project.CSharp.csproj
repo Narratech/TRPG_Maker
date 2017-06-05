@@ -198,6 +198,16 @@
     <Compile Include="Assets\TRPG\Skill.cs" />
     <Compile Include="Assets\TRPG\SkillRequirement\SkillRequirement.cs" />
     <Compile Include="Assets\TRPG\SkillsDB.cs" />
+    <Compile Include="Assets\TRPG\Source\AttributeTRPG.cs" />
+    <Compile Include="Assets\TRPG\Source\CharacterManager.cs" />
+    <Compile Include="Assets\TRPG\Source\CharacterSheet.cs" />
+    <Compile Include="Assets\TRPG\Source\Database.cs" />
+    <Compile Include="Assets\TRPG\Source\Formula.cs" />
+    <Compile Include="Assets\TRPG\Source\ItemTemplate.cs" />
+    <Compile Include="Assets\TRPG\Source\PassiveTemplate.cs" />
+    <Compile Include="Assets\TRPG\Source\SlotsConfig.cs" />
+    <Compile Include="Assets\TRPG\Source\SpecTemplate.cs" />
+    <Compile Include="Assets\TRPG\Source\Template.cs" />
     <Compile Include="Assets\TRPG\TRPGCharacter.cs" />
     <Compile Include="Assets\TRPG\TipoHabilidad.cs" />
     <Compile Include="Assets\TRPG\Turn.cs" />

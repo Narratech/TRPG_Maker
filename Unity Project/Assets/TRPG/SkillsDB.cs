@@ -143,6 +143,7 @@ using System.IO;
     {
         bool canDelete = skills.ContainsValue(skill) ? true : false;
         skills[skill.getName()] = skill;
+        Save();
         return canDelete;
     }
 

@@ -226,21 +226,20 @@ public class Turn: EventedEventManager
     private IEnumerator attackState()
     {
         Skill attack = new Skill("Attack", "Attack with main weapon", "", "", "", 1, 100, 1, null, 0);
-        
 
-        //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
-        IGameEvent evento = new GameEvent();
-        evento.Name = "select cell";
-        evento.setParameter("cell", character.Entity.Position);
-        evento.setParameter("skill", attack);
-        evento.setParameter("synchronous", true);
-        Game.main.enqueueEvent(evento);
-        IGameEvent eventFinished;
+            //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
+            IGameEvent evento = new GameEvent();
+            evento.Name = "select cell";
+            evento.setParameter("cell", character.Entity.Position);
+            evento.setParameter("skill", attack);
+            evento.setParameter("synchronous", true);
+            Game.main.enqueueEvent(evento);
+            IGameEvent eventFinished;
 
-        yield return new WaitForEventFinished(evento, out eventFinished);
+            yield return new WaitForEventFinished(evento, out eventFinished);
 
-        var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
-        doDamage(selectedCell, attack);
+            var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
+            doDamage(selectedCell, attack);
 
 
         //Realizar animaciones
@@ -286,21 +285,22 @@ public class Turn: EventedEventManager
 
         toDestroy.ForEach(go => DestroyImmediate(go));
 
-        skillScroll.gameObject.SetActive(false);
-        //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
-        IGameEvent evento = new GameEvent();
-        evento.Name = "select cell";
-        evento.setParameter("cell", character.Entity.Position);
-        evento.setParameter("skill", selected);
-        evento.setParameter("synchronous", true);
-        Game.main.enqueueEvent(evento);
-        IGameEvent eventFinished;
+            skillScroll.gameObject.SetActive(false);
+            //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
+            IGameEvent evento = new GameEvent();
+            evento.Name = "select cell";
+            evento.setParameter("cell", character.Entity.Position);
+            evento.setParameter("skill", selected);
+            evento.setParameter("synchronous", true);
+            Game.main.enqueueEvent(evento);
+            IGameEvent eventFinished;
 
-        yield return new WaitForEventFinished(evento, out eventFinished);
+            yield return new WaitForEventFinished(evento, out eventFinished);
 
-        var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
-        doDamage(selectedCell, selected);
+            var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
+            doDamage(selectedCell, selected);
 
+   
         //Realizar animaciones
         //terminar ronda de ataque, quitar puntos de daño, pm...
         attacked = true;
@@ -419,7 +419,7 @@ public class Turn: EventedEventManager
 
 
     //deals the damage of the skill in the selected character;
-    private void doDamage(Cell cell, Skill skill)
+    private bool doDamage(Cell cell, Skill skill)
     {
         bool damageDone = false;
         foreach (TRPGCharacter ch in characters)
@@ -442,6 +442,8 @@ public class Turn: EventedEventManager
         {
             Debug.Log("La habilidad ha fallado");
         }
+
+        return damageDone;
     }
 
 
