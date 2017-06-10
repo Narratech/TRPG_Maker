@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe252187c579bc5458136333ca4f0a07, type: 3}
+  m_Name: guillermo
+  m_EditorClassIdentifier: 
+  realTexture: {fileID: 2800000, guid: 42276e35bed0efc429f4fa2f7323a897, type: 3}
+  nrows: 4
+  ncols: 3
