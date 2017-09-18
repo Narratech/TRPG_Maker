@@ -76,14 +76,14 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="NCalc">
-      <HintPath>Assets\dll\NCalc.dll</HintPath>
-    </Reference>
     <Reference Include="C5">
       <HintPath>Assets\IsoUnity\Plugins\C5.dll</HintPath>
     </Reference>
     <Reference Include="NCalc">
       <HintPath>Assets\IsoUnity\Plugins\NCalc.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc">
+      <HintPath>Assets\TRPG\Plugins\NCalc.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -188,30 +188,31 @@
     <Compile Include="Assets\IsoUnity\Source\Util\JSONObject\JSONSerializer.cs" />
     <Compile Include="Assets\IsoUnity\Source\Util\JSONObject\JSONTemplates.cs" />
     <Compile Include="Assets\IsoUnity\Source\Util\JSONObject\VectorTemplates.cs" />
-    <Compile Include="Assets\TRPG\ButtonScripts\AttackEvent.cs" />
-    <Compile Include="Assets\TRPG\ButtonScripts\DeffendEvent.cs" />
-    <Compile Include="Assets\TRPG\ButtonScripts\MoveEvent.cs" />
-    <Compile Include="Assets\TRPG\ButtonScripts\SkillButton.cs" />
-    <Compile Include="Assets\TRPG\CellSelectionArrow.cs" />
-    <Compile Include="Assets\TRPG\CellSelectorManager.cs" />
-    <Compile Include="Assets\TRPG\Painter.cs" />
-    <Compile Include="Assets\TRPG\Skill.cs" />
-    <Compile Include="Assets\TRPG\SkillRequirement\SkillRequirement.cs" />
-    <Compile Include="Assets\TRPG\SkillsDB.cs" />
-    <Compile Include="Assets\TRPG\Source\AttributeTRPG.cs" />
-    <Compile Include="Assets\TRPG\Source\CharacterManager.cs" />
-    <Compile Include="Assets\TRPG\Source\CharacterSheet.cs" />
-    <Compile Include="Assets\TRPG\Source\Database.cs" />
-    <Compile Include="Assets\TRPG\Source\Formula.cs" />
-    <Compile Include="Assets\TRPG\Source\ItemTemplate.cs" />
-    <Compile Include="Assets\TRPG\Source\PassiveTemplate.cs" />
-    <Compile Include="Assets\TRPG\Source\SlotsConfig.cs" />
-    <Compile Include="Assets\TRPG\Source\SpecTemplate.cs" />
-    <Compile Include="Assets\TRPG\Source\Template.cs" />
-    <Compile Include="Assets\TRPG\TRPGCharacter.cs" />
-    <Compile Include="Assets\TRPG\TipoHabilidad.cs" />
-    <Compile Include="Assets\TRPG\Turn.cs" />
-    <Compile Include="Assets\TRPG\TurnState.cs" />
+    <Compile Include="Assets\TRPG\Source\BancoHabilidades.cs" />
+    <Compile Include="Assets\TRPG\Source\ButtonScripts\AttackEvent.cs" />
+    <Compile Include="Assets\TRPG\Source\ButtonScripts\DeffendEvent.cs" />
+    <Compile Include="Assets\TRPG\Source\ButtonScripts\MoveEvent.cs" />
+    <Compile Include="Assets\TRPG\Source\ButtonScripts\SkillButton.cs" />
+    <Compile Include="Assets\TRPG\Source\CellSelectionArrow.cs" />
+    <Compile Include="Assets\TRPG\Source\CellSelectorManager.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\AttributeTRPG.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\CharacterManager.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\CharacterSheet.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\Database.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\Formula.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\ItemTemplate.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\PassiveTemplate.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\SlotsConfig.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\SpecTemplate.cs" />
+    <Compile Include="Assets\TRPG\Source\Database\Template.cs" />
+    <Compile Include="Assets\TRPG\Source\Painter.cs" />
+    <Compile Include="Assets\TRPG\Source\Skill.cs" />
+    <Compile Include="Assets\TRPG\Source\SkillRequirement\SkillRequirement.cs" />
+    <Compile Include="Assets\TRPG\Source\SkillsDB.cs" />
+    <Compile Include="Assets\TRPG\Source\TRPGCharacter.cs" />
+    <Compile Include="Assets\TRPG\Source\TipoHabilidad.cs" />
+    <Compile Include="Assets\TRPG\Source\Turn.cs" />
+    <Compile Include="Assets\TRPG\Source\TurnState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\IsoUnity\Source\Util\JSONObject\readme.txt" />

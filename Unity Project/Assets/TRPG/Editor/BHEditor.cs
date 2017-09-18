@@ -10,6 +10,7 @@ public class BHEditor : EditorWindow
 
     private int damage = 0;
     private int distance = 0;
+    private double manaCost = 0;
     private int step = 0;
     private int area = 0;
     private string skillName;
@@ -82,6 +83,7 @@ public class BHEditor : EditorWindow
                     // Creando una habilidad, definimos nombre, descripcion y tipo de daño que va a hacer 
                     skillName = EditorGUILayout.TextField("Skill name", skillName);
                     skillDescription = EditorGUILayout.TextField("Skill description", skillDescription);
+                    manaCost = EditorGUILayout.DoubleField("Mana Cost", manaCost);
 
                     GUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField("Type of skill");
@@ -434,7 +436,7 @@ private void selectColor(bool active)
 
     private void saveSkill()
     {
-        Skill skill = new Skill(this.skillName, this.skillDescription, this.spelltype[this.selectedSpellType], this.skillType[this.selectedSkillType], this.skillEffect[this.selectedEffect], this.selectedSkillType1, this.damage,this.distance, this.skillRequirements, numberRequirements);
+        Skill skill = new Skill(this.skillName, this.skillDescription, this.manaCost, this.spelltype[this.selectedSpellType], this.skillType[this.selectedSkillType], this.skillEffect[this.selectedEffect], this.selectedSkillType1, this.damage,this.distance, this.skillRequirements, numberRequirements);
         this.skills.add(skill);
         SkillsDB.Instance.addSkill(skill);
     }

@@ -44,7 +44,7 @@ namespace IsoUnity
             titleStyle.fontStyle = FontStyle.Bold;
             titleStyle.margin = new RectOffset(0, 0, 5, 5);
 
-            brushes = new Brush[] { new NormalBrush(), new SurfaceBrush() };
+            brushes = new Brush[] { new NormalBrush(), new SurfaceBrush(), new SameColorSurface() };
             List<string> names = new List<string>();
 
             foreach (var b in brushes)
@@ -378,6 +378,132 @@ namespace IsoUnity
                 Cell.CellFace[] faces = cf.c.getSameSurfaceAdjacentFaces(cf.f);
                 foreach (var nf in faces)
                     if (!closed.ContainsKey(nf.f))
+                    {
+                        result.Add(nf);
+                        closed.Add(nf.f, false);
+                        generateFaces(nf, result, closed);
+                    }
+
+            }
+
+            public override void Prepare()
+            {
+                base.Prepare();
+
+                if (f != null) faces = generateFaces(new Cell.CellFace(cs, f));
+                else faces = null;
+
+
+            }
+
+            public override void Display()
+            {
+                if (faces != null)
+                {
+                    foreach (var cfs in faces)
+                    {
+
+                        if (cfs.f != null)
+                        {
+                            Vector3[] vertex = cfs.f.SharedVertex;
+                            int[] indexes = cfs.f.VertexIndex;
+
+                            Vector3[] puntos = new Vector3[4];
+                            for (int i = 0; i < indexes.Length; i++)
+                                puntos[i] = cfs.c.transform.TransformPoint(vertex[indexes[i]]);
+
+                            if (indexes.Length == 3)
+                                puntos[3] = cfs.c.transform.TransformPoint(vertex[indexes[2]]);
+
+                            Handles.DrawSolidRectangleWithOutline(puntos, (Event.current.shift) ? Color.blue : new Color(255f, 255f, 0f, 0.5f), Color.white);
+                        }
+                    }
+                }
+            }
+
+            public override void Work()
+            {
+
+                if (faces != null)
+                {
+
+                    Dictionary<Cell, List<FaceNoSC>> eachCellFaces = new Dictionary<Cell, List<FaceNoSC>>();
+                    foreach (var cfs in faces)
+                    {
+                        // First i recopilate all faces
+                        if (paintLater && paintModule.PaintingTexture != null)
+                        {
+                            if (!eachCellFaces.ContainsKey(cfs.c))
+                                eachCellFaces.Add(cfs.c, new List<FaceNoSC>());
+
+                            eachCellFaces[cfs.c].Add(cfs.f);
+                        }
+
+                        if (backupTextures)
+                        {
+                            paintModule.PaintingTexture = cfs.f.Texture;
+                            paintModule.PaintingIsoTexture = cfs.f.TextureMapping;
+
+                            paintModule.Repaint = true;
+                        }
+                    }
+
+                    // Then I update all of them
+                    foreach (var clf in eachCellFaces)
+                    {
+                        foreach (var eachFace in clf.Value)
+                        {
+                            eachFace.Texture = paintModule.PaintingTexture;
+                            eachFace.TextureMapping = paintModule.PaintingIsoTexture;
+
+                        }
+                        clf.Key.forceRefresh();
+                    }
+                }
+            }
+        }
+
+        private class SameColorSurface : LeftButtonAbstractBrush
+        {
+
+            public override string BrushName { get { return "Same Color Surface"; } }
+
+            private Vector3[] getRealPointsOf(FaceNoSC f)
+            {
+                Vector3[] vertex = f.SharedVertex;
+                int[] indexes = f.VertexIndex;
+
+                Vector3[] puntos = new Vector3[4];
+                for (int i = 0; i < indexes.Length; i++)
+                    puntos[i] = cs.transform.TransformPoint(vertex[indexes[i]]);
+
+                if (indexes.Length == 3)
+                    puntos[3] = cs.transform.TransformPoint(vertex[indexes[2]]);
+
+                return puntos;
+            }
+
+            private List<Cell.CellFace> faces;
+
+            private List<Cell.CellFace> generateFaces(Cell.CellFace cf)
+            {
+                List<Cell.CellFace> faces = new List<Cell.CellFace>();
+                Dictionary<FaceNoSC, bool> closed = new Dictionary<FaceNoSC, bool>();
+
+                faces.Add(cf);
+                closed.Add(cf.f, false);
+                generateFaces(cf, faces, closed);
+
+                return faces;
+            }
+
+            private void generateFaces(Cell.CellFace cf, List<Cell.CellFace> result, Dictionary<FaceNoSC, bool> closed)
+            {
+                closed[cf.f] = true;
+
+                Cell.CellFace[] faces = cf.c.getSameSurfaceAdjacentFaces(cf.f);
+                foreach (var nf in faces)
+                    if (!closed.ContainsKey(nf.f) && nf.f.TextureMapping == f.TextureMapping)
                     {
                         result.Add(nf);
                         closed.Add(nf.f, false);

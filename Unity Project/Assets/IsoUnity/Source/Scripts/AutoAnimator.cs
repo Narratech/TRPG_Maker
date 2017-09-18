@@ -7,7 +7,7 @@ namespace IsoUnity
     {
 
 
-        public int[] FrameSecuence;
+        public int[] FrameSecuence = new int[0];
         public float FrameRate;
 
         public int Repeat = 0;

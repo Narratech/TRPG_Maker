@@ -23,6 +23,8 @@ public class Turn: EventedEventManager
     private bool deffended = false;
     private TurnState state = TurnState.Idle;
 
+    private int contador;
+
 
     public override void ReceiveEvent(IsoUnity.IGameEvent ge)
     {
@@ -40,12 +42,13 @@ public class Turn: EventedEventManager
     {
         //todo dentro de un bucle, hasta que todos los enemigos esten derrotados, sigue dando vueltas
         characters = IsoUnity.Map.FindObjectsOfType<TRPGCharacter>();
+        contador = characters.Length;
         //startCharacters();
         foreach (TRPGCharacter charac in characters)
             if (charac.playable)
                 playableCharacters++;
                 
-        while (characters.Length > 2)
+        while (contador > 2)
         {
             //Ordenar la lista de characters segun su "velocidad" o agilidad...
             turnOrder();
@@ -55,6 +58,7 @@ public class Turn: EventedEventManager
             if (turnFinished()) restartTurn();
 
             this.character = selectNextCharacter();
+            changeHPPlayer(this.character.getHP(), this.character.getName());
             if (character != null){
                 if (character.playable){
                     activateButtons();
@@ -75,6 +79,8 @@ public class Turn: EventedEventManager
             }
         }
         Debug.Log("Fin de la partida");
+        unactivateButtons();
+        canvas.gameObject.SetActive(false);
     }
 
 
@@ -126,6 +132,7 @@ public class Turn: EventedEventManager
                 attack.SetActive(false);
                 GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
                 skillb.SetActive(false);
+                attack.SetActive(false);
             }
 
             //ahora mismo aqui no entra por lanzar el evento como corutina
@@ -136,6 +143,8 @@ public class Turn: EventedEventManager
                 GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
                 skillb.SetActive(false);
             }
+
+
         }
 
         //pressed skill list
@@ -143,7 +152,7 @@ public class Turn: EventedEventManager
         {
             if (this.character != null)
             {
-                if (canvas.GetComponentInChildren<UnityEngine.UI.Image>().IsActive())
+                if (!canvas.GetComponentInChildren<UnityEngine.UI.Image>().IsActive())
                 {
                     unactivateButtons();
                     canvas.GetComponentInChildren<UnityEngine.UI.Image>().enabled = false;
@@ -165,6 +174,7 @@ public class Turn: EventedEventManager
                 GameObject skillb = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonSkill").gameObject;
                 skillb.SetActive(false);
             }
+
         }
 
         //pressed deffend button
@@ -197,7 +207,7 @@ public class Turn: EventedEventManager
 
         //recalcular la distancia de movimiento según la "agilidad" del personaje, 2 por defecto
         int movement = (int)this.character.getSpeed();
-        Skill habilidad = new Skill("Mover", "", "", "", "", 2, 0, movement/10, null, 0);
+        Skill habilidad = new Skill("Mover", "", 0 , "", "", "", 2, 0, movement, null, 0);
         evento.setParameter("skill", habilidad);
         evento.setParameter("entity", character.Entity);
         evento.setParameter("synchronous", true);
@@ -227,12 +237,11 @@ public class Turn: EventedEventManager
     private IEnumerator attackState()
     {
         int distance = (int)this.character.getSpeed();
-        if (distance != 20) { distance = distance + 1; }
-        else distance = 10;
 
-        int damage = (int)this.character.getStrenght();
 
-        Skill attack = new Skill("Attack", "Attack with main weapon", "", "", "", 1, damage, distance/10, null, 0);
+        int damage = (int)this.character.getStrength();
+
+        Skill attack = new Skill("Attack", "Attack with main weapon", 0, "", "", "", 1, damage, distance, null, 0);
 
             //colocamos la flecha en la posicion del personaje y lanzamos el evento de seleccionar objetivo
             IGameEvent evento = new GameEvent();
@@ -248,6 +257,7 @@ public class Turn: EventedEventManager
             var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
             doDamage(selectedCell, attack);
 
+            changeHPPlayer(this.character.getHP(), this.character.getName());
 
         //Realizar animaciones
 
@@ -305,13 +315,52 @@ public class Turn: EventedEventManager
             yield return new WaitForEventFinished(evento, out eventFinished);
 
             var selectedCell = eventFinished.getParameter("cellSelected") as Cell;
-            doDamage(selectedCell, selected);
+            bool goodMP = this.character.lessMP(selected);
 
-   
+
+
+        if (goodMP)
+        {
+            Database.SkillAnimation animation = Database.Instance.animations.Find(a => selected.getName() == a.name);
+            if (animation != null)
+            {
+                selected.castingAnimation = animation.castAnimation;
+                selected.receiveAnimation = animation.receiveAnimation;
+            }
+
+            // Cast event (for animation)
+            var cast = new GameEvent("cast skill", new Dictionary<string, object>()
+            {
+                { "trpgcharacter", character },
+                { "skill", selected },
+                { "synchronous", true }
+            });
+
+            Game.main.enqueueEvent(cast);
+
+            yield return new WaitForEventFinished(cast);
+
+            // Receive event (for animation)
+            var receive = new GameEvent("receive skill", new Dictionary<string, object>()
+            {
+                { "trpgcharacter", selectedCell.GetComponentInChildren<TRPGCharacter>() },
+                { "skill", selected },
+                { "synchronous", true }
+            });
+
+            Game.main.enqueueEvent(receive);
+
+            yield return new WaitForEventFinished(receive);
+
+            doDamage(selectedCell, selected);
+        }
+        else Debug.Log("No mana for this skill");
+
+
         //Realizar animaciones
         //terminar ronda de ataque, quitar puntos de daño, pm...
         attacked = true;
-        canvas.GetComponentInChildren<UnityEngine.UI.Image>().enabled = true;
+        canvas.GetComponentInChildren<UnityEngine.UI.Image>().enabled = false;
         if (!moved)
         {
             GameObject move = canvas.GetComponentInChildren<UnityEngine.UI.Image>().transform.Find("ButtonMove").gameObject;
@@ -326,7 +375,7 @@ public class Turn: EventedEventManager
     //functionallity of deffendButton
     private void deffendState()
     {
-
+        changeHPEnemy(-1, "");
     }
 
     //returns next playable character;
@@ -431,13 +480,15 @@ public class Turn: EventedEventManager
         {
             if (ch.Entity.Position == cell)
             {
-                ch.receibeDamage(skill);
+                ch.receiveDamage(skill);
+                changeHPEnemy(ch.getHP(), ch.getName());
                 damageDone = true;
                 if (ch.isDead())
                 {
                     ch.playable = false;
                     Debug.Log("El enemigo ha muerto");
-                    playableCharacters--;
+                    contador--;
+
                     //cambiar la textura a muerto.
                 }
             }
@@ -451,38 +502,39 @@ public class Turn: EventedEventManager
         return damageDone;
     }
 
-/*
-    private void startCharacters()
+    void Muertos()
     {
-        CharacterSheet ficha;
-
-        foreach (TRPGCharacter charac in characters) { 
-            Dictionary<string, AttributeTRPG> diccionario = new Dictionary<string, AttributeTRPG>();
-
-            if (charac.name.Equals("Dommie")){
-                diccionario.Add("Health", new AttributeTRPG(true,"HP","Health","health of character",0,300));
-                diccionario.Add("Mana", new AttributeTRPG(true, "MP", "Mana", "Mana of character", 0, 20));
-                diccionario.Add("Speed", new AttributeTRPG(true, "SP", "Speed", "Speed of character", 0, 10));
-                ficha = new CharacterSheet("Doomie", "Munieco de entrenamiento", diccionario, null, null, null,null);
-            }else if (charac.name.Equals("Guerrero")){
-                diccionario.Add("Health", new AttributeTRPG(true, "HP", "Health", "health of character", 0, 150));
-                diccionario.Add("Mana", new AttributeTRPG(true, "MP", "Mana", "Mana of character", 0, 40));
-                diccionario.Add("Speed", new AttributeTRPG(true, "SP", "Speed", "Speed of character", 0, 30));
-                ficha = new CharacterSheet("Guerrero", "Guerrero de espada", diccionario, new SpecTemplate(), new SpecTemplate(), null, null);
-            }
-            else if (charac.name.Equals("Arquero")){
-                diccionario.Add("Health", new AttributeTRPG(true, "HP", "Health", "health of character", 0, 150));
-                diccionario.Add("Mana", new AttributeTRPG(true, "MP", "Mana", "Mana of character", 0, 50));
-                diccionario.Add("Speed", new AttributeTRPG(true, "SP", "Speed", "Speed of character", 0, 50));
-                ficha = new CharacterSheet("Arquero", "Arquero a distancia", diccionario, new SpecTemplate(), new SpecTemplate(), null, null);
+        characters = IsoUnity.Map.FindObjectsOfType<TRPGCharacter>();
+        foreach (TRPGCharacter charac in characters)
+        {
+            if (charac.isDead())
+            {
+                Destroy(charac);
             }
         }
     }
-*/
 
 
     // Update is called once per frame
     void Update () {
 		
 	}
+
+    private void changeHPPlayer(double hp, string name)
+    {
+        /*
+        GameObject hpcharacter = canvas.transform.Find("CharacterHP").gameObject;
+        hpcharacter.GetComponentInChildren<Text>().text = name + ": " + hp.ToString();*/
+
+    }
+
+    private void changeHPEnemy(double hp, string name)
+    {
+        /*
+         GameObject hpcharacter = canvas.transform.Find("EnemyHP").gameObject;
+
+        if (hp == -1)  hpcharacter.GetComponentInChildren<Text>().text = "";
+        else hpcharacter.GetComponentInChildren<Text>().text = name + ": " + hp.ToString();
+        */
+    }
 }

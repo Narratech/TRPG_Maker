@@ -43,6 +43,9 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
         GameObject obj = cell.addDecoration(cell.transform.position +  new Vector3(0, cell.WalkingHeight, 0), 0, false, true, arrowDecoration);
         arrow = obj.AddComponent<CellSelectionArrow>();
         IsoUnity.Entities.Entity ent = obj.AddComponent<IsoUnity.Entities.Entity>();
+        var previousTarget = CameraManager.Instance.Target;
+        StartCoroutine(Game.FindObjectOfType<CameraManager>().LookTo(obj, false));
+
         ent.mover.blocks = false;
         ent.Position = cell;
         cell.Map.registerEntity(ent);
@@ -53,22 +56,22 @@ public class CellSelectorManager: IsoUnity.Entities.EventedEventManager
             yield return new WaitUntil(() => cellSelected != null);
         }
      
-            paint.removePaint(cell, skill, entity);
-
-            Game.main.eventFinished(ge, new Dictionary<string, object>()
-            {
-                {"cellSelected", cellSelected }
-            });
+        paint.removePaint(cell, skill, entity);
+        StartCoroutine(Game.FindObjectOfType<CameraManager>().LookTo(previousTarget, false));
+        Game.main.eventFinished(ge, new Dictionary<string, object>()
+        {
+            {"cellSelected", cellSelected }
+        });
  
-            cellSelected = null;
+        cellSelected = null;
 
-            //Destroy the arrow and create a new one
-            if (arrow != null)
-            {
-                Cell selectedCell = arrow.Entity.Position;
-                arrow.Entity.Position.Map.unRegisterEntity(arrow.Entity);
-                GameObject.DestroyImmediate(arrow.gameObject);
-            }
+        //Destroy the arrow and create a new one
+        if (arrow != null)
+        {
+            Cell selectedCell = arrow.Entity.Position;
+            arrow.Entity.Position.Map.unRegisterEntity(arrow.Entity);
+            GameObject.DestroyImmediate(arrow.gameObject);
+        }
 
     }
 

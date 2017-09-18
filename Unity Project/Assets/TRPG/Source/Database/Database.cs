@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Database : ScriptableObject, ISerializationCallbackReceiver
     #region Description
-    // The 'Database' is the unique object (singleton) that stores all the info that can be used to create a game. This info is 
-    // the Attributes ('AttributeTRPG') and the templates ('Template'). In order to edit, relate and show this info correctly we need
+    // The 'Database' is the unique object (singleton) that stores all the info that can be used to create a game. This info includes 
+    // attributes, templates (specializations, items and passives). In order to edit, relate and show this info correctly we need
     // extra structures which are basically tags
     #endregion
     {
@@ -801,7 +801,7 @@ public class Database : ScriptableObject, ISerializationCallbackReceiver
         {
         #region Empty database
         if (option == "empty")
-        {
+            {
             // Create tags container      
             _tags = new Dictionary<string, List<string>>();
             // Create tags for PassiveTemplate
@@ -819,7 +819,7 @@ public class Database : ScriptableObject, ISerializationCallbackReceiver
             _tags.Add("Item", new List<string>());
             // Create tags for SpecTemplate
             _tags.Add("Specialization", new List<string>());
-        }
+            }
         #endregion
         #region Demo database
         else if (option == "demo")
@@ -937,6 +937,26 @@ public class Database : ScriptableObject, ISerializationCallbackReceiver
     #endregion
 
     #region Database elemements management: get, add, modify, and delete database elements
+    public List<string> getTagKeys()
+        // Retrieves the list of keys in the Dictionary '_tags'
+        {
+        List<string> tagKeys=new List<string>();
+        foreach (string key in _tags.Keys)
+            tagKeys.Add(key);
+        return tagKeys;
+        }
+
+    public List<string> getTagValues(string key)
+        // Retrieves the list of values for the key 'key' in the Dictionary '_tags'
+        {
+        List<string> tagValues=new List<string>();
+        foreach (string value in _tags[key])
+            {
+            tagValues.Add(value);
+            }
+        return tagValues;
+        }
+    
     public List<string> getAttribIdentifiers()
         // Retrieves the list of identifiers for every AttributeTRPG stored in the database Dictionary '_Attributes'
         {
@@ -1128,4 +1148,16 @@ public class Database : ScriptableObject, ISerializationCallbackReceiver
         }
         #endregion
     #endregion
+
+    // TODO
+
+    [Serializable]
+    public class SkillAnimation
+    {
+        public string name;
+        public IsoUnity.IsoDecoration castAnimation;
+        public IsoUnity.IsoDecoration receiveAnimation;
+    }
+
+    public List<SkillAnimation> animations;
 }

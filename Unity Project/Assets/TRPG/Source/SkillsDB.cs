@@ -42,11 +42,11 @@ using System.IO;
     {
         Debug.Log("Creating Skill database!");
 
-        Skill skill1 = new Skill("Bola de fuego", "Lanza una bola de fuego", "Linear Projectile", "Self Character", "Single target", 1, 20, 4, null, 0);
+        Skill skill1 = new Skill("Bola de fuego", "Lanza una bola de fuego", 10, "Linear Projectile", "Self Character", "Single target", 1, 20, 4, null, 0);
         addSkill(skill1);
-        Skill skill2 = new Skill("Lanza de Hielo", "Lanza una lanza de hielo", "Parabolic Projectile", "Self Character", "Area", 1, 30, 3, null, 0);
+        Skill skill2 = new Skill("Lanza de Hielo", "Lanza una lanza de hielo", 15, "Parabolic Projectile", "Self Character", "Area", 1, 30, 3, null, 0);
         addSkill(skill2);
-        Skill skill3 = new Skill("Curaga", "Sana a un aliado", "On Ground", "Ranged Place", "Single target", 0, 30, 4, null, 0);
+        Skill skill3 = new Skill("Curaga", "Sana a un aliado", 20, "On Ground", "Ranged Place", "Single target", 0, 30, 4, null, 0);
         addSkill(skill3);
 
 

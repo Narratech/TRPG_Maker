@@ -8,10 +8,17 @@ using System;
 //heredará de Slot?
 public class Skill {
 
+    [NonSerialized]
+    public IsoUnity.IsoDecoration castingAnimation;
+
+    [NonSerialized]
+    public IsoUnity.IsoDecoration receiveAnimation;
 
     private string name;
 
     private string description;
+
+    private double manaCost;
  
     private int distance;
 
@@ -35,10 +42,11 @@ public class Skill {
 
 
     //Constructora básica 
-    public Skill(string name, string description, string spellType, string skillType, string skillEffect, int typeOfDamage, int damage, int distance, List<SkillRequirement> requirements, int requirementsCreated)
+    public Skill(string name, string description, double manaCost, string spellType, string skillType, string skillEffect, int typeOfDamage, int damage, int distance, List<SkillRequirement> requirements, int requirementsCreated)
     {
         this.name = name;
         this.description = description;
+        this.manaCost = manaCost;
         this.type = spellType;
         this.cast = skillType;
         this.effect = skillEffect;
@@ -271,6 +279,11 @@ public void removeRQ(SkillRequirement position)
         this.requirement.Remove(remove);
         this.requirements--;
 
+    }
+
+public double getManaCost()
+    {
+        return this.manaCost;
     }
 
 }

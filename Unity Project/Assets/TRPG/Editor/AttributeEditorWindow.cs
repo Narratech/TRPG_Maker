@@ -4,8 +4,13 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class AttributeEditorWindow: EditorWindow
+    #region Description
+    // The 'AttributeEditorWindow' is the editor that allows to create/edit/remove attributes used in the game. They are stored
+    // in the main and singleton database 'Database'
+    #endregion
     {
     // Current attribute values and container for the values
+    private static int TAG_LENGTH=3;  // Tags should be 3 characters long. Not less, neither more
     bool attribIsCore;  // 'true' if is a core attribute
     string attribId;  // Three letters identifier for the attribute
     string attribName;  // Name of the attribute readable by humans

@@ -25,7 +25,30 @@ namespace IsoUnity.Entities
                 AutoAnimator anim = go.GetComponent<AutoAnimator>();
                 anim.registerEvent(ev);
             }
+
+
+            if (ev.Name == "show decoration animation")
+            {
+                Decoration dec = (ev.getParameter("objective") as GameObject).GetComponent<Decoration>();
+
+                GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                Decoration decoration = go.AddComponent<Decoration>();
+                decoration.IsoDec = (IsoDecoration)ev.getParameter("animation");
+
+                decoration.GetComponent<Renderer>().sharedMaterial = new Material(Shader.Find("Transparent/Cutout/Diffuse"));
+                decoration.Father = dec;
+                decoration.adaptate();
+
+                AutoAnimator anim = go.AddComponent<AutoAnimator>();
+                anim.FrameRate = 0.1f;
+                anim.AutoDestroy = true;
+                anim.Repeat = 1;
+                anim.registerEvent(ev);
+
+                go.transform.Translate(new Vector3(0, 0, -0.1f));
+            }
         }
+
 
         public override void Tick() { }
 

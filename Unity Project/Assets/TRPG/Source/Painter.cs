@@ -115,9 +115,12 @@ public class Painter{
 
                     if ((int)Mathf.Abs(Mathf.Abs(i - xcentral) + Mathf.Abs(j - ycentral)) <= skill.getDistance())
                     {
-                        celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].TextureMapping = oldTextures[contador];
-                        celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].Texture = oldTextures[contador].getTexture();
-                        celdaAPintar.forceRefresh();
+                        if(contador < oldTextures.Length && oldTextures[contador] != null)
+                        {
+                            celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].TextureMapping = oldTextures[contador];
+                            celdaAPintar.Properties.faces[celdaAPintar.Properties.faces.Length - 1].Texture = oldTextures[contador].getTexture();
+                            celdaAPintar.forceRefresh();
+                        }
                         contador++;
                     }
                 }

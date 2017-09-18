@@ -20,7 +20,11 @@ namespace IsoUnity {
 	    public GameEvent(string name, Dictionary<string, object> parameters)
 	    {
 	        this.name = name;
-	        this.args = parameters;
+            this.args = new Dictionary<string, object>();
+            foreach(var param in parameters)
+            {
+                args.Add(param.Key.ToLower(), param.Value);
+            }
 	    }
 
 	    public string name;

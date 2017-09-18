@@ -112,14 +112,14 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="NCalc">
-      <HintPath>Assets\dll\NCalc.dll</HintPath>
-    </Reference>
     <Reference Include="C5">
       <HintPath>Assets\IsoUnity\Plugins\C5.dll</HintPath>
     </Reference>
     <Reference Include="NCalc">
       <HintPath>Assets\IsoUnity\Plugins\NCalc.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc">
+      <HintPath>Assets\TRPG\Plugins\NCalc.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -129,16 +129,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\AttributeEditorWindow.cs" />
-    <Compile Include="Assets\Editor\BancoHabilidades.cs" />
-    <Compile Include="Assets\Editor\CharacterEditorWindow.cs" />
-    <Compile Include="Assets\Editor\DatabaseMenu.cs" />
-    <Compile Include="Assets\Editor\FormulaEditorWindow.cs" />
-    <Compile Include="Assets\Editor\ItemEditorWindow.cs" />
-    <Compile Include="Assets\Editor\PassiveEditorWindow.cs" />
-    <Compile Include="Assets\Editor\SkillsEditor\BHEditor.cs" />
-    <Compile Include="Assets\Editor\SpecEditorWindow.cs" />
-    <Compile Include="Assets\Editor\TagEditorWindow.cs" />
     <Compile Include="Assets\IsoUnity\Editor\CellEditor.cs" />
     <Compile Include="Assets\IsoUnity\Editor\Drawing.cs" />
     <Compile Include="Assets\IsoUnity\Editor\Inspector\DialogEditor.cs" />
@@ -196,6 +186,15 @@
     <Compile Include="Assets\IsoUnity\Editor\Tests\GameEventTests.cs" />
     <Compile Include="Assets\IsoUnity\Editor\TextureAssistant.cs" />
     <Compile Include="Assets\IsoUnity\Source\Util\JSONObject\Editor\JSONChecker.cs" />
+    <Compile Include="Assets\TRPG\Editor\AttributeEditorWindow.cs" />
+    <Compile Include="Assets\TRPG\Editor\BHEditor.cs" />
+    <Compile Include="Assets\TRPG\Editor\CharacterEditorWindow.cs" />
+    <Compile Include="Assets\TRPG\Editor\DatabaseMenu.cs" />
+    <Compile Include="Assets\TRPG\Editor\FormulaEditorWindow.cs" />
+    <Compile Include="Assets\TRPG\Editor\ItemEditorWindow.cs" />
+    <Compile Include="Assets\TRPG\Editor\PassiveEditorWindow.cs" />
+    <Compile Include="Assets\TRPG\Editor\SpecEditorWindow.cs" />
+    <Compile Include="Assets\TRPG\Editor\TagEditorWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\IsoUnity\Source\Util\JSONObject\readme.txt" />

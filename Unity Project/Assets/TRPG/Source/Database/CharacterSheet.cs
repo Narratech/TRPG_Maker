@@ -176,7 +176,7 @@ public class CharacterSheet: ScriptableObject, ISerializationCallbackReceiver
 
     public void OnBeforeSerialize()
         {
-        _keyBaseAttr=_baseAttributes.Keys.ToList();
+        _keyBaseAttr =_baseAttributes.Keys.ToList();
         _valueBaseAttr=_baseAttributes.Values.ToList();
         }
 
