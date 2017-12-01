@@ -1,23 +1,28 @@
-
-
+# =============== #
+# Unity generated #
+# =============== #
 Temp/
 Library/
 
-
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
 UnityVS/
 ExportedObj/
 obj/
 *.svd
-.userprefs
-/.csproj
+*.userprefs
+/*.csproj
 *.pidb
-.suo
-/.sln
+*.suo
+/*.sln
 *.user
 *.unityproj
 *.booproj
 
-
+# ============ #
+# OS generated #
+# ============ #
 .DS_Store
 .DS_Store?
 ._*
