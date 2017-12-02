@@ -284,7 +284,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Slots: []
+  Slots:
+  - slotType: {fileID: 11400000, guid: 1f24e1a425050c3479f4debec998a4f3, type: 2}
+    item: {fileID: 0}
+  - slotType: {fileID: 11400000, guid: 1718b62f6a6b5e64caee037c6f9c736d, type: 2}
+    item: {fileID: 11400000, guid: 7f887a7b31a67e748914f174da3933e6, type: 2}
+  - slotType: {fileID: 0}
+    item: {fileID: 0}
+  - slotType: {fileID: 0}
+    item: {fileID: 0}
+  - slotType: {fileID: 0}
+    item: {fileID: 0}
 --- !u!114 &195878935
 MonoBehaviour:
   m_ObjectHideFlags: 0

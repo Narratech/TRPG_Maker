@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Slot : MonoBehaviour {
+public class Slot{
 
     public SlotType slotType;
     public Item item;
