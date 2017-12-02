@@ -1,42 +1,21 @@
-
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using UnityEngine;
 
-/**
- * @author PerezPrieto
- */
-public class Slot {
+[Serializable]
+public class Slot : MonoBehaviour {
 
-    /**
-     * 
-     */
-    public Slot() {
-    }
+    public SlotType slotType;
+    public Item item;
 
-    /**
-     * 
-     */
-    private Item Item;
-
-    /**
-     * 
-     */
-    private SlotType Type;
-
-    /**
-     * @param item
-     */
-    public void addItem(Item item) {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    public void removeItem() {
-        // TODO implement here
-    }
-
+	// Use this for initialization
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
 }

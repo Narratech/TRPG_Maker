@@ -8,5 +8,5 @@ public class Item : ScriptableObject {
 
     public string Name = "Enter item name";
     public string Description = "Enter item description";
-    public SlotType[] SlotType;
+    public SlotType[] SlotType = new SlotType[1];
 }

@@ -3,26 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 /**
  * @author PerezPrieto
  */
-public class Character {
+[RequireComponent(typeof(Inventory))]
+public class Character: MonoBehaviour{
 
-    /**
-     * 
-     */
-    public Character() {
+    public Inventory inventory
+    {
+        get
+        {
+            return this.GetComponent<Inventory>();
+        }
     }
 
-    /**
-     * 
-     */
-    private Inventory Inventory;
-
-    /**
-     * 
-     */
-    private SlotManager SlotManager;
+    public Slot[] Slots;
 
 }

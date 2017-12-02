@@ -29,6 +29,6 @@ public class ItemScript {
     /**
      * 
      */
-    private SlotType Type;
+    private Slot SlotType;
 
 }
