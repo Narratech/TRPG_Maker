@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public Item[] items;
+    public List<Item> items;
     
     
 }

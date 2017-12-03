@@ -23,6 +23,11 @@ public class Character: MonoBehaviour{
 
     public List<Slot> Slots;
 
+    public void addItem(Item item)
+    {
+
+    }
+
     // Custom Editor class for checking Slots and Items
     [CustomEditor(typeof(Character))]
     public class MyScriptEditor : Editor
