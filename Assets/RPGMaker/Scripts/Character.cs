@@ -44,8 +44,18 @@ public class Character: MonoBehaviour{
                 // Si el slot actual tiene item
                 if (myScript.Slots[i].item != null)
                 {
-                    // Para cada tipo de slot del item
-                    for(int j = 0; j < myScript.Slots[i].item.SlotType.Length; j++)
+                    // Si el item tiene este tipo de slot
+                    int posAct = myScript.Slots[i].item.SlotType.FindIndex(
+                            delegate (SlotType slotType)
+                            {
+                                return slotType == myScript.Slots[i].slotType;
+                            });
+                    // Si no lo contiene, error
+                    if (posAct == -1)
+                        correct = false;
+                    
+                    //Para cada tipo de slot del item
+                    for(int j = 0; j < myScript.Slots[i].item.SlotType.Count; j++)
                     {
                         // Si el slot es distinto del actual
                         if(myScript.Slots[i].item.SlotType[j].GetInstanceID() != myScript.Slots[i].slotType.GetInstanceID())
@@ -56,24 +66,18 @@ public class Character: MonoBehaviour{
                             {
                                 return slot.slotType == myScript.Slots[i].item.SlotType[j];
                             });
+                            
                             // Si tiene un item, error
                             if (myScript.Slots[pos].item != null)
                             {
                                 correct = false;                             
-                            }       
-                        } else // Si es el slot actual
-                        {
-                            // Si no es del mismo tipo, error
-                            if (myScript.Slots[i].item.SlotType[j].GetInstanceID() != myScript.Slots[i].slotType.GetInstanceID())
-                            {
-                                correct = false;
                             }
-                        }
+                        } 
                     }
                 }
                 if (!correct) {
                     EditorUtility.DisplayDialog("Error",
-                        "The item does not correspond with this slot", "Accept");
+                      "The item does not correspond with this slot", "Accept");
                     myScript.Slots[i].item = null;
                 }
             }
