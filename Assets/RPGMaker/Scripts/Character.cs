@@ -23,25 +23,25 @@ public class Character: MonoBehaviour{
 
     public List<Slot> Slots;
 
-    public void addItem(Item item)
+    public void addItem(Item item, Item.SlotsOcupped slotTypes)
     {
         // Slot Manager
         List<int> positions = new List<int>();
         Boolean correct = true;
 
         // Recorremos los slots del item
-        for(int i = 0; i < item.SlotType.Count; i++)
+        for(int i = 0; i < slotTypes.slotsOcupped.Count; i++)
         {
             // Buscamos la posicion del slot
             int pos = Slots.FindIndex(
                 delegate (Slot slot) {
-                    return slot.slotType == item.SlotType[i];
+                    return slot.slotType == slotTypes.slotsOcupped[i];
                 });
             // Si no existe, error
             if (pos == -1)
             {
                 Debug.Log("Error: " +
-                            "The character doesn't have the slot type " + item.SlotType[i]);
+                            "The character doesn't have the slot type " + slotTypes.slotsOcupped[i]);
                 correct = false;
             } else // Si existe guardamos la posicion del slot
             {
@@ -60,10 +60,10 @@ public class Character: MonoBehaviour{
                     // Lo quitamos de todos sus slots
                     for (int j = 0; j < itemAux.SlotType.Count; j++)
                     {
-                        // Buscamos es slot
+                        // Buscamos el slot
                         int pos = Slots.FindIndex(
                             delegate (Slot slot) {
-                                return slot.slotType == itemAux.SlotType[j];
+                                return slot.item == itemAux;
                             });
                         // Si existe lo quitamos
                         if(pos != -1 && Slots[pos].item != null) Slots[pos].item = null;
@@ -79,7 +79,7 @@ public class Character: MonoBehaviour{
         }
     }
 
-    // Custom Editor class for checking Slots and Items
+    /*// Custom Editor class for checking Slots and Items
     [CustomEditor(typeof(Character))]
     public class MyScriptEditor : Editor
     {
@@ -167,5 +167,5 @@ public class Character: MonoBehaviour{
                 }   
             }   
         }
-    }
+    }*/
 }

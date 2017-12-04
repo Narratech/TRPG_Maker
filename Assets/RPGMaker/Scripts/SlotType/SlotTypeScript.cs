@@ -11,5 +11,4 @@ public class SlotTypeScript{
      * 
      */
     private string Name;
-    private int NumberItems;
 }

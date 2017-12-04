@@ -55,15 +55,34 @@ public class OutputCharacter : MonoBehaviour {
             slotText.text = texto;
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
         // Actualizamos el inventario
         Dropdown itemDropdown = GameObject.Find("ItemDropdown").GetComponent<Dropdown>();
         itemDropdown.options.Clear();
         for (int i = 0; i < inventory.items.Count; i++)
             if (inventory.items[i] != null) itemDropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData() { text = inventory.items[i].name });
         itemDropdown.RefreshShownValue();
+
+        // Actualizamos los posibles slots
+        int itemIndex = itemDropdown.GetComponent<Dropdown>().value;
+        // Escribimos los posibles slots
+        Dropdown slotDropDown = GameObject.Find("SlotDropdown").GetComponent<Dropdown>();
+        slotDropDown.options.Clear();        
+        for (int i = 0; i < inventory.items[itemIndex].SlotType.Count; i++) {
+            var texto = "";
+            if (inventory.items[itemIndex].SlotType[i].slotsOcupped[0] != null)
+                texto += inventory.items[itemIndex].SlotType[i].slotsOcupped[0].Name;
+            for (int j = 1; j < inventory.items[itemIndex].SlotType[i].slotsOcupped.Count; j++)
+            {
+                if (inventory.items[itemIndex].SlotType[i].slotsOcupped[j] != null)
+                    texto += " + " + inventory.items[itemIndex].SlotType[i].slotsOcupped[j].Name;
+            }
+            slotDropDown.options.Add(new UnityEngine.UI.Dropdown.OptionData() { text = texto });
+        }
+        slotDropDown.RefreshShownValue();
+
 
         // Actualizamos slots
         for (int i = 0; i < character.Slots.Count; i++)
@@ -84,14 +103,12 @@ public class OutputCharacter : MonoBehaviour {
 		// Cogemos el nombre del item seleccionado
         Dropdown itemDropDown = GameObject.Find("ItemDropdown").GetComponent<Dropdown>();
         int itemIndex = itemDropDown.GetComponent<Dropdown>().value;
-        List<Dropdown.OptionData> menuOptions = itemDropDown.GetComponent<Dropdown>().options;
-        string itemName = menuOptions[itemIndex].text;
+        itemDropDown.value = 0;
 
-        // Buscamos el item
-        int pos = inventory.items.FindIndex(
-                            delegate (Item item) {
-                                return item.Name == itemName;
-                            });
-        character.addItem(inventory.items[pos]);
+        // Cogemos los tipos de slot seleccionados
+        Dropdown slotDropDown = GameObject.Find("SlotDropdown").GetComponent<Dropdown>();
+        int slotIndex = slotDropDown.GetComponent<Dropdown>().value;
+        
+        character.addItem(inventory.items[itemIndex], inventory.items[itemIndex].SlotType[slotIndex]);
 	}
 }

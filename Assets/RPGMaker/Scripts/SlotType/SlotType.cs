@@ -6,5 +6,4 @@ using UnityEngine;
 public class SlotType : ScriptableObject {
 
     public string Name = "Enter slot type";
-    public int NumberItems = 1;
 }
