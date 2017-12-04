@@ -108,7 +108,8 @@ public class OutputCharacter : MonoBehaviour {
         // Cogemos los tipos de slot seleccionados
         Dropdown slotDropDown = GameObject.Find("SlotDropdown").GetComponent<Dropdown>();
         int slotIndex = slotDropDown.GetComponent<Dropdown>().value;
-        
+        slotDropDown.value = 0;
+
         character.addItem(inventory.items[itemIndex], inventory.items[itemIndex].SlotType[slotIndex]);
 	}
 }

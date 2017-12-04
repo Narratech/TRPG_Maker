@@ -60,13 +60,17 @@ public class Character: MonoBehaviour{
                     // Lo quitamos de todos sus slots
                     for (int j = 0; j < itemAux.SlotType.Count; j++)
                     {
-                        // Buscamos el slot
-                        int pos = Slots.FindIndex(
-                            delegate (Slot slot) {
-                                return slot.item == itemAux;
-                            });
-                        // Si existe lo quitamos
-                        if(pos != -1 && Slots[pos].item != null) Slots[pos].item = null;
+                        for (int h = 0; h < itemAux.SlotType[j].slotsOcupped.Count; h++)
+                        {
+                            // Buscamos el slot
+                            int pos = Slots.FindIndex(
+                                delegate (Slot slot)
+                                {
+                                    return slot.slotType == itemAux.SlotType[j].slotsOcupped[h];
+                                });
+                            // Si existe lo quitamos
+                            if (pos != -1 && Slots[pos].item != null && Slots[pos].item == itemAux) Slots[pos].item = null;
+                        }
                     }
                     // Lo guardamos en el inventario.
                     inventory.addItem(itemAux);
