@@ -52,7 +52,7 @@ public class OutputCharacter : MonoBehaviour {
 	void Update () {
         for (int i = 0; i < character.Slots.Count; i++)
         {
-            gameObjects[i].transform.parent = GameObject.Find("Canvas").transform;
+			gameObjects [i].transform.SetParent (GameObject.Find ("Canvas").transform);
             Text m_nameText = gameObjects[i].GetComponent<Text>();
             string texto = "Slot " + i + ": ";
             if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType.Name + " - ";
