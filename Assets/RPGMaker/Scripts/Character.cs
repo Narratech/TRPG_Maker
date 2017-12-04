@@ -25,7 +25,58 @@ public class Character: MonoBehaviour{
 
     public void addItem(Item item)
     {
+        // Slot Manager
+        List<int> positions = new List<int>();
+        Boolean correct = true;
 
+        // Recorremos los slots del item
+        for(int i = 0; i < item.SlotType.Count; i++)
+        {
+            // Buscamos la posicion del slot
+            int pos = Slots.FindIndex(
+                delegate (Slot slot) {
+                    return slot.slotType == item.SlotType[i];
+                });
+            // Si no existe, error
+            if (pos == -1)
+            {
+                Debug.Log("Error: " +
+                            "The character doesn't have the slot type " + item.SlotType[i]);
+                correct = false;
+            } else // Si existe guardamos la posicion del slot
+            {
+                positions.Add(pos);
+            }
+        }
+        // Si todo es correcto, asignamos el item
+        if (correct)
+        {
+            for(int i = 0; i < positions.Count; i++)
+            {
+                // Si habia algo, lo quitamos y lo guardamos en el inventario
+                if(Slots[positions[i]].item != null)
+                {
+                    Item itemAux = Slots[positions[i]].item;
+                    // Lo quitamos de todos sus slots
+                    for (int j = 0; j < itemAux.SlotType.Count; j++)
+                    {
+                        // Buscamos es slot
+                        int pos = Slots.FindIndex(
+                            delegate (Slot slot) {
+                                return slot.slotType == itemAux.SlotType[j];
+                            });
+                        // Si existe lo quitamos
+                        if(pos != -1 && Slots[pos].item != null) Slots[pos].item = null;
+                    }
+                    // Lo guardamos en el inventario.
+                    inventory.addItem(itemAux);
+                }
+                // Asignamos el item
+                Slots[positions[i]].item = item;
+                // Lo quitamos del inventario
+                inventory.removeItem(item);
+            }
+        }
     }
 
     // Custom Editor class for checking Slots and Items
