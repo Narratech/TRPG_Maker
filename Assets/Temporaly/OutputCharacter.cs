@@ -19,13 +19,19 @@ public class OutputCharacter : MonoBehaviour {
         for (int i = 0; i < inventory.items.Count; i++)
             if(inventory.items[i] != null) itemDropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData() { text = inventory.items[i].name });
 
+		// Escuchando al boton del canvas
+		UnityEngine.UI.Button btn = GameObject.Find("SetButton").GetComponent<UnityEngine.UI.Button>();
+		btn.onClick.AddListener(TaskOnClick);
+
         // Asignar slots
-        Dropdown slotDropDown = GameObject.Find("SlotDropdown").GetComponent<Dropdown>();        
+		Dropdown slotDropDown = GameObject.Find("SlotDropdown").GetComponent<Dropdown>();        
 
         slotDropDown.options.Clear();
-        for (int i = 0; i < character.Slots.Count; i++)
-            if(character.Slots[i] != null && character.Slots[i].slotType != null) slotDropDown.options.Add(new UnityEngine.UI.Dropdown.OptionData() { text = character.Slots[i].slotType.Name });
 
+		for (int i = 0; i < character.Slots.Count; i++)
+			if (character.Slots [i] != null && character.Slots [i].slotType != null)
+				slotDropDown.options.Add (new UnityEngine.UI.Dropdown.OptionData () { text = character.Slots [i].slotType.Name });
+		
         // Creamos los textos de los slots
         gameObjects = new List<GameObject>();
         for (int i = 0; i < character.Slots.Count; i++)
@@ -61,5 +67,13 @@ public class OutputCharacter : MonoBehaviour {
             else texto += "Vacio";
             m_nameText.text = texto;
         }
+
     }
+
+	void TaskOnClick(){
+		Debug.Log ("Boton pulsado");
+		// Ir al metodo que compruebe si está el item colocado en el slot adecuado o no
+		// una vez comprobado, añadir
+		character.addItem(null);
+	}
 }
