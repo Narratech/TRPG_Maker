@@ -1,6 +1,0 @@
-Añadir a Unity el proyecto (o abrirlo con Unity) entrando en Unity Project/Assets
-Ejecutar el archivo basica.unity
-Darle al play en Unity
-
-Tecla alt para confirmar selección
-Usar puntero para elegir entre las diferentes opciones
