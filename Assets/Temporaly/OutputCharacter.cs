@@ -32,7 +32,7 @@ public class OutputCharacter : MonoBehaviour {
 
 		for (int i = 0; i < character.Slots.Count; i++)
 			if (character.Slots [i] != null && character.Slots [i].slotType != null)
-				slotDropDown.options.Add (new UnityEngine.UI.Dropdown.OptionData () { text = character.Slots [i].slotType.Name });
+				slotDropDown.options.Add (new UnityEngine.UI.Dropdown.OptionData () { text = character.Slots[i].slotType.Name });
 		
         // Creamos los textos de los slots
         gameObjects = new List<GameObject>();
@@ -50,7 +50,7 @@ public class OutputCharacter : MonoBehaviour {
             string texto = "Slot " + i + ": ";
             if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType.Name + " - ";
             else texto += "Vacio - ";
-            if (character.Slots[i] != null && character.Slots[i].item != null) texto += character.Slots[i].item.Name;
+            if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.Name;
             else texto += "Vacio";
             slotText.text = texto;
         }
@@ -65,25 +65,6 @@ public class OutputCharacter : MonoBehaviour {
             if (inventory.items[i] != null) itemDropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData() { text = inventory.items[i].name });
         itemDropdown.RefreshShownValue();
 
-        // Actualizamos los posibles slots
-        int itemIndex = itemDropdown.GetComponent<Dropdown>().value;
-        // Escribimos los posibles slots
-        Dropdown slotDropDown = GameObject.Find("SlotDropdown").GetComponent<Dropdown>();
-        slotDropDown.options.Clear();        
-        for (int i = 0; i < inventory.items[itemIndex].SlotType.Count; i++) {
-            var texto = "";
-            if (inventory.items[itemIndex].SlotType[i].slotsOcupped[0] != null)
-                texto += inventory.items[itemIndex].SlotType[i].slotsOcupped[0].Name;
-            for (int j = 1; j < inventory.items[itemIndex].SlotType[i].slotsOcupped.Count; j++)
-            {
-                if (inventory.items[itemIndex].SlotType[i].slotsOcupped[j] != null)
-                    texto += " + " + inventory.items[itemIndex].SlotType[i].slotsOcupped[j].Name;
-            }
-            slotDropDown.options.Add(new UnityEngine.UI.Dropdown.OptionData() { text = texto });
-        }
-        slotDropDown.RefreshShownValue();
-
-
         // Actualizamos slots
         for (int i = 0; i < character.Slots.Count; i++)
         {
@@ -92,7 +73,7 @@ public class OutputCharacter : MonoBehaviour {
             string texto = "Slot " + i + ": ";
             if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType.Name + " - ";
             else texto += "Vacio - ";
-            if (character.Slots[i] != null && character.Slots[i].item != null) texto += character.Slots[i].item.Name;
+            if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.Name;
             else texto += "Vacio";
             slotText.text = texto;
         }
@@ -103,13 +84,17 @@ public class OutputCharacter : MonoBehaviour {
 		// Cogemos el nombre del item seleccionado
         Dropdown itemDropDown = GameObject.Find("ItemDropdown").GetComponent<Dropdown>();
         int itemIndex = itemDropDown.GetComponent<Dropdown>().value;
-        itemDropDown.value = 0;
 
         // Cogemos los tipos de slot seleccionados
         Dropdown slotDropDown = GameObject.Find("SlotDropdown").GetComponent<Dropdown>();
         int slotIndex = slotDropDown.GetComponent<Dropdown>().value;
-        slotDropDown.value = 0;
 
-        character.addItem(inventory.items[itemIndex], inventory.items[itemIndex].SlotType[slotIndex]);
+        if (character.Slots[slotIndex].canEquip(inventory.items[itemIndex])) {
+            character.Slots[slotIndex].setModifier(inventory.items[itemIndex]);
+            itemDropDown.value = 0;
+            slotDropDown.value = 0;
+        }
+        else
+            Debug.Log("Can't equip!");       
 	}
 }
