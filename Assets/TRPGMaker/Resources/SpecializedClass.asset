@@ -12,4 +12,59 @@ MonoBehaviour:
   m_Name: SpecializedClass
   m_EditorClassIdentifier: 
   className: 
-  slots: []
+  slots:
+  - slotType: {fileID: 0}
+    modifier: {fileID: 0}
+  attributes:
+  - name: Health
+    id: HP
+    description: Health points
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 1
+  - name: Experience
+    id: EXP
+    description: Experience points
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 1
+  - name: Mana
+    id: MAN
+    description: Mana points
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 0
+  formulas:
+  - attributeModified:
+      name: 
+      id: 
+      description: 
+      maxValue: 0
+      minValue: 0
+      value: 0
+      isCore: 0
+    operation: 0
+    value: 0
+  - attributeModified:
+      name: 
+      id: 
+      description: 
+      maxValue: 0
+      minValue: 0
+      value: 0
+      isCore: 0
+    operation: 0
+    value: 0
+  - attributeModified:
+      name: 
+      id: 
+      description: 
+      maxValue: 0
+      minValue: 0
+      value: 0
+      isCore: 0
+    operation: 0
+    value: 0

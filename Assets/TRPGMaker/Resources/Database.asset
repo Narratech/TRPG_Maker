@@ -14,14 +14,14 @@ MonoBehaviour:
   attributes:
   - name: Health
     id: HP
-    description: Health Points
+    description: Health points
     maxValue: 0
     minValue: 0
     value: 0
     isCore: 1
   - name: Experience
-    id: XP
-    description: Blablalba
+    id: EXP
+    description: Experience points
     maxValue: 0
     minValue: 0
     value: 0
