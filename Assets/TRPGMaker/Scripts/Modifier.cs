@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 /**
  * @author PerezPrieto
@@ -12,8 +13,10 @@ using UnityEngine;
  [Serializable]
 public class Modifier: ScriptableObject {
 
+
     public string Name = "Enter item name";
     public string Description = "Enter item description";
+	//public string tag = "Enter a Tag (Empty could be used by all characters)";
 
     [Serializable]
     public class SlotsOcupped
@@ -30,6 +33,8 @@ public class Modifier: ScriptableObject {
         {
             DrawDefaultInspector();
             EditorGUILayout.HelpBox("Each element of the slot defines the types of slots where the item could be placed, multiple 'Slots Occuped' in the same position are used for items who needs multiple slots.", MessageType.Info);
-        }
+
+		}
     }
+
 }

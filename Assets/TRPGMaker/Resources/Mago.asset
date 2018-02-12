@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: SpecializedClass
   m_EditorClassIdentifier: 
   className: 
+  tags: []
   slots:
   - slotType: {fileID: 0}
     modifier: {fileID: 0}

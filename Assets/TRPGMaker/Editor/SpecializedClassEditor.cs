@@ -9,6 +9,7 @@ using System.Linq;
 public class SpecializedClassEditor : Editor {
 
     private SerializedProperty className;
+	private ReorderableList listTags;
     private ReorderableList listSlots;
     private ReorderableList listAttributes;
     private ReorderableList listFormulas;
@@ -35,6 +36,11 @@ public class SpecializedClassEditor : Editor {
 
         className = serializedObject.FindProperty("className");
 
+		// Get tags
+		listTags = new ReorderableList(serializedObject,
+			serializedObject.FindProperty("tags"),
+			true, true, true, true);
+
         // Get Slots
         listSlots = new ReorderableList(serializedObject,
                 serializedObject.FindProperty("slots"),
@@ -50,6 +56,17 @@ public class SpecializedClassEditor : Editor {
                 serializedObject.FindProperty("formulas"),
                 true, true, true, true);        
 
+		reloadAttributes();
+
+		// Draw Tags
+		listTags.drawElementCallback =
+			(Rect rect, int index, bool isActive, bool isFocused) => {
+			rect.y += 2;
+			EditorGUI.LabelField(
+				new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
+				specializedClass.tags[index]);
+		};
+
         // Draw Slots
         listSlots.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
@@ -62,8 +79,6 @@ public class SpecializedClassEditor : Editor {
                     new Rect(rect.x + 150, rect.y, rect.width - 150, EditorGUIUtility.singleLineHeight),
                     element.FindPropertyRelative("modifier"), GUIContent.none);
             };
-
-        reloadAttributes();
 
         // Draw attributes
         listAttributes.drawElementCallback =
@@ -98,10 +113,15 @@ public class SpecializedClassEditor : Editor {
                 }
             };
 
-            // Slots header
-            listSlots.drawHeaderCallback = (Rect rect) => {
-            EditorGUI.LabelField(rect, "Slots");
-        };
+		// Tags header
+		listTags.drawHeaderCallback = (Rect rect) => {
+			EditorGUI.LabelField(rect, "Tags");
+		};
+
+        // Slots header
+        listSlots.drawHeaderCallback = (Rect rect) => {
+        	EditorGUI.LabelField(rect, "Slots");
+       	};
 
         // listFormulas header
         listFormulas.drawHeaderCallback = (Rect rect) => {
@@ -113,6 +133,19 @@ public class SpecializedClassEditor : Editor {
             EditorGUI.LabelField(rect, "Attributes");
         };
 
+		// Añadir tags
+		listTags.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
+			var menu = new GenericMenu();
+			foreach (string tag in Database.Instance.tags)
+			{
+				menu.AddItem(new GUIContent(tag),
+						false, clickHandlerTags,
+					tag);
+				
+			}
+			menu.ShowAsContext();
+		};
+
         // Añadir atributo
         listAttributes.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
             var menu = new GenericMenu();
@@ -120,7 +153,7 @@ public class SpecializedClassEditor : Editor {
             {
                 if (!attrib.isCore && !attributes.Contains(attrib)) {
                     menu.AddItem(new GUIContent(attrib.name),
-                    false, clickHandler,
+						false, clickHandlerAttributes,
                     attrib);
                 }
             }
@@ -140,16 +173,24 @@ public class SpecializedClassEditor : Editor {
     {
         serializedObject.Update();
         EditorGUILayout.PropertyField(className, new GUIContent("Name: "), GUILayout.MinWidth(100));
-        listSlots.DoLayoutList();
+		listTags.DoLayoutList();
+		listSlots.DoLayoutList();
         listAttributes.DoLayoutList();
         listFormulas.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
     }
 
-    private void clickHandler(object target)
+	private void clickHandlerAttributes(object target)
     {
         var data = (Attribute) target;
         attributes.Add(data);
         serializedObject.ApplyModifiedProperties();
     }
+
+	private void clickHandlerTags(object target)
+	{
+		var data = (string) target;
+		specializedClass.tags.Add (data);
+		serializedObject.ApplyModifiedProperties();
+	}
 }

@@ -11,7 +11,8 @@ using System.Linq;
 public class SpecializedClass : ScriptableObject {
 
     public string className;
-    //private List<Tags> tags;
+	// ¿Lo ponemos como String o como "Tag"?
+	public List<String> tags;
     public List<Slot> slots;
     public List<Attribute> attributes = null;
     public List<Formula> formulas;    

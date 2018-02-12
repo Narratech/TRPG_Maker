@@ -7,4 +7,5 @@ using UnityEngine;
 public class Database : SingletonScriptableObject<Database>
 {
     public List<Attribute> attributes;
+	public List<string> tags;
 }

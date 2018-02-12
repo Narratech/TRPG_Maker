@@ -33,3 +33,5 @@ MonoBehaviour:
     minValue: 0
     value: 0
     isCore: 1
+  tags:
+  - Espada
