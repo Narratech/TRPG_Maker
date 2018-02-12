@@ -19,17 +19,17 @@ MonoBehaviour:
     minValue: 0
     value: 0
     isCore: 1
-  - name: Experience
-    id: EXP
-    description: Experience points
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 1
   - name: Mana
-    id: MAN
-    description: Mana points
+    id: Man
+    description: Health points
     maxValue: 0
     minValue: 0
     value: 0
     isCore: 0
+  - name: Experience
+    id: Exp
+    description: Health points
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 1

@@ -15,4 +15,9 @@ public class Formula {
     public Attribute attributeModified;
     public operatorFormula operation;
     public float value;
+
+    public void setAttributeModified(Attribute attribute)
+    {
+        this.attributeModified = new Attribute(attribute.name, attribute.id, attribute.description, attribute.maxValue, attribute.minValue, attribute.value, attribute.isCore);
+    }
 }

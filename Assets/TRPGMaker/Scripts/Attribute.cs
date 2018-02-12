@@ -16,6 +16,19 @@ public class Attribute{
     public int value;
     public bool isCore;  // 'true' if is a basic or core attribute    
 
+    public Attribute(string name, string id, string description, int maxValue, int minValue, int value, bool isCore)
+    {
+        // Defined in editor
+        this.isCore = isCore;
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        // Defined in game (now just defalut values)
+        this.value = value;
+    }
+
     protected bool Equals(Attribute other)
     {
         return id == other.id;
@@ -27,5 +40,10 @@ public class Attribute{
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
         return Equals((Attribute)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return Int32.Parse(id);
     }
 }

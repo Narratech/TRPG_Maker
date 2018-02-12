@@ -21,5 +21,6 @@ public class Character: MonoBehaviour{
         }
     }
 
-    public List<Slot> Slots;    
+    public List<Slot> Slots;
+    public SpecializedClass specializedClass;
 }

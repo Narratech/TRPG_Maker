@@ -12,24 +12,22 @@ public class SpecializedClassEditor : Editor {
     private ReorderableList listSlots;
     private ReorderableList listAttributes;
     private ReorderableList listFormulas;
+    private SpecializedClass specializedClass;
 
     // Get attributes SpecialClass
     List<Attribute> attributes;
-    private string[] attriburesStringArray;
-    int selected = 0;
-
-    // Get all attributes SpecialClass
-    List<Attribute> allAttributes;
-    private string[] allAttriburesStringArray;
-    int selectedAll = 0;
+    private string[] attributesStringArray;
+    int selected = -1;
 
     private void reloadAttributes()
     {
-        SpecializedClass specializedClass = (SpecializedClass)target;
+        specializedClass = (SpecializedClass) target;
         specializedClass.refreshAttributes();
         attributes = specializedClass.attributes;
-        attriburesStringArray = new string[0];
-        attriburesStringArray = attributes.Select(I => I.name).ToArray();
+
+        // String array of class atributes
+        attributesStringArray = new string[0];
+        attributesStringArray = attributes.Select(I => I.name).ToArray();
     }
 
     private void OnEnable()
@@ -50,7 +48,7 @@ public class SpecializedClassEditor : Editor {
         // Get Formulas
         listFormulas = new ReorderableList(serializedObject,
                 serializedObject.FindProperty("formulas"),
-                true, true, true, true);
+                true, true, true, true);        
 
         // Draw Slots
         listSlots.drawElementCallback =
@@ -65,10 +63,11 @@ public class SpecializedClassEditor : Editor {
                     element.FindPropertyRelative("modifier"), GUIContent.none);
             };
 
+        reloadAttributes();
+
         // Draw attributes
         listAttributes.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
-                var element = listAttributes.serializedProperty.GetArrayElementAtIndex(index);
                 rect.y += 2;
                 EditorGUI.LabelField(
                     new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
@@ -76,24 +75,31 @@ public class SpecializedClassEditor : Editor {
             };
 
         // Draw formulas
-        reloadAttributes();
         listFormulas.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 var element = listFormulas.serializedProperty.GetArrayElementAtIndex(index);
                 rect.y += 2;
-                // EditorGUI.DropdownButton(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight), new GUIContent("asd", "asdasd"), FocusType.Keyboard);
+                EditorGUI.BeginChangeCheck();
+                selected = attributes.IndexOf(specializedClass.formulas[index].attributeModified);
+                if (selected < 0) selected = 0;
                 selected = EditorGUI.Popup(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight),
-                    selected, attriburesStringArray);
+                    selected, attributesStringArray);
                 EditorGUI.PropertyField(
                     new Rect(rect.x + 70, rect.y, 60, EditorGUIUtility.singleLineHeight),
                     element.FindPropertyRelative("operation"), GUIContent.none);
                 EditorGUI.PropertyField(
                     new Rect(rect.x + 140, rect.y, 90, EditorGUIUtility.singleLineHeight),
                     element.FindPropertyRelative("value"), GUIContent.none);
+                if (selected < 0)
+                    specializedClass.formulas.Remove(specializedClass.formulas[index]);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    specializedClass.formulas[index].setAttributeModified(attributes[selected]);
+                }
             };
 
-        // Slots header
-        listSlots.drawHeaderCallback = (Rect rect) => {
+            // Slots header
+            listSlots.drawHeaderCallback = (Rect rect) => {
             EditorGUI.LabelField(rect, "Slots");
         };
 
