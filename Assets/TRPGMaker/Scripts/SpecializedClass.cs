@@ -25,10 +25,8 @@ public class SpecializedClass : ScriptableObject
             attributes = Database.Instance.attributes.Where(x => x.isCore).ToList();
         else
         {
-            Database dat = Database.Instance;
             List<Attribute> aux = new List<Attribute>();
-            if (attributes.Count > 0)
-                aux = attributes.Where(x => !x.isCore && Database.Instance.attributes.Contains(x)).ToList();
+            aux = attributes.Where(x => !x.isCore && Database.Instance.attributes.Contains(x)).ToList();
             attributes = new List<Attribute>();
             attributes.AddRange(Database.Instance.attributes.Where(x => x.isCore).ToList());
             attributes.AddRange(aux);
