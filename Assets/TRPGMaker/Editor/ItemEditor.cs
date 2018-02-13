@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [CustomEditor(typeof(Item))]
 public class ItemEditor : Editor
@@ -12,6 +14,7 @@ public class ItemEditor : Editor
     public override void OnInspectorGUI()
     {
         Item item = (Item)target;
+
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Description"), new GUIContent("Description: "), GUILayout.MinWidth(100));
@@ -30,10 +33,21 @@ public class ItemEditor : Editor
         // Text in tag changed
         if (changed && GUI.GetNameOfFocusedControl() != "AutoCompleteField" && !Database.Instance.tags.Contains(item.tag))
         {
-            EditorUtility.DisplayDialog("Warning!",
-               "The tag \"" + item.tag  + "\" doesn't exists in Database, default tag will be used!", "Ok");
-           item.tag = "";
-           changed = false;
+            if (item.tag != "" && item.tag != "Enter a Tag(Empty could be used by all characters)")
+            {
+                EditorUtility.DisplayDialog("Warning!",
+                   "The tag \"" + item.tag + "\" doesn't exists in Database, default tag will be used!", "Ok");
+                item.tag = "";
+                changed = false;
+            }
+        }
+
+        // Save changes
+        if (GUI.changed)
+        {
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(target);
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         }
     }
 }

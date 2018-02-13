@@ -16,7 +16,7 @@ public class Modifier: ScriptableObject {
 
     public string Name = "Enter item name";
     public string Description = "Enter item description";
-	public string tag = "Enter a Tag (Empty could be used by all characters)";
+    public string tag = "Enter a Tag (Empty could be used by all characters)";
 
     [Serializable]
     public class SlotsOcupped

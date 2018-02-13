@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Name: Mago
   m_EditorClassIdentifier: 
   className: 
-  tags: []
+  tags:
+  - Casco
+  - Mandoble
+  - Espada
   slots:
   - slotType: {fileID: 0}
     modifier: {fileID: 0}
