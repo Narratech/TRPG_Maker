@@ -8,21 +8,24 @@ using System.Linq;
 
 [Serializable]
 [CreateAssetMenu(fileName = "SpecializedClass", menuName = "RPG/SpecializedClass", order = 3)]
-public class SpecializedClass : ScriptableObject {
+public class SpecializedClass : ScriptableObject
+{
 
     public string className;
-	// ¿Lo ponemos como String o como "Tag"?
-	public List<String> tags;
+    // ¿Lo ponemos como String o como "Tag"?
+    public List<String> tags;
     public List<Slot> slots;
     public List<Attribute> attributes = null;
-    public List<Formula> formulas;    
-    
+    public List<Formula> formulas;
+
     // Por si se han añadido nuevos atributos CORE a Database
     public void refreshAttributes()
     {
-        if(attributes == null)
+        if (attributes == null)
             attributes = Database.Instance.attributes.Where(x => x.isCore).ToList();
-        else {
+        else
+        {
+            Database dat = Database.Instance;
             List<Attribute> aux = new List<Attribute>();
             if (attributes.Count > 0)
                 aux = attributes.Where(x => !x.isCore && Database.Instance.attributes.Contains(x)).ToList();

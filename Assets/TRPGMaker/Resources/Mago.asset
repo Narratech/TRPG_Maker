@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4cfe1e2b18c9494b8e22325c9a32ff7, type: 3}
-  m_Name: SpecializedClass
+  m_Name: Mago
   m_EditorClassIdentifier: 
   className: 
   tags: []
