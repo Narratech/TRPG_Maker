@@ -15,6 +15,7 @@ public class ItemEditor : Editor
     {
         Item item = (Item)target;
 
+        serializedObject.Update();
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("Description"), new GUIContent("Description: "), GUILayout.MinWidth(100));

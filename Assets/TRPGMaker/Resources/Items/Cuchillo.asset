@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Cuchillo
   m_EditorClassIdentifier: 
   Name: Cuchillo
-  Description: Enter item description
+  Description: Item de una mano
   tag: 
   SlotType:
   - slotsOcupped:
