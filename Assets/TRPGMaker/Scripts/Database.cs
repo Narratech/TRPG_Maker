@@ -18,6 +18,6 @@ public class Database : ScriptableObject
 
     public static Database Instance
     {
-        get { return _instance == null ? _instance = UnityEditor.AssetDatabase.LoadAssetAtPath<Database>("Assets/TRPGMaker/Resources/Database.asset") : _instance; }
+        get { return _instance == null ? _instance = UnityEditor.AssetDatabase.LoadAssetAtPath<Database>("Assets/TRPGMaker/Source/Database.asset") : _instance; }
     }
 }

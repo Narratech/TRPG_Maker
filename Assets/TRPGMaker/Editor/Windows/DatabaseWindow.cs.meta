@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 4df5b1c37bfbf744996d3fcca51e9892
+timeCreated: 1519505992
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_PersistentViewDataDictionary: {instanceID: 0}
+  - itemTexture: {fileID: 2800000, guid: 101b7c8b5e3f4de40ad949f041bec40b, type: 3}
+  - specializedTexture: {fileID: 2800000, guid: 6f49fc0cdf39a34419d8131cebce1615,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
