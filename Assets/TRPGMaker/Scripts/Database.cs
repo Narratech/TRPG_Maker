@@ -9,6 +9,7 @@ public class Database : ScriptableObject
     private static Database _instance = null;
     public List<Attribute> attributes;
     public List<string> tags;
+    public List<Item> items;
 
     public Database()
     {

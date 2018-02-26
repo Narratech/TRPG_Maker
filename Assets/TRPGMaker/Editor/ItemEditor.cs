@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 [CustomEditor(typeof(Item))]
 public class ItemEditor : Editor
 {
-    string temp = "";
     bool changed = false;
 
     public override void OnInspectorGUI()
@@ -17,8 +16,8 @@ public class ItemEditor : Editor
 
         serializedObject.Update();
         EditorGUI.BeginChangeCheck();
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("Name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("Description"), new GUIContent("Description: "), GUILayout.MinWidth(100));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("description"), new GUIContent("Description: "), GUILayout.MinWidth(100));
         Rect rect = EditorGUILayout.GetControlRect();
         EditorGUI.LabelField(new Rect(rect.x, rect.y, 180, EditorGUIUtility.singleLineHeight), "Tag:");
         item.tag = TextAutocomplete.TextFieldAutoComplete(new Rect(rect.x + 180, rect.y, rect.width - 180, EditorGUIUtility.singleLineHeight), item.tag, Database.Instance.tags.ToArray(), maxShownCount: 10, levenshteinDistance: 0.5f);
@@ -34,7 +33,7 @@ public class ItemEditor : Editor
         // Text in tag changed
         if (changed && GUI.GetNameOfFocusedControl() != "AutoCompleteField" && !Database.Instance.tags.Contains(item.tag))
         {
-            if (item.tag != "" && item.tag != "Enter a Tag(Empty could be used by all characters)")
+            if (item.tag != "" && item.tag != "Enter a Tag (Empty could be used by all characters)")
             {
                 EditorUtility.DisplayDialog("Warning!",
                    "The tag \"" + item.tag + "\" doesn't exists in Database, default tag will be used!", "Ok");
@@ -49,6 +48,8 @@ public class ItemEditor : Editor
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(target);
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath((Item)target), item.name + ".asset");
         }
     }
 }

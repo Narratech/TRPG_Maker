@@ -50,7 +50,7 @@ public class OutputCharacter : MonoBehaviour {
             string texto = "Slot " + i + ": ";
             if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType.Name + " - ";
             else texto += "Vacio - ";
-            if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.Name;
+            if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.name;
             else texto += "Vacio";
             slotText.text = texto;
         }
@@ -73,7 +73,7 @@ public class OutputCharacter : MonoBehaviour {
             string texto = "Slot " + i + ": ";
             if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType.Name + " - ";
             else texto += "Vacio - ";
-            if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.Name;
+            if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.name;
             else texto += "Vacio";
             slotText.text = texto;
         }

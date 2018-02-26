@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169f70efb2d642342bccf93f555f7742, type: 3}
   m_Name: Casco
   m_EditorClassIdentifier: 
-  Name: Casco
-  Description: Item para la cabeza
-  tag: Casco
+  name: Casco
+  description: Enter item description
+  tag: Vara
   SlotType:
   - slotsOcupped:
     - {fileID: 11400000, guid: 2042010a3f80d77428a1ea88f9590eff, type: 2}

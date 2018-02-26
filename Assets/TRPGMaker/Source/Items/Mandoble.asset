@@ -11,8 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169f70efb2d642342bccf93f555f7742, type: 3}
   m_Name: Mandoble
   m_EditorClassIdentifier: 
-  Name: Mandoble
-  Description: Enter item description
+  name: Mandoble
+  description: Enter item description
   tag: Mandoble
   SlotType:
   - slotsOcupped:

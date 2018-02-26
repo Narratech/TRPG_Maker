@@ -11,8 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169f70efb2d642342bccf93f555f7742, type: 3}
   m_Name: Sombrero
   m_EditorClassIdentifier: 
-  Name: Sombrero
-  Description: Enter item description
+  name: Sombrero
+  description: Enter item description
+  tag: 
   SlotType:
   - slotsOcupped:
     - {fileID: 11400000, guid: 2042010a3f80d77428a1ea88f9590eff, type: 2}
