@@ -50,12 +50,12 @@ class ItemWindow : LayoutWindow
     {
         buttonEditor = Editor.CreateEditor(Database.Instance);
 
-        // Get Attributes
+        // Get items
         listItems = new ReorderableList(buttonEditor.serializedObject,
                 buttonEditor.serializedObject.FindProperty("items"),
                 true, false, true, true);
 
-        // Draw attributes
+        // Draw items
         listItems.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 var element = listItems.serializedProperty.GetArrayElementAtIndex(index);

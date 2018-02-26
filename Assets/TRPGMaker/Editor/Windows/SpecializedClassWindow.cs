@@ -6,7 +6,7 @@ class SpecializedClassWindow : LayoutWindow
 {
     public override void Init()
     {
-
+        
     }
 
     public override void Draw(Rect rect)

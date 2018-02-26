@@ -73,7 +73,9 @@ public class AttributesWindow : LayoutWindow
 
     public override bool Button(Rect rect)
     {
-        if (GUILayout.Button(new GUIContent("Attributes"), "Button"))
+        var attributeTexture = (Texture2D)Resources.Load("Menu/Buttons/settings", typeof(Texture2D));
+
+        if (GUILayout.Button(new GUIContent("Attributes", attributeTexture), "Button"))
         {
             Draw(rect);
             selected = true;

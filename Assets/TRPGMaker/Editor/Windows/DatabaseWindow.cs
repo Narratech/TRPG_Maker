@@ -46,6 +46,9 @@ class DatabaseWindow : EditorWindow
         itemWindow = (ItemWindow)ScriptableObject.CreateInstance(typeof(ItemWindow));
         itemWindow.Init();
 
+        tagWindow = (TagWindow)ScriptableObject.CreateInstance(typeof(TagWindow));
+        tagWindow.Init();
+
         specilizedWindow = (SpecializedClassWindow)ScriptableObject.CreateInstance(typeof(SpecializedClassWindow));
         specilizedWindow.Init();
     }
@@ -74,8 +77,14 @@ class DatabaseWindow : EditorWindow
             case MenuOptions.ITEMS:
                 rightWindow = itemWindow;
                 break;
+            case MenuOptions.TAGS:
+                rightWindow = tagWindow;
+                break;
             case MenuOptions.SPECIALIZED_CLASS:
-                rightWindow = (SpecializedClassWindow)ScriptableObject.CreateInstance(typeof(SpecializedClassWindow));
+                rightWindow = specilizedWindow;
+                break;
+            case MenuOptions.CHARACTERS:
+
                 break;
             default:
                 break;
@@ -93,6 +102,8 @@ class DatabaseWindow : EditorWindow
     {
         var specializedTexture = (Texture2D)Resources.Load("Menu/Buttons/witch_hat", typeof(Texture2D));
 
+        var characterTexture = (Texture2D)Resources.Load("Menu/Buttons/knight", typeof(Texture2D));
+
         if (attributesWindow.Button(windowArea))
         {
             if(menuOption != MenuOptions.ATTRIBUTES)
@@ -100,8 +111,10 @@ class DatabaseWindow : EditorWindow
             menuOption = MenuOptions.ATTRIBUTES;
         }
 
-        if (GUILayout.Button(new GUIContent("Tags"), "Button"))
+        if (tagWindow.Button(windowArea))
         {
+            if(menuOption != MenuOptions.TAGS)
+                rightWindow.selected = false;
             menuOption = MenuOptions.TAGS;
         }
         if (itemWindow.Button(windowArea))
@@ -114,7 +127,7 @@ class DatabaseWindow : EditorWindow
         {
             menuOption = MenuOptions.SPECIALIZED_CLASS;
         }
-        else if (GUILayout.Button(new GUIContent("Characters"), "Button"))
+        else if (GUILayout.Button(new GUIContent("Characters", characterTexture), "Button"))
         {
             menuOption = MenuOptions.CHARACTERS;
         }
