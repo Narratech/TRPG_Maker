@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4cfe1e2b18c9494b8e22325c9a32ff7, type: 3}
   m_Name: Mago
   m_EditorClassIdentifier: 
-  className: 
+  name: Mago
   tags:
   - Casco
   - Mandoble
@@ -20,13 +20,6 @@ MonoBehaviour:
   - slotType: {fileID: 0}
     modifier: {fileID: 0}
   attributes:
-  - name: Health
-    id: HP
-    description: Health points
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 1
   - name: Experience
     id: Exp
     description: Health points

@@ -10,6 +10,7 @@ public class Database : ScriptableObject
     public List<Attribute> attributes;
     public List<string> tags;
     public List<Item> items;
+    public List<SpecializedClass> specializedClasses;
 
     public Database()
     {
@@ -19,6 +20,6 @@ public class Database : ScriptableObject
 
     public static Database Instance
     {
-        get { return _instance == null ? _instance = UnityEditor.AssetDatabase.LoadAssetAtPath<Database>("Assets/TRPGMaker/Source/Database.asset") : _instance; }
+        get { return _instance == null ? _instance = UnityEditor.AssetDatabase.LoadAssetAtPath<Database>("Assets/TRPGMaker/Database/Database.asset") : _instance; }
     }
 }

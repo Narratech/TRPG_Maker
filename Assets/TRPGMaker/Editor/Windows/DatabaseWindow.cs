@@ -21,7 +21,7 @@ class DatabaseWindow : EditorWindow
     [MenuItem("TRPGMaker/Database editor")]
     public static void ShowWindow()
     {
-        EditorWindow.GetWindow(typeof(DatabaseWindow));        
+        EditorWindow.GetWindow(typeof(DatabaseWindow), false, "Database Editor");        
     }
 
     private void OnEnable()
@@ -43,20 +43,23 @@ class DatabaseWindow : EditorWindow
         attributesWindow = (AttributesWindow)ScriptableObject.CreateInstance(typeof(AttributesWindow));
         attributesWindow.Init();
 
-        itemWindow = (ItemWindow)ScriptableObject.CreateInstance(typeof(ItemWindow));
-        itemWindow.Init();
-
         tagWindow = (TagWindow)ScriptableObject.CreateInstance(typeof(TagWindow));
         tagWindow.Init();
 
+        itemWindow = (ItemWindow)ScriptableObject.CreateInstance(typeof(ItemWindow));
+        itemWindow.Init();
+        
         specilizedWindow = (SpecializedClassWindow)ScriptableObject.CreateInstance(typeof(SpecializedClassWindow));
         specilizedWindow.Init();
+
+        characterWindow = (CharacterWindow)ScriptableObject.CreateInstance(typeof(CharacterWindow));
+        characterWindow.Init();
     }
 
         void OnGUI()
     {
         EditorGUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
-        var leftMenuRect = EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(250), GUILayout.ExpandHeight(true));
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(250), GUILayout.ExpandHeight(true));
 
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
@@ -74,17 +77,17 @@ class DatabaseWindow : EditorWindow
             case MenuOptions.ATTRIBUTES:
                 rightWindow = attributesWindow;
                 break;
-            case MenuOptions.ITEMS:
-                rightWindow = itemWindow;
-                break;
             case MenuOptions.TAGS:
                 rightWindow = tagWindow;
+                break;
+            case MenuOptions.ITEMS:
+                rightWindow = itemWindow;
                 break;
             case MenuOptions.SPECIALIZED_CLASS:
                 rightWindow = specilizedWindow;
                 break;
             case MenuOptions.CHARACTERS:
-
+                rightWindow = characterWindow;
                 break;
             default:
                 break;
@@ -100,10 +103,6 @@ class DatabaseWindow : EditorWindow
 
     void DrawLeftMenu()
     {
-        var specializedTexture = (Texture2D)Resources.Load("Menu/Buttons/witch_hat", typeof(Texture2D));
-
-        var characterTexture = (Texture2D)Resources.Load("Menu/Buttons/knight", typeof(Texture2D));
-
         if (attributesWindow.Button(windowArea))
         {
             if(menuOption != MenuOptions.ATTRIBUTES)
@@ -123,12 +122,16 @@ class DatabaseWindow : EditorWindow
                 rightWindow.selected = false;
             menuOption = MenuOptions.ITEMS;
         }
-        if (GUILayout.Button(new GUIContent("Specialized Class", specializedTexture), "Button"))
+        if (specilizedWindow.Button(windowArea))
         {
+            if (menuOption != MenuOptions.SPECIALIZED_CLASS)
+                rightWindow.selected = false;
             menuOption = MenuOptions.SPECIALIZED_CLASS;
         }
-        else if (GUILayout.Button(new GUIContent("Characters", characterTexture), "Button"))
+        if (characterWindow.Button(windowArea))
         {
+            if (menuOption != MenuOptions.CHARACTERS)
+                rightWindow.selected = false;
             menuOption = MenuOptions.CHARACTERS;
         }
         

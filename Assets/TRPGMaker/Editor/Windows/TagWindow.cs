@@ -22,7 +22,7 @@ public class TagWindow : LayoutWindow
         EditorGUILayout.HelpBox("This is the tag list editor. You can:" +
             "\n - Add a new tag clicking on the \"+\" symbol." +
             "\n - Edit a tag name." +
-			"\n - Remove any tag selecting it and clicking on the \"-\" symbol or right-click on it and select \"Delete array element.\"", MessageType.Info);
+			"\n - Remove any tag selecting it and clicking on the \"-\" symbol.", MessageType.Info);
 
         listTags.DoLayoutList();
 
@@ -42,20 +42,17 @@ public class TagWindow : LayoutWindow
 
         // Draw tags
         listTags.drawElementCallback =
-            (Rect rectL, int index, bool isActive, bool isFocused) => {
+            (Rect rect, int index, bool isActive, bool isFocused) => {
                 var element = listTags.serializedProperty.GetArrayElementAtIndex(index);
-                rectL.y += 2;
-                rectL.height = EditorGUI.GetPropertyHeight(element, GUIContent.none, true);
-                rectL.y += 1;
-                /* To be unable to change the name, but you can not change the new label name */
-                //EditorGUI.LabelField(rectL, element.stringValue);
-                EditorGUI.PropertyField(rectL, element, GUIContent.none, true);
-                listTags.elementHeight = rectL.height + 4.0f;
-
-
+                var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.stringValue));
+                if (isActive) EditorGUI.PropertyField(new Rect(rect.x, rect.y, textDimensions.x + 5, rect.height), element, GUIContent.none, true);
+                else EditorGUI.LabelField(rect, element.stringValue);
             };
 
-        listTags.elementHeightCallback += (idx) => { return Mathf.Max(EditorGUIUtility.singleLineHeight, EditorGUI.GetPropertyHeight(listTags.serializedProperty.GetArrayElementAtIndex(idx), GUIContent.none, true)) + 4.0f; };
+        // On new tag
+        listTags.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
+            Database.Instance.tags.Add("New tag");
+        };
 
         // listTags header
         listTags.drawHeaderCallback = (Rect rectH) => {
@@ -66,8 +63,11 @@ public class TagWindow : LayoutWindow
     public override bool Button(Rect rect)
     {
         var tagTexture = (Texture2D)Resources.Load("Menu/Buttons/tags", typeof(Texture2D));
+        GUIStyle myStyle = new GUIStyle("Button");
+        myStyle.padding = new RectOffset(0, 0, 10, 10);
 
-        if (GUILayout.Button(new GUIContent("Tags", tagTexture), "Button"))
+
+        if (GUILayout.Button(new GUIContent("Tags", tagTexture), myStyle))
         {
             Draw(rect);
             selected = true;

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 169f70efb2d642342bccf93f555f7742, type: 3}
-  m_Name: Sombrero
+  m_Name: Enter item name
   m_EditorClassIdentifier: 
   name: Sombrero
   description: Enter item description

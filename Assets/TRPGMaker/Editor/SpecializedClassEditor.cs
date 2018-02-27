@@ -8,8 +8,7 @@ using System.Linq;
 [CustomEditor(typeof(SpecializedClass))]
 public class SpecializedClassEditor : Editor {
 
-    private SerializedProperty className;
-	private ReorderableList listTags;
+    private ReorderableList listTags;
     private ReorderableList listSlots;
     private ReorderableList listAttributes;
     private ReorderableList listFormulas;
@@ -34,9 +33,7 @@ public class SpecializedClassEditor : Editor {
     private void OnEnable()
     {
 
-        className = serializedObject.FindProperty("className");
-
-		// Get tags
+        // Get tags
 		listTags = new ReorderableList(serializedObject,
 			serializedObject.FindProperty("tags"),
 			true, true, true, true);
@@ -172,8 +169,15 @@ public class SpecializedClassEditor : Editor {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        EditorGUILayout.PropertyField(className, new GUIContent("Name: "), GUILayout.MinWidth(100));
-		listTags.DoLayoutList();
+
+        EditorGUI.BeginChangeCheck();
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
+        if (EditorGUI.EndChangeCheck())
+        {
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath((SpecializedClass)target), specializedClass.name + ".asset");
+        }
+
+        listTags.DoLayoutList();
 		listSlots.DoLayoutList();
         listAttributes.DoLayoutList();
         listFormulas.DoLayoutList();

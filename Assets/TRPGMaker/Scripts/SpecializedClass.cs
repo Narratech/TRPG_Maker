@@ -10,8 +10,7 @@ using System.Linq;
 [CreateAssetMenu(fileName = "SpecializedClass", menuName = "RPG/SpecializedClass", order = 3)]
 public class SpecializedClass : ScriptableObject
 {
-
-    public string className;
+    public new string name;
     // ¿Lo ponemos como String o como "Tag"?
     public List<String> tags;
     public List<Slot> slots;
