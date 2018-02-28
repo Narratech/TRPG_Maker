@@ -12,6 +12,7 @@ class DatabaseWindow : EditorWindow
     private LayoutWindow rightWindow;
     private MenuOptions menuOption;
 
+    private LayoutWindow welcomeWindow;
     private LayoutWindow attributesWindow;
     private LayoutWindow tagWindow;
     private LayoutWindow slotTypeWindow;
@@ -32,6 +33,7 @@ class DatabaseWindow : EditorWindow
 
     public enum MenuOptions
     {
+        WELCOME,
         ATTRIBUTES,
         TAGS,
         SLOT_TYPE,
@@ -42,6 +44,9 @@ class DatabaseWindow : EditorWindow
 
     public void createMenuLayouts()
     {
+        welcomeWindow = (Welcomewindow)ScriptableObject.CreateInstance(typeof(Welcomewindow));
+        menuOption = MenuOptions.WELCOME;
+
         attributesWindow = (AttributesWindow)ScriptableObject.CreateInstance(typeof(AttributesWindow));
         attributesWindow.Init();
 
@@ -79,6 +84,9 @@ class DatabaseWindow : EditorWindow
 
         switch(menuOption)
         {
+            case MenuOptions.WELCOME:
+                rightWindow = welcomeWindow;
+                break;
             case MenuOptions.ATTRIBUTES:
                 rightWindow = attributesWindow;
                 break;
