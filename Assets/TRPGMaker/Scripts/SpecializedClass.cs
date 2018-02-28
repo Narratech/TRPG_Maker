@@ -7,7 +7,6 @@ using UnityEngine;
 using System.Linq;
 
 [Serializable]
-[CreateAssetMenu(fileName = "SpecializedClass", menuName = "RPG/SpecializedClass", order = 3)]
 public class SpecializedClass : ScriptableObject
 {
     public new string name;

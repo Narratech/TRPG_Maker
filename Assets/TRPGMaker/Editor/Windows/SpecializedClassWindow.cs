@@ -24,7 +24,10 @@ class SpecializedClassWindow : LayoutWindow
 
     public void DrawMainView()
     {
-        EditorGUILayout.LabelField("All specialized classes", EditorStyles.boldLabel);
+        var customStyle = new GUIStyle();
+        customStyle.alignment = TextAnchor.UpperCenter;
+        customStyle.fontSize = 17;
+        GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "List of specialized classes:", customStyle);
 
         // Create color for each line
         GUIStyle gsLinePair = new GUIStyle();

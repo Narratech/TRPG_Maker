@@ -17,7 +17,9 @@ public class SpecializedClassEditor : Editor {
     // Get attributes SpecialClass
     List<Attribute> attributes;
     private string[] attributesStringArray;
-    int selected = -1;
+    private int formulaAttributeSelected = -1;
+    private int slotTypeSelected = -1;
+    private int slotItemSelected = -1;
 
     private void reloadAttributes()
     {
@@ -69,12 +71,22 @@ public class SpecializedClassEditor : Editor {
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 var element = listSlots.serializedProperty.GetArrayElementAtIndex(index);
                 rect.y += 2;
-                EditorGUI.PropertyField(
-                    new Rect(rect.x, rect.y, 140, EditorGUIUtility.singleLineHeight),
-                    element.FindPropertyRelative("slotType"), GUIContent.none);
-                EditorGUI.PropertyField(
-                    new Rect(rect.x + 150, rect.y, rect.width - 150, EditorGUIUtility.singleLineHeight),
-                    element.FindPropertyRelative("modifier"), GUIContent.none);
+
+                slotTypeSelected = Database.Instance.slotTypes.IndexOf(specializedClass.slots[index].slotType);
+                slotItemSelected = Database.Instance.items.IndexOf(specializedClass.slots[index].modifier);
+
+                EditorGUI.BeginChangeCheck();
+                EditorGUI.LabelField(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight), "Slot type:");
+                slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.Select(s => (string)s.Name).ToArray());
+                EditorGUI.LabelField(new Rect(rect.x + 170, rect.y, 35, EditorGUIUtility.singleLineHeight), "Item:");
+                slotItemSelected = EditorGUI.Popup(new Rect(rect.x + 208, rect.y, rect.width - 208, EditorGUIUtility.singleLineHeight), slotItemSelected, Database.Instance.items.Select(s => (string)s.name).ToArray());
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if(slotTypeSelected != -1)
+                        specializedClass.slots[index].slotType = Database.Instance.slotTypes[slotTypeSelected];
+                    if(slotItemSelected != -1)
+                        specializedClass.slots[index].modifier = Database.Instance.items[slotItemSelected];
+                }
             };
 
         // Draw attributes
@@ -92,21 +104,21 @@ public class SpecializedClassEditor : Editor {
                 var element = listFormulas.serializedProperty.GetArrayElementAtIndex(index);
                 rect.y += 2;
                 EditorGUI.BeginChangeCheck();
-                selected = attributes.IndexOf(specializedClass.formulas[index].attributeModified);
-                if (selected < 0) selected = 0;
-                selected = EditorGUI.Popup(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight),
-                    selected, attributesStringArray);
+                formulaAttributeSelected = attributes.IndexOf(specializedClass.formulas[index].attributeModified);
+                if (formulaAttributeSelected < 0) formulaAttributeSelected = 0;
+                formulaAttributeSelected = EditorGUI.Popup(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight),
+                    formulaAttributeSelected, attributesStringArray);
                 EditorGUI.PropertyField(
                     new Rect(rect.x + 70, rect.y, 60, EditorGUIUtility.singleLineHeight),
                     element.FindPropertyRelative("operation"), GUIContent.none);
                 EditorGUI.PropertyField(
                     new Rect(rect.x + 140, rect.y, 90, EditorGUIUtility.singleLineHeight),
                     element.FindPropertyRelative("value"), GUIContent.none);
-                if (selected < 0)
+                if (formulaAttributeSelected < 0)
                     specializedClass.formulas.Remove(specializedClass.formulas[index]);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    specializedClass.formulas[index].setAttributeModified(attributes[selected]);
+                    specializedClass.formulas[index].setAttributeModified(attributes[formulaAttributeSelected]);
                 }
             };
 
@@ -143,6 +155,12 @@ public class SpecializedClassEditor : Editor {
 			menu.ShowAsContext();
 		};
 
+
+        // Add slot
+        listSlots.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
+            specializedClass.slots.Add(new Slot());
+        };
+
         // Añadir atributo
         listAttributes.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
             var menu = new GenericMenu();
@@ -169,6 +187,11 @@ public class SpecializedClassEditor : Editor {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
+        var customStyle = new GUIStyle();
+        customStyle.alignment = TextAnchor.UpperCenter;
+        customStyle.fontSize = 17;
+        GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Editing \"" + specializedClass.name +  "\" specialized class:", customStyle);
 
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));

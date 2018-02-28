@@ -24,7 +24,10 @@ class ItemWindow : LayoutWindow
 
     public void DrawMainView()
     {
-        EditorGUILayout.LabelField("All items", EditorStyles.boldLabel);
+        var customStyle = new GUIStyle();
+        customStyle.alignment = TextAnchor.UpperCenter;
+        customStyle.fontSize = 17;
+        GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "List of items:", customStyle);
 
         // Create color for each line
         GUIStyle gsLinePair = new GUIStyle();
@@ -34,7 +37,7 @@ class ItemWindow : LayoutWindow
 
         for(int i = 0; i < Database.Instance.items.Count; i++)
         {
-            Item item = Database.Instance.items[i];
+            Modifier item = Database.Instance.items[i];
 
             // Changing line color
             if (i % 2 == 0)
@@ -128,7 +131,7 @@ class ItemWindow : LayoutWindow
         listItems.headerHeight = 0;        
     }
 
-    private void removeItem(Item item)
+    private void removeItem(Modifier item)
     {
         Database.Instance.items.Remove(item);
         AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(item));

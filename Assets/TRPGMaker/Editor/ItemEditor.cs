@@ -15,6 +15,12 @@ public class ItemEditor : Editor
         Item item = (Item)target;
 
         serializedObject.Update();
+
+        var customStyle = new GUIStyle();
+        customStyle.alignment = TextAnchor.UpperCenter;
+        customStyle.fontSize = 17;
+        GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Editing \"" + item.name + "\" item:", customStyle);
+
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("description"), new GUIContent("Description: "), GUILayout.MinWidth(100));
