@@ -14,6 +14,7 @@ class DatabaseWindow : EditorWindow
 
     private LayoutWindow attributesWindow;
     private LayoutWindow tagWindow;
+    private LayoutWindow slotTypeWindow;
     private LayoutWindow itemWindow;
     private LayoutWindow specilizedWindow;
     private LayoutWindow characterWindow;
@@ -33,6 +34,7 @@ class DatabaseWindow : EditorWindow
     {
         ATTRIBUTES,
         TAGS,
+        SLOT_TYPE,
         ITEMS,
         SPECIALIZED_CLASS,
         CHARACTERS
@@ -45,6 +47,9 @@ class DatabaseWindow : EditorWindow
 
         tagWindow = (TagWindow)ScriptableObject.CreateInstance(typeof(TagWindow));
         tagWindow.Init();
+
+        slotTypeWindow = (SlotTypeWindow)ScriptableObject.CreateInstance(typeof(SlotTypeWindow));
+        slotTypeWindow.Init();
 
         itemWindow = (ItemWindow)ScriptableObject.CreateInstance(typeof(ItemWindow));
         itemWindow.Init();
@@ -79,6 +84,9 @@ class DatabaseWindow : EditorWindow
                 break;
             case MenuOptions.TAGS:
                 rightWindow = tagWindow;
+                break;
+            case MenuOptions.SLOT_TYPE:
+                rightWindow= slotTypeWindow;
                 break;
             case MenuOptions.ITEMS:
                 rightWindow = itemWindow;
@@ -116,6 +124,12 @@ class DatabaseWindow : EditorWindow
                 rightWindow.selected = false;
             menuOption = MenuOptions.TAGS;
         }
+        if (slotTypeWindow.Button(windowArea))
+        {
+            if (menuOption != MenuOptions.SLOT_TYPE)
+                rightWindow.selected = false;
+            menuOption = MenuOptions.SLOT_TYPE;
+        }  
         if (itemWindow.Button(windowArea))
         {
             if (menuOption != MenuOptions.ITEMS)
@@ -133,7 +147,6 @@ class DatabaseWindow : EditorWindow
             if (menuOption != MenuOptions.CHARACTERS)
                 rightWindow.selected = false;
             menuOption = MenuOptions.CHARACTERS;
-        }
-        
+        } 
     }
 }

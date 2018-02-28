@@ -22,7 +22,7 @@ public class ItemSlot : Slot {
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (SlotType slotType)
+                        delegate (string slotType)
                         {
                             return slotType == this.slotType;
                         });
@@ -40,7 +40,7 @@ public class ItemSlot : Slot {
             if (pos == -1)
             {
                 Debug.Log("Error: " +
-                            "The character doesn't have the slot type " + modifier.SlotType[index].slotsOcupped[j].Name + ". Execute Slot.canEquip() before executing Slot.setModifier()");
+                            "The character doesn't have the slot type " + modifier.SlotType[index].slotsOcupped[j] + ". Execute Slot.canEquip() before executing Slot.setModifier()");
             }
             else
                 indexes.Add(pos);
@@ -93,7 +93,7 @@ public class ItemSlot : Slot {
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (SlotType slotType)
+                        delegate (string slotType)
                         {
                             return slotType == this.slotType;
                         });
@@ -101,7 +101,7 @@ public class ItemSlot : Slot {
                 indexes.Add(i);
         }
 
-        // Comprobamos si en alguno de las combinaciones del item donde está este tipo de slot puede
+        // Comprobamos si en alguno de las combinaciones del item donde estï¿½ este tipo de slot puede
         // equiparse el item. Ejemplo: si el slot actual es "mano derecha" y se puede asignar 
         // en "mano derecha y pie derecho" o en "mano derecha y pie izquierdo" comprobamos que 
         // exista al menos uno de los pies.

@@ -32,7 +32,7 @@ public class OutputCharacter : MonoBehaviour {
 
 		for (int i = 0; i < character.Slots.Count; i++)
 			if (character.Slots [i] != null && character.Slots [i].slotType != null)
-				slotDropDown.options.Add (new UnityEngine.UI.Dropdown.OptionData () { text = character.Slots[i].slotType.Name });
+				slotDropDown.options.Add (new UnityEngine.UI.Dropdown.OptionData () { text = character.Slots[i].slotType });
 		
         // Creamos los textos de los slots
         gameObjects = new List<GameObject>();
@@ -48,7 +48,7 @@ public class OutputCharacter : MonoBehaviour {
             slotText.rectTransform.sizeDelta = new Vector2(500, 100);
            
             string texto = "Slot " + i + ": ";
-            if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType.Name + " - ";
+            if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType + " - ";
             else texto += "Vacio - ";
             if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.name;
             else texto += "Vacio";
@@ -71,7 +71,7 @@ public class OutputCharacter : MonoBehaviour {
 			gameObjects [i].transform.SetParent (GameObject.Find ("Canvas").transform);
             Text slotText = gameObjects[i].GetComponent<Text>();
             string texto = "Slot " + i + ": ";
-            if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType.Name + " - ";
+            if (character.Slots[i] != null && character.Slots[i].slotType != null) texto += character.Slots[i].slotType + " - ";
             else texto += "Vacio - ";
             if (character.Slots[i] != null && character.Slots[i].modifier != null) texto += character.Slots[i].modifier.name;
             else texto += "Vacio";

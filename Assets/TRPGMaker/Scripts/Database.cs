@@ -9,7 +9,7 @@ public class Database : ScriptableObject
     private static Database _instance = null;
     public List<Attribute> attributes;
     public List<string> tags;
-    public List<SlotType> slotTypes;
+    public List<string> slotTypes;
     public List<Modifier> items;
     public List<SpecializedClass> specializedClasses;
 
@@ -17,7 +17,7 @@ public class Database : ScriptableObject
     {
         attributes = new List<Attribute>();
         tags = new List<string>();
-        slotTypes = new List<SlotType>();
+        slotTypes = new List<string>();
         items = new List<Modifier>();
         specializedClasses = new List<SpecializedClass>();
     }

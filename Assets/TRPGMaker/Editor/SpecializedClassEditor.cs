@@ -69,7 +69,6 @@ public class SpecializedClassEditor : Editor {
         // Draw Slots
         listSlots.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
-                var element = listSlots.serializedProperty.GetArrayElementAtIndex(index);
                 rect.y += 2;
 
                 slotTypeSelected = Database.Instance.slotTypes.IndexOf(specializedClass.slots[index].slotType);
@@ -77,7 +76,7 @@ public class SpecializedClassEditor : Editor {
 
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.LabelField(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight), "Slot type:");
-                slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.Select(s => (string)s.Name).ToArray());
+                slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.ToArray());
                 EditorGUI.LabelField(new Rect(rect.x + 170, rect.y, 35, EditorGUIUtility.singleLineHeight), "Item:");
                 slotItemSelected = EditorGUI.Popup(new Rect(rect.x + 208, rect.y, rect.width - 208, EditorGUIUtility.singleLineHeight), slotItemSelected, Database.Instance.items.Select(s => (string)s.name).ToArray());
                 if (EditorGUI.EndChangeCheck())

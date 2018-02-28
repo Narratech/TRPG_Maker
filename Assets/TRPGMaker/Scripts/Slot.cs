@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Slot{
 
-    public SlotType slotType;
+    public string slotType;
     public Modifier modifier;
 
     // Use this for initialization
@@ -29,7 +29,7 @@ public class Slot{
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (SlotType slotType)
+                        delegate (string slotType)
                         {
                             return slotType == this.slotType;
                         });
@@ -47,7 +47,7 @@ public class Slot{
             if (pos == -1)
             {
                 Debug.Log("Error: " +
-                            "The character doesn't have the slot type " + modifier.SlotType[index].slotsOcupped[j].Name + ". Execute Slot.canEquip() before executing Slot.setModifier()");
+                            "The character doesn't have the slot type " + modifier.SlotType[index].slotsOcupped[j] + ". Execute Slot.canEquip() before executing Slot.setModifier()");
             }
             else
                 indexes.Add(pos);
@@ -100,7 +100,7 @@ public class Slot{
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (SlotType slotType)
+                        delegate (string slotType)
                         {
                             return slotType == this.slotType;
                         });
