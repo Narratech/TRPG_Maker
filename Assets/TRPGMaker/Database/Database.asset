@@ -33,9 +33,9 @@ MonoBehaviour:
   - Vara
   - Escudo
   slotTypes:
-  - Cabeza
-  - Mano derecha
-  - Mano izquieda
+  - Head
+  - Right Hand
+  - Left Hand
   items:
   - {fileID: 11400000, guid: 533554e859f43aa43b609d9a63853ecf, type: 2}
   - {fileID: 11400000, guid: 32008aadd22dceb498cbcf47f5bb7cd7, type: 2}

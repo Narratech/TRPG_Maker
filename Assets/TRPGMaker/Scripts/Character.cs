@@ -6,21 +6,12 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-/**
- * @author PerezPrieto
- */
 [RequireComponent(typeof(Inventory))]
 [Serializable]
-public class Character: MonoBehaviour{
+public class Character: ScriptableObject{
 
-    public Inventory inventory
-    {
-        get
-        {
-            return this.GetComponent<Inventory>();
-        }
-    }
-
+    public Inventory inventory;
     public List<Slot> Slots;
+    public List<Attribute> attributes;
     public SpecializedClass specializedClass;
 }

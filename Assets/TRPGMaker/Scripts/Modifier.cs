@@ -19,6 +19,11 @@ public class Modifier: ScriptableObject {
     [Serializable]
     public class SlotsOcupped
     {
+        public SlotsOcupped()
+        {
+            slotsOcupped = new List<String>();
+        }
+
         public List<string> slotsOcupped;
     }
 

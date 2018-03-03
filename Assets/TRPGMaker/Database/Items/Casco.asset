@@ -16,4 +16,4 @@ MonoBehaviour:
   tag: Vara
   SlotType:
   - slotsOcupped:
-    - {fileID: 11400000, guid: 2042010a3f80d77428a1ea88f9590eff, type: 2}
+    - Head

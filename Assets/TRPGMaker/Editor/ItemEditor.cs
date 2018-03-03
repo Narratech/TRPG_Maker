@@ -27,8 +27,61 @@ public class ItemEditor : Editor
         Rect rect = EditorGUILayout.GetControlRect();
         EditorGUI.LabelField(new Rect(rect.x, rect.y, 180, EditorGUIUtility.singleLineHeight), "Tag:");
         item.tag = TextAutocomplete.TextFieldAutoComplete(new Rect(rect.x + 180, rect.y, rect.width - 180, EditorGUIUtility.singleLineHeight), item.tag, Database.Instance.tags.ToArray(), maxShownCount: 10, levenshteinDistance: 0.5f);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("SlotType"), true);
-        EditorGUILayout.HelpBox("Each element of the slot defines the types of slots where the item could be placed, multiple 'Slots Occuped' in the same position are used for items who needs multiple slots.", MessageType.Info);
+
+        // All possible equip combinations
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Number of combinations for this item:");
+        EditorGUILayout.IntField(item.SlotType.Count);
+        if(GUILayout.Button("Add combination"))
+        {
+            item.SlotType.Add(new Modifier.SlotsOcupped());
+        }
+        GUILayout.EndHorizontal();
+
+        var centeredStyle = new GUIStyle();
+        centeredStyle.alignment = TextAnchor.UpperCenter;
+        for (int i = 0; i < item.SlotType.Count; i++)
+        {
+            GUILayout.BeginVertical("Box");
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Comination size:");
+            EditorGUILayout.IntField(item.SlotType[i].slotsOcupped.Count);
+            if (GUILayout.Button("Add slot type also needed"))
+            {
+                item.SlotType[i].slotsOcupped.Add("");
+                serializedObject.Update();
+            }
+            GUILayout.EndHorizontal();
+
+            for (int j = 0; j < item.SlotType[i].slotsOcupped.Count; j++)
+            {
+                SerializedProperty property = serializedObject.FindProperty("SlotType").GetArrayElementAtIndex(i).FindPropertyRelative("slotsOcupped").GetArrayElementAtIndex(j);
+
+                EditorGUI.BeginChangeCheck();
+                GUILayout.BeginHorizontal();
+                int selectedIndex = Database.Instance.slotTypes.IndexOf(property.stringValue);
+                Rect rectPopup = EditorGUILayout.GetControlRect();
+                selectedIndex = EditorGUI.Popup(rectPopup, selectedIndex, Database.Instance.slotTypes.ToArray());
+                if (GUILayout.Button("Remove"))
+                {
+                    item.SlotType[i].slotsOcupped.RemoveAt(j);
+                }
+                GUILayout.EndHorizontal();
+                if (EditorGUI.EndChangeCheck())
+                {
+                    property.stringValue = Database.Instance.slotTypes[selectedIndex];
+                }
+                if (j != item.SlotType[i].slotsOcupped.Count - 1)
+                    GUILayout.Label("AND", centeredStyle);
+            }
+            if (GUILayout.Button("Remove this combination"))
+            {
+                item.SlotType.RemoveAt(i);
+            }
+            GUILayout.EndVertical();
+            if(i != item.SlotType.Count - 1)
+                GUILayout.Label("OR", centeredStyle);
+        }
         
         // Detect if text changed
         if (EditorGUI.EndChangeCheck())
