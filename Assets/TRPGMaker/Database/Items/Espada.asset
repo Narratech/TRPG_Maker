@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: Espada
   m_EditorClassIdentifier: 
   name: Espada
-  description: Enter item description
-  tag: Espada
+  description: Enter
+  tags:
+  - Espada
   SlotType:
   - slotsOcupped:
     - Right Hand

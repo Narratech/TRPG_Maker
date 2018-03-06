@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public class Modifier: ScriptableObject {
     public new string name = "Enter item name";
     public string description = "Enter item description";
-    public string tag = "Enter a Tag (Empty could be used by all characters)";
+    public List<string> tags = new List<String>();
 
     [Serializable]
     public class SlotsOcupped

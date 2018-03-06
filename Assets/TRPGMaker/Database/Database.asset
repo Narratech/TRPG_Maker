@@ -38,8 +38,8 @@ MonoBehaviour:
   - Left Hand
   items:
   - {fileID: 11400000, guid: 533554e859f43aa43b609d9a63853ecf, type: 2}
-  - {fileID: 11400000, guid: 32008aadd22dceb498cbcf47f5bb7cd7, type: 2}
   - {fileID: 11400000, guid: 6cca57ca003397045a8f3f725d28fd5c, type: 2}
+  - {fileID: 11400000, guid: 32008aadd22dceb498cbcf47f5bb7cd7, type: 2}
   - {fileID: 11400000, guid: 16929c98679e8174fba1145471865933, type: 2}
   - {fileID: 11400000, guid: 7f887a7b31a67e748914f174da3933e6, type: 2}
   specializedClasses:

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Casco
   description: Enter item description
-  tag: Vara
+  tags:
+  - Casco
   SlotType:
   - slotsOcupped:
     - Head

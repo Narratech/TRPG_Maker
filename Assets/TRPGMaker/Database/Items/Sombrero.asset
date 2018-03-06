@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Sombrero
   description: Enter item description
-  tag: 
+  tags: []
   SlotType:
   - slotsOcupped:
     - Head

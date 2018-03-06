@@ -61,7 +61,7 @@ public class SpecializedClassEditor : Editor {
 		listTags.drawElementCallback =
 			(Rect rect, int index, bool isActive, bool isFocused) => {
 			rect.y += 2;
-			EditorGUI.LabelField(
+            EditorGUI.LabelField(
 				new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
 				specializedClass.tags[index]);
 		};
