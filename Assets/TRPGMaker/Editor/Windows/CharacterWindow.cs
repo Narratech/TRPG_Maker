@@ -14,6 +14,7 @@ public class CharacterWindow : LayoutWindow
     public override void Draw(Rect rect)
     {
         
+        
     }
 
     public override bool Button(Rect rect)

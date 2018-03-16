@@ -8,6 +8,6 @@ public class CharacterEditor : Editor {
 
     public override void OnInspectorGUI()
     {
-
+        DrawDefaultInspector();
     }
 }

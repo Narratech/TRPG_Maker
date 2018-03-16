@@ -15,4 +15,4 @@ MonoBehaviour:
   defaultCellPrefab: {fileID: 100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
   defaultDecorationPrefab: {fileID: 100000, guid: e28f5d31a7e1b4a419fb3f4ec51bbc88,
     type: 2}
-  defautTextureScale: {fileID: 2800000, guid: 139de670a81288745a7f6c4583ccf3e8, type: 3}
+  defautTextureScale: {fileID: 2800000, guid: a2f241151e0e7c848aba3d6c6d0b7abd, type: 3}

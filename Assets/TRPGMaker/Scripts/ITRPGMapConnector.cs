@@ -10,7 +10,7 @@ public interface ITRPGMapConnector {
 	 
 	void moveCharacter(Character character, Cell cell);
 
-	void showArea(Cell cell /*, caracteristicas*/);
+	void showArea(Character character, Cell cell /*, caracteristicas*/);
 	
 	void showSelector(Cell cell);
 

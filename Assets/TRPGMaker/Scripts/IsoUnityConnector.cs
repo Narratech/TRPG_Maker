@@ -4,7 +4,7 @@ using UnityEngine;
 using IsoUnity;
 using IsoUnity.Entities;
 
-public class IsoUnityConnector : ITRPGMapConnector {
+public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
     
     /*
      * Character contendrá una información concreta para realizar las acciones:
@@ -29,18 +29,38 @@ public class IsoUnityConnector : ITRPGMapConnector {
     }
 
     // Mover a un Character a una posicion
-    public void moveCharacter(Character character, Cell cell)
-    {
+    // CAMBIAR ISOUNITY.CELL POR CELL DE TRPGMAKER!! 
+    public delegate void MoveCharacterToCallBack(bool result);
 
+    public void MoveCharacterTo(Character character, IsoUnity.Cell cell, MoveCharacterToCallBack callback /*, caracteristicas*/)
+    {
+        StartCoroutine(MoveCharacterToAsync(character, cell, callback));
+    }
+
+    private IEnumerator MoveCharacterToAsync(Character character, IsoUnity.Cell cell, MoveCharacterToCallBack callback)
+    {
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
+
+        var showAreaEvent = new GameEvent("move", new Dictionary<string, object>()
+        {
+            {"mover", entity.mover },
+            {"cell", cell},
+            {"synchronous", true }
+        });
+
+        Game.main.enqueueEvent(showAreaEvent);
+
+        yield return new WaitForEventFinished(showAreaEvent);
+        callback(true);
     }
 
     // Mostrar área para un ataque o movimiento de un Character
     // ActionType: define el tipo de acción (ataque, movimiento...)
     // ¿Realiza la acción o sólo devuelve información? Si realiza la acción
     // sobrarian bastantes metodos implementados a continuación
-    public void showArea(Cell cell/*, caracteristicas*/)
+    public void showArea(Character character, IsoUnity.Cell cell /*, caracteristicas*/)
     {
-
+        
     }
 
     // Mostramos una flecha en las casillas en las que podemos realizar la acción
@@ -80,8 +100,28 @@ public class IsoUnityConnector : ITRPGMapConnector {
     }
 
     // Centrar la cámara en un Character
-    public void moveCameraToCharacter(Character character)
-    {
+    public delegate void moveCameraToCallback(bool result);
 
+    public void moveCameraToCharacter(Character character, moveCameraToCallback callback)
+    {
+        StartCoroutine(moveCameraToCharacterAsync(character, callback));
+    }
+
+    private IEnumerator moveCameraToCharacterAsync(Character character, moveCameraToCallback callback)
+    {
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
+
+        var lookToEvent = new GameEvent("look to", new Dictionary<string, object>()
+        {
+            {"gameobject", character.transform.gameObject },
+            {"instant", false},
+            {"synchronous", true }
+        });
+
+        Game.main.enqueueEvent(lookToEvent);
+
+        yield return new WaitForEventFinished(lookToEvent);
+
+        callback(true);
     }
 }
