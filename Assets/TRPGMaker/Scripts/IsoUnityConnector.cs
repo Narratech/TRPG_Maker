@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using IsoUnity;
+using IsoUnity.Entities;
 
-/*public class IsoUnityConnector : ITRPGMapConnector {
+public class IsoUnityConnector : ITRPGMapConnector {
     
     /*
      * Character contendrá una información concreta para realizar las acciones:
@@ -19,7 +21,7 @@ using UnityEngine;
      *                       que se encuentren en la trayectoria en la que se lanza la
      *                       habilidad).
      *
-
+     */
     // Posicionar a un Character en una posicion del mapa
 	public void setCharacterPosition(Character character, Cell cell)
     {
@@ -36,7 +38,7 @@ using UnityEngine;
     // ActionType: define el tipo de acción (ataque, movimiento...)
     // ¿Realiza la acción o sólo devuelve información? Si realiza la acción
     // sobrarian bastantes metodos implementados a continuación
-    public void showArea(Cell cell, caracteristicas)
+    public void showArea(Cell cell/*, caracteristicas*/)
     {
 
     }
@@ -48,10 +50,11 @@ using UnityEngine;
     }
 
     // Seleccionamos la casilla donde realizaremos la acción
-    public void selectCell(ActionType actionType)
+    //ACTION TYPE, da errores
+    /*public void selectCell(ActionType actionType)
     {
 
-    }
+    }*/
 
     
 
@@ -81,4 +84,4 @@ using UnityEngine;
     {
 
     }
-}*/
+}
