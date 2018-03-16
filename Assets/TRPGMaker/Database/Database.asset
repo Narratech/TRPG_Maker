@@ -32,6 +32,7 @@ MonoBehaviour:
   - Casco
   - Vara
   - Escudo
+  - Armadura ligera
   slotTypes:
   - Head
   - Right Hand

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IsoUnityConnector {
-
+/*public class IsoUnityConnector : ITRPGMapConnector {
+    
     /*
      * Character contendrá una información concreta para realizar las acciones:
      *      - Distancia: cuantas casillas puede moverse o en que rango puede
@@ -18,31 +18,10 @@ public class IsoUnityConnector {
      *                      (este último especifica si hace daño a todos los personajes
      *                       que se encuentren en la trayectoria en la que se lanza la
      *                       habilidad).
-     */
+     *
 
     // Posicionar a un Character en una posicion del mapa
 	public void setCharacterPosition(Character character, Cell cell)
-    {
-
-    }
-
-    // Mostrar área para un ataque o movimiento de un Character
-    // ActionType: define el tipo de acción (ataque, movimiento...)
-    // ¿Realiza la acción o sólo devuelve información? Si realiza la acción
-    // sobrarian bastantes metodos implementados a continuación
-    public void showCharacterArea(Character character, ActionType actionType)
-    {
-
-    }
-
-    // Mostramos una flecha en las casillas en las que podemos realizar la acción
-    public void showArrow(Cell cell)
-    {
-
-    }
-
-    // Seleccionamos la casilla donde realizaremos la acción
-    public void selectCell(ActionType actionType)
     {
 
     }
@@ -53,6 +32,29 @@ public class IsoUnityConnector {
 
     }
 
+    // Mostrar área para un ataque o movimiento de un Character
+    // ActionType: define el tipo de acción (ataque, movimiento...)
+    // ¿Realiza la acción o sólo devuelve información? Si realiza la acción
+    // sobrarian bastantes metodos implementados a continuación
+    public void showArea(Cell cell, caracteristicas)
+    {
+
+    }
+
+    // Mostramos una flecha en las casillas en las que podemos realizar la acción
+    public void showSelector(Cell cell)
+    {
+
+    }
+
+    // Seleccionamos la casilla donde realizaremos la acción
+    public void selectCell(ActionType actionType)
+    {
+
+    }
+
+    
+
     // Calculamos las celdas a las que afectará un ataque
     // en función de su trayectoria
     // ¿Quizás este método es privado? ¿Debería devolver a que Characters
@@ -62,8 +64,8 @@ public class IsoUnityConnector {
         return new List<Cell>();
     }
 
-    // Ralizamos la animacion de ataque
-    public void characterAttack(Character character, Cell cell)
+    // Ralizamos la animacion de ataque, defensa...
+    public void triggerAnimation(Character character, Cell cell)
     {
 
     }
@@ -79,4 +81,4 @@ public class IsoUnityConnector {
     {
 
     }
-}
+}*/
