@@ -5,7 +5,7 @@ using IsoUnity;
 using IsoUnity.Entities;
 
 public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
-    
+
     /*
      * Character contendrá una información concreta para realizar las acciones:
      *      - Distancia: cuantas casillas puede moverse o en que rango puede
@@ -22,35 +22,62 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
      *                       habilidad).
      *
      */
-    // Posicionar a un Character en una posicion del mapa
-	public void setCharacterPosition(Character character, Cell cell)
-    {
 
+    // Teleport Character to Cell position
+    public delegate void SetCharacterPositionCallBack(bool result);
+
+    public void SetCharacterPosition(CharacterScript character, Cell cell, SetCharacterPositionCallBack callback)
+    {
+        StartCoroutine(SetCharacterPositionAsync(character, cell, callback));
     }
 
-    // Mover a un Character a una posicion
-    // CAMBIAR ISOUNITY.CELL POR CELL DE TRPGMAKER!! 
-    public delegate void MoveCharacterToCallBack(bool result);
-
-    public void MoveCharacterTo(Character character, IsoUnity.Cell cell, MoveCharacterToCallBack callback /*, caracteristicas*/)
-    {
-        StartCoroutine(MoveCharacterToAsync(character, cell, callback));
-    }
-
-    private IEnumerator MoveCharacterToAsync(Character character, IsoUnity.Cell cell, MoveCharacterToCallBack callback)
+    private IEnumerator SetCharacterPositionAsync(CharacterScript character, Cell cell, SetCharacterPositionCallBack callback)
     {
         Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
 
-        var showAreaEvent = new GameEvent("move", new Dictionary<string, object>()
+        IsoUnity.Cell destinyCell = SearchCellInMap(cell);
+
+        var showAreaEvent = new GameEvent("teleport", new Dictionary<string, object>()
         {
             {"mover", entity.mover },
-            {"cell", cell},
+            {"cell", destinyCell},
             {"synchronous", true }
         });
 
         Game.main.enqueueEvent(showAreaEvent);
 
         yield return new WaitForEventFinished(showAreaEvent);
+        callback(true);
+    }
+
+    // Move Character to Cell position
+    public delegate void MoveCharacterToCallBack(bool result);
+
+    public void MoveCharacterTo(CharacterScript character, Cell cell, MoveCharacterToCallBack callback /*, caracteristicas*/)
+    {
+        StartCoroutine(MoveCharacterToAsync(character, cell, callback));
+    }
+
+    private IEnumerator MoveCharacterToAsync(CharacterScript character, Cell cell, MoveCharacterToCallBack callback)
+    {
+        // Get entity of character
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;        
+
+        IsoUnity.Cell destinyCell = SearchCellInMap(cell);
+
+        // Set event
+        var showAreaEvent = new GameEvent("move", new Dictionary<string, object>()
+        {
+            {"mover", entity.mover },
+            {"cell", destinyCell},
+            {"synchronous", true }
+        });
+        
+        // Launch event
+        Game.main.enqueueEvent(showAreaEvent);
+
+        yield return new WaitForEventFinished(showAreaEvent);
+
         callback(true);
     }
 
@@ -99,15 +126,15 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         return null; // Si no hay nadie en esa casilla
     }
 
-    // Centrar la cámara en un Character
-    public delegate void moveCameraToCallback(bool result);
+    // Camera look to Character
+    public delegate void MoveCameraToCallback(bool result);
 
-    public void moveCameraToCharacter(Character character, moveCameraToCallback callback)
+    public void MoveCameraToCharacter(CharacterScript character, MoveCameraToCallback callback)
     {
-        StartCoroutine(moveCameraToCharacterAsync(character, callback));
+        StartCoroutine(MoveCameraToCharacterAsync(character, callback));
     }
 
-    private IEnumerator moveCameraToCharacterAsync(Character character, moveCameraToCallback callback)
+    private IEnumerator MoveCameraToCharacterAsync(CharacterScript character, MoveCameraToCallback callback)
     {
         Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
 
@@ -123,5 +150,25 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         yield return new WaitForEventFinished(lookToEvent);
 
         callback(true);
+    }
+
+    private IsoUnity.Cell SearchCellInMap(Cell cell)
+    {
+        // Get map of scene
+        IsoUnity.Map map = GameObject.Find("Map").GetComponent<IsoUnity.Map>();
+
+        // Search cell with same coords
+        IsoUnity.Cell isoCell = null;
+        foreach (IsoUnity.Cell c in map.Cells)
+        {
+            var coords = map.getCoords(c.gameObject);
+            if (coords.x == cell.x && coords.y == cell.y)
+                isoCell = c;
+        }
+
+        if (isoCell == null)
+            Debug.Log("The cell selected (coords x: " + cell.x + ", y: " + cell.y + ") doesn't exists in the current map!");
+
+        return isoCell;
     }
 }

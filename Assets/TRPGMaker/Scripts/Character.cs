@@ -8,13 +8,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(Inventory))]
 [Serializable]
-public class Character: MonoBehaviour{
+public class Character: ScriptableObject{
 
     public string name;
     public Inventory inventory;
     public List<Slot> Slots;
     public List<Attribute> attributes;
     public SpecializedClass specializedClass;
-    public int altura;
-    public int distancia;
+    public int height;
+    public int distance;
 }

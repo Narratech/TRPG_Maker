@@ -620,6 +620,25 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &13279653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a413602f9429a24e943fe8c6b8b2508, type: 3}
+  m_Name: teleport
+  m_EditorClassIdentifier: 
+  keys:
+  - synchronous
+  - mover
+  - cell
+  values:
+  - {fileID: 193430910}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &19435174
 Prefab:
   m_ObjectHideFlags: 0
@@ -6017,16 +6036,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 175549495}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
+  m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
-  inventory: {fileID: 0}
-  Slots: []
-  attributes: []
-  specializedClass: {fileID: 0}
-  altura: 0
-  distancia: 0
+  character: {fileID: 0}
 --- !u!114 &175549501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6681,6 +6694,10 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: 6a0a19358a5dec041b95e34d3b5bb0ae,
         type: 2}
+    - target: {fileID: 100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
+      propertyPath: m_Name
+      value: Teleport2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
   m_IsPrefabParent: 0
@@ -6976,6 +6993,28 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &193430910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
+  f: 0
+  d: 0
+  s: 
+  v2: {x: 0, y: 0}
+  v3: {x: 0, y: 0, z: 0}
+  v4: {x: 0, y: 0, z: 0, w: 0}
+  q: {x: 0, y: 0, z: 0, w: 0}
+  b: 0
+  c: 0
+  whatIs: System.Boolean
 --- !u!114 &194243055 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -13814,6 +13853,29 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 684778260}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
+--- !u!114 &430573535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06a4f01aa6e07542a2f9cdadd91cc10, type: 3}
+  m_Name: GameEvent
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 0}
+  isUnityObject: 1
+  objectContent: {fileID: 13279653}
+  secuence: {fileID: 644564707}
+  position:
+    serializedVersion: 2
+    x: 584
+    y: 102
+    width: 300
+    height: 107
+  collapsed: 0
 --- !u!1001 &438157842
 Prefab:
   m_ObjectHideFlags: 0
@@ -20134,6 +20196,23 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &644564707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2610de954cb4f247a9d6e9f34762f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  localVariables: {fileID: 1999083187}
+  nodes:
+  - {fileID: 430573535}
+  ids:
+  - -20592
 --- !u!114 &645766537 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -34808,6 +34887,7 @@ GameObject:
   - component: {fileID: 930472394}
   - component: {fileID: 930472395}
   - component: {fileID: 930472397}
+  - component: {fileID: 930472393}
   - component: {fileID: 930472396}
   m_Layer: 0
   m_Name: CharacterTest
@@ -34888,6 +34968,18 @@ MonoBehaviour:
   parallel: 0
   centered: 1
   tile: 0
+--- !u!114 &930472393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 930472388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!114 &930472394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34927,16 +35019,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 930472388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
+  m_Script: {fileID: 11500000, guid: aa0e7214bd7b75b42b431db2b4524132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: asdasd
-  inventory: {fileID: 0}
-  Slots: []
-  attributes: []
-  specializedClass: {fileID: 11400000, guid: 8d38410e8c7cb4a12839501c393e1343, type: 2}
-  altura: 4
-  distancia: 4
+  sequence: {fileID: 644564707}
 --- !u!114 &930472397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58524,6 +58610,10 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: 6a0a19358a5dec041b95e34d3b5bb0ae,
         type: 2}
+    - target: {fileID: 100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
+      propertyPath: m_Name
+      value: Teleport1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
   m_IsPrefabParent: 0
@@ -68358,6 +68448,18 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 170375268}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
+--- !u!114 &1999083187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f903b5c05730594280dcba273e69bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switches: []
 --- !u!28 &2000172508
 Texture2D:
   m_ObjectHideFlags: 0

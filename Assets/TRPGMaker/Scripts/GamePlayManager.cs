@@ -19,18 +19,18 @@ public class GamePlayManager : IsoUnity.EventManager {
     // This is a TEST. This class NEEDS TO BE EDITED
     void Start () {
         IsoUnityConnector connector = (new GameObject("IsoUnityConector")).AddComponent<IsoUnityConnector>();
-        Character[] characters = IsoUnity.Map.FindObjectsOfType<Character>();
-        IsoUnity.Cell cell = GameObject.Find("FinalCell").GetComponent<IsoUnity.Cell>();
+        CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
+        Cell cell = new Cell(13, -10);
         Debug.Log("BIG BOY: ¡Start moving!");
-        connector.MoveCharacterTo(characters[1], cell, ParametrizedCallback(characters[1], (character, result) =>
+        connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
         {
             Debug.Log("BIG BOY: ¡Finish moving!");
-            connector.moveCameraToCharacter(characters[0], moveCameraToParametrizedCallback(characters[1], (character2, result2) =>
+            connector.MoveCameraToCharacter(characters[0], MoveCameraToParametrizedCallback(characters[0], (character2, result2) =>
             {
 
-                IsoUnity.Cell cell2 = GameObject.Find("FinalCell2").GetComponent<IsoUnity.Cell>();
+                Cell cell2 = new Cell(13, -9);
                 Debug.Log("LITTLE BOY: ¡Start moving!");
-                connector.MoveCharacterTo(characters[0], cell2, ParametrizedCallback(characters[0], (character3, result3) =>
+                connector.SetCharacterPosition(characters[0], cell2, SetCharacterPositionParametrizedCallback(characters[0], (character3, result3) =>
                 {
                     Debug.Log("LITTLE BOY: ¡Finish moving!");                    
                 }));
@@ -45,12 +45,17 @@ public class GamePlayManager : IsoUnity.EventManager {
 
     }
 
-    public IsoUnityConnector.MoveCharacterToCallBack ParametrizedCallback(Character character, System.Action<Character, bool> callback)
+    public IsoUnityConnector.MoveCharacterToCallBack MoveCharacterToParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
     {
         return (result) => callback(character, result);
     }
 
-    public IsoUnityConnector.moveCameraToCallback moveCameraToParametrizedCallback(Character character, System.Action<Character, bool> callback)
+    public IsoUnityConnector.MoveCameraToCallback MoveCameraToParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
+    {
+        return (result) => callback(character, result);
+    }
+
+    public IsoUnityConnector.SetCharacterPositionCallBack SetCharacterPositionParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
     {
         return (result) => callback(character, result);
     }
