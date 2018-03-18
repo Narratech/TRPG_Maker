@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using IsoUnity;
 using UnityEngine;
 
-public class GamePlayManager : IsoUnity.EventManager {
+public class GamePlayManager : IsoUnity.EventManager
+{
     public override void ReceiveEvent(IGameEvent ev)
     {
         //throw new NotImplementedException();
@@ -17,7 +18,8 @@ public class GamePlayManager : IsoUnity.EventManager {
 
     // Use this for initialization
     // This is a TEST. This class NEEDS TO BE EDITED
-    void Start () {
+    void Start()
+    {
         IsoUnityConnector connector = (new GameObject("IsoUnityConector")).AddComponent<IsoUnityConnector>();
         CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
         Cell cell = new Cell(13, -10);
@@ -29,10 +31,10 @@ public class GamePlayManager : IsoUnity.EventManager {
             {
 
                 Cell cell2 = new Cell(13, -9);
-                Debug.Log("LITTLE BOY: ¡Start moving!");
-                connector.SetCharacterPosition(characters[0], cell2, SetCharacterPositionParametrizedCallback(characters[0], (character3, result3) =>
+                Debug.Log("LITTLE BOY: ¡Start calculating distance!");
+                connector.ShowArea(characters[0], ShowAreaCallBackParametrizedCallback(characters[0], (character3, result3) =>
                 {
-                    Debug.Log("LITTLE BOY: ¡Finish moving!");                    
+                    Debug.Log("LITTLE BOY: ¡Finish calculating distance!");
                 }));
 
             }));
@@ -56,6 +58,11 @@ public class GamePlayManager : IsoUnity.EventManager {
     }
 
     public IsoUnityConnector.SetCharacterPositionCallBack SetCharacterPositionParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
+    {
+        return (result) => callback(character, result);
+    }
+
+    public IsoUnityConnector.ShowAreaCallBack ShowAreaCallBackParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
     {
         return (result) => callback(character, result);
     }

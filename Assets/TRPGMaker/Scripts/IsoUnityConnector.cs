@@ -3,25 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using IsoUnity;
 using IsoUnity.Entities;
+using System.Linq;
 
 public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
-
-    /*
-     * Character contendrá una información concreta para realizar las acciones:
-     *      - Distancia: cuantas casillas puede moverse o en que rango puede
-     *                   atacar en un turno.
-     *      - Altura: que casillas puede atravesar en función de la altura de la
-     *                misma.
-     *                
-     * La habilidad utilizada tendrá tambien una información concreta para saber
-     * a que celdas/personajes afecta o la animación que se realiza:
-     *      - Tipo de ataque: Cuerpo a cuerpo ó a distancia.
-     *      - Tipo de daño: solo a un personaje, daño en area ó daño por trayectoria
-     *                      (este último especifica si hace daño a todos los personajes
-     *                       que se encuentren en la trayectoria en la que se lanza la
-     *                       habilidad).
-     *
-     */
 
     // Teleport Character to Cell position
     public delegate void SetCharacterPositionCallBack(bool result);
@@ -61,7 +45,7 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
     private IEnumerator MoveCharacterToAsync(CharacterScript character, Cell cell, MoveCharacterToCallBack callback)
     {
         // Get entity of character
-        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;        
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
 
         IsoUnity.Cell destinyCell = SearchCellInMap(cell);
 
@@ -81,13 +65,88 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         callback(true);
     }
 
-    // Mostrar área para un ataque o movimiento de un Character
-    // ActionType: define el tipo de acción (ataque, movimiento...)
-    // ¿Realiza la acción o sólo devuelve información? Si realiza la acción
-    // sobrarian bastantes metodos implementados a continuación
-    public void showArea(Character character, IsoUnity.Cell cell /*, caracteristicas*/)
+    // Show calculated area with the character distance requirement
+    public delegate void ShowAreaCallBack(bool result);
+
+    public void ShowArea(CharacterScript character, ShowAreaCallBack callback)
     {
-        
+        StartCoroutine(ShowAreaAsync(character, callback));
+    }
+
+    private IEnumerator ShowAreaAsync(CharacterScript character, ShowAreaCallBack callback)
+    {
+
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
+
+        IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+
+        entity.mover.maxJumpSize = character.character.height;
+
+        CalculateDistanceArea(entity, characterCurrentCell, character.character.distance);
+
+        yield return true;
+
+        callback(true);
+    }
+
+    struct CellWithDistance {
+        public IsoUnity.Cell cell;
+        public float distanceFromCharacter;
+
+        public CellWithDistance(IsoUnity.Cell cell, float distance)
+        {
+            this.cell = cell;
+            this.distanceFromCharacter = distance;
+        }
+    };
+
+    private void CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, int distanceMax)
+    {
+        /************ This would be changed! ********************/
+        IsoUnity.Game game = GameObject.Find("Game").GetComponent<IsoUnity.Game>();
+        IsoUnityOptions isoUnityOptions = game.transform.GetComponent(typeof(IsoUnityOptions)) as IsoUnityOptions;
+        IsoUnity.IsoTexture color = isoUnityOptions.moveCell;
+        /*******************************************************/
+
+        List<CellWithDistance> openList = new List<CellWithDistance>();
+        List<CellWithDistance> closeList = new List<CellWithDistance>();
+
+        openList.Add(new CellWithDistance(currentCell, 0));
+
+        while (openList.Count > 0)
+        {
+            CellWithDistance current = openList[0];
+            openList.Remove(current);
+            closeList.Add(current);
+
+            foreach(IsoUnity.Cell neighbour in current.cell.Map.getNeightbours(current.cell))
+            {
+                if (neighbour != null && !closeList.Any(x => x.cell == neighbour))
+                {
+                    float distanceManhattan = Mathf.Abs(currentCell.Map.getCoords(currentCell.gameObject).x - neighbour.Map.getCoords(neighbour.gameObject).x) + Mathf.Abs(currentCell.Map.getCoords(currentCell.gameObject).y - neighbour.Map.getCoords(neighbour.gameObject).y);
+
+                    if(distanceManhattan <= distanceMax)
+                    {
+                        bool planify = RoutePlanifier.planifyRoute(entity.mover, neighbour);
+
+                        if (!openList.Any(x => x.cell == neighbour) && planify)
+                        {
+                            PaintCell(neighbour, color);
+                            openList.Add(new CellWithDistance(neighbour, distanceManhattan));
+                        }
+
+                        RoutePlanifier.cancelRoute(entity.mover);
+                    }                    
+                }
+            }
+        }
+    }
+
+    private void PaintCell(IsoUnity.Cell cell, IsoTexture texture)
+    {
+        cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = texture;
+        cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = texture.getTexture();
+        cell.forceRefresh();
     }
 
     // Mostramos una flecha en las casillas en las que podemos realizar la acción
