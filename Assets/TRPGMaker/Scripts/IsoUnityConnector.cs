@@ -82,7 +82,7 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
 
         entity.mover.maxJumpSize = character.character.height;
 
-        CalculateDistanceArea(entity, characterCurrentCell, character.character.distance);
+        CalculateDistanceArea(entity, characterCurrentCell, character.character.distance, character.character.height);
 
         yield return true;
 
@@ -100,7 +100,7 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         }
     };
 
-    private void CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, int distanceMax)
+    private void CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, int distanceMax, int heighMax)
     {
         /************ This would be changed! ********************/
         IsoUnity.Game game = GameObject.Find("Game").GetComponent<IsoUnity.Game>();
@@ -123,19 +123,16 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
             {
                 if (neighbour != null && !closeList.Any(x => x.cell == neighbour))
                 {
-                    float distanceManhattan = Mathf.Abs(currentCell.Map.getCoords(currentCell.gameObject).x - neighbour.Map.getCoords(neighbour.gameObject).x) + Mathf.Abs(currentCell.Map.getCoords(currentCell.gameObject).y - neighbour.Map.getCoords(neighbour.gameObject).y);
+                    float distanceManhattanFromCurrentToNeigh = Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).x - neighbour.Map.getCoords(neighbour.gameObject).x) + Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).y - neighbour.Map.getCoords(neighbour.gameObject).y);
+                    float distanceManhattanFromCharacterToNeigh = current.distanceFromCharacter + distanceManhattanFromCurrentToNeigh;
 
-                    if(distanceManhattan <= distanceMax)
+                    if (distanceManhattanFromCurrentToNeigh <= 1 && distanceManhattanFromCharacterToNeigh <= distanceMax && Mathf.Abs(neighbour.Height - current.cell.Height) <= heighMax)
                     {
-                        bool planify = RoutePlanifier.planifyRoute(entity.mover, neighbour);
-
-                        if (!openList.Any(x => x.cell == neighbour) && planify)
+                        if (!openList.Any(x => x.cell == neighbour))
                         {
                             PaintCell(neighbour, color);
-                            openList.Add(new CellWithDistance(neighbour, distanceManhattan));
+                            openList.Add(new CellWithDistance(neighbour, distanceManhattanFromCharacterToNeigh));
                         }
-
-                        RoutePlanifier.cancelRoute(entity.mover);
                     }                    
                 }
             }
