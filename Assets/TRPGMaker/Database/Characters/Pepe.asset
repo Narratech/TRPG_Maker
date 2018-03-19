@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
   m_Name: NewCharacter
   m_EditorClassIdentifier: 
-  name: Character1
+  name: NewCharacter
   inventory: {fileID: 0}
   Slots: []
   attributes: []
-  specializedClass: {fileID: 0}
-  height: 1
-  distance: 3
+  specializedClass: []
+  height: 0
+  distance: 0

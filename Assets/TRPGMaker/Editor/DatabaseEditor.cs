@@ -107,5 +107,20 @@ public class CustomEditorBase : Editor{
         GUILayout.EndVertical();
 
         // Characters
+        GUILayout.BeginVertical("Box");
+        GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Characters:", titleStyle);
+        for (int i = 0; i < Database.Instance.characters.Count; i++)
+        {
+            Character character = Database.Instance.characters[i];
+            // Changing line color
+            if (i % 2 == 0)
+                GUILayout.BeginHorizontal(gsLinePair);
+            else
+                GUILayout.BeginHorizontal(gsLineOdd);
+            Rect rect = EditorGUILayout.GetControlRect();
+            GUI.Label(rect, character.name);
+            GUILayout.EndHorizontal();
+        }
+        GUILayout.EndVertical();
     }
 }

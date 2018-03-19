@@ -12,6 +12,7 @@ public class Database : ScriptableObject
     public List<string> slotTypes;
     public List<Modifier> items;
     public List<SpecializedClass> specializedClasses;
+    public List<Character> characters;
 
     public Database()
     {
@@ -20,6 +21,7 @@ public class Database : ScriptableObject
         slotTypes = new List<string>();
         items = new List<Modifier>();
         specializedClasses = new List<SpecializedClass>();
+        characters = new List<Character>();
     }
 
     public static Database Instance

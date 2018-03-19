@@ -121,12 +121,13 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
 
             foreach(IsoUnity.Cell neighbour in current.cell.Map.getNeightbours(current.cell))
             {
-                if (neighbour != null && !closeList.Any(x => x.cell == neighbour))
+                if (neighbour != null && !closeList.Any(x => x.cell == neighbour) && neighbour.Walkable)
                 {
                     float distanceManhattanFromCurrentToNeigh = Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).x - neighbour.Map.getCoords(neighbour.gameObject).x) + Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).y - neighbour.Map.getCoords(neighbour.gameObject).y);
                     float distanceManhattanFromCharacterToNeigh = current.distanceFromCharacter + distanceManhattanFromCurrentToNeigh;
 
-                    if (distanceManhattanFromCurrentToNeigh <= 1 && distanceManhattanFromCharacterToNeigh <= distanceMax && Mathf.Abs(neighbour.Height - current.cell.Height) <= heighMax)
+                    if (distanceManhattanFromCurrentToNeigh <= 1 && distanceManhattanFromCharacterToNeigh <= distanceMax && 
+                        Mathf.Abs(neighbour.Height - current.cell.Height) <= heighMax)
                     {
                         if (!openList.Any(x => x.cell == neighbour))
                         {

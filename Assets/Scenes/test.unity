@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -45883,8 +45883,11 @@ Prefab:
     - target: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
       propertyPath: properties.faces.Array.data[4].textureMapping
       value: 
-      objectReference: {fileID: 11400000, guid: 6a0a19358a5dec041b95e34d3b5bb0ae,
-        type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
+      propertyPath: walkable
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
   m_IsPrefabParent: 0
