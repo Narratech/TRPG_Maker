@@ -620,29 +620,6 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
---- !u!114 &13279653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a413602f9429a24e943fe8c6b8b2508, type: 3}
-  m_Name: move
-  m_EditorClassIdentifier: 
-  keys:
-  - synchronous
-  - cell
-  - mover
-  - distance
-  - direction
-  values:
-  - {fileID: 193430910}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 37069046}
-  - {fileID: 428999791}
 --- !u!1001 &19435174
 Prefab:
   m_ObjectHideFlags: 0
@@ -891,28 +868,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 697333724}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
---- !u!114 &37069046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  i: 0
-  f: 0
-  d: 0
-  s: 
-  v2: {x: 0, y: 0}
-  v3: {x: 0, y: 0, z: 0}
-  v4: {x: 0, y: 0, z: 0, w: 0}
-  q: {x: 0, y: 0, z: 0, w: 0}
-  b: 0
-  c: 0
-  whatIs: System.Int32
 --- !u!114 &37981173 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -6074,7 +6029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e00223589bdce4693914cd49b4b0d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isoDec: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
+  isoDec: {fileID: 0}
   father: {fileID: 1021182435}
   center: {x: 0.73830414, y: 0.011942863, z: 5.2040753}
   angle: 0
@@ -6133,8 +6088,8 @@ MonoBehaviour:
   canBlockMe: 1
   blocks: 1
   maxJumpSize: 1.5
-  normalSprite: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
-  jumpingSprite: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
+  normalSprite: {fileID: 0}
+  jumpingSprite: {fileID: 0}
   direction: 0
 --- !u!114 &175549504
 MonoBehaviour:
@@ -7058,28 +7013,6 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
---- !u!114 &193430910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  i: 0
-  f: 0
-  d: 0
-  s: 
-  v2: {x: 0, y: 0}
-  v3: {x: 0, y: 0, z: 0}
-  v4: {x: 0, y: 0, z: 0, w: 0}
-  q: {x: 0, y: 0, z: 0, w: 0}
-  b: 0
-  c: 0
-  whatIs: System.Boolean
 --- !u!114 &194243055 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -14023,48 +13956,12 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 614971607}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
---- !u!114 &428999791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 588a04c1e0949e04bb22e19933871b5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enumerated: 3
-  type: IsoUnity.Entities.Mover+Direction
 --- !u!114 &429058449 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
     type: 2}
   m_PrefabInternal: {fileID: 684778260}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
---- !u!114 &430573535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e06a4f01aa6e07542a2f9cdadd91cc10, type: 3}
-  m_Name: GameEvent
-  m_EditorClassIdentifier: 
-  childs:
-  - {fileID: 0}
-  isUnityObject: 1
-  objectContent: {fileID: 13279653}
-  secuence: {fileID: 644564707}
-  position:
-    serializedVersion: 2
-    x: 584
-    y: 102
-    width: 300
-    height: 1
-  collapsed: 0
 --- !u!1001 &438157842
 Prefab:
   m_ObjectHideFlags: 0
@@ -20396,12 +20293,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2610de954cb4f247a9d6e9f34762f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  root: {fileID: 0}
+  root: {fileID: 1554496082}
   localVariables: {fileID: 1999083187}
   nodes:
-  - {fileID: 430573535}
+  - {fileID: 1554496082}
   ids:
-  - -20592
+  - -415612
 --- !u!114 &645766537 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -31287,6 +31184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveCell: {fileID: 11400000, guid: 1285aa62ffa004945b03dfbda9cf0afd, type: 2}
+  arrowDecoration: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
 --- !u!43 &771847860
 Mesh:
   m_ObjectHideFlags: 0
@@ -35236,7 +35134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e00223589bdce4693914cd49b4b0d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isoDec: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
+  isoDec: {fileID: 0}
   father: {fileID: 929082088}
   center: {x: 0.90564156, y: 0.011944771, z: 0.7097478}
   angle: 0
@@ -35270,8 +35168,8 @@ MonoBehaviour:
   canBlockMe: 0
   blocks: 0
   maxJumpSize: 1.5
-  normalSprite: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
-  jumpingSprite: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
+  normalSprite: {fileID: 0}
+  jumpingSprite: {fileID: 0}
   direction: 0
 --- !u!114 &930472395
 MonoBehaviour:
@@ -55230,6 +55128,29 @@ Material:
     - _Cutoff: 0.5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1554496082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06a4f01aa6e07542a2f9cdadd91cc10, type: 3}
+  m_Name: GameEvent
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 0}
+  isUnityObject: 1
+  objectContent: {fileID: 2055154388}
+  secuence: {fileID: 644564707}
+  position:
+    serializedVersion: 2
+    x: 550
+    y: 141
+    width: 474
+    height: 71
+  collapsed: 0
 --- !u!1001 &1554510924
 Prefab:
   m_ObjectHideFlags: 0
@@ -69737,6 +69658,25 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1742273737}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
+--- !u!114 &2055154388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a413602f9429a24e943fe8c6b8b2508, type: 3}
+  m_Name: selected cell
+  m_EditorClassIdentifier: 
+  keys:
+  - synchronous
+  - isounityconnector
+  - characterscript
+  values:
+  - {fileID: 2115287822}
+  - {fileID: 0}
+  - {fileID: 930472393}
 --- !u!21 &2056399549
 Material:
   serializedVersion: 6
@@ -71059,6 +70999,28 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &2115287822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
+  f: 0
+  d: 0
+  s: 
+  v2: {x: 0, y: 0}
+  v3: {x: 0, y: 0, z: 0}
+  v4: {x: 0, y: 0, z: 0, w: 0}
+  q: {x: 0, y: 0, z: 0, w: 0}
+  b: 0
+  c: 0
+  whatIs: System.Boolean
 --- !u!28 &2116211514
 Texture2D:
   m_ObjectHideFlags: 0

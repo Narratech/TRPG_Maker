@@ -5,7 +5,9 @@ using IsoUnity;
 using IsoUnity.Entities;
 using System.Linq;
 
-public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
+public class IsoUnityConnector : EventedEventManager/*, ITRPGMapConnector*/  {
+
+    private GameEvent selectedCellEvent;
 
     // Teleport Character to Cell position
     public delegate void SetCharacterPositionCallBack(bool result);
@@ -21,16 +23,17 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
 
         IsoUnity.Cell destinyCell = SearchCellInMap(cell);
 
-        var showAreaEvent = new GameEvent("teleport", new Dictionary<string, object>()
+        var setCharacterPositionEvent = new GameEvent("teleport", new Dictionary<string, object>()
         {
             {"mover", entity.mover },
             {"cell", destinyCell},
             {"synchronous", true }
         });
 
-        Game.main.enqueueEvent(showAreaEvent);
+        Game.main.enqueueEvent(setCharacterPositionEvent);
 
-        yield return new WaitForEventFinished(showAreaEvent);
+        yield return new WaitForEventFinished(setCharacterPositionEvent);
+
         callback(true);
     }
 
@@ -50,7 +53,7 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         IsoUnity.Cell destinyCell = SearchCellInMap(cell);
 
         // Set event
-        var showAreaEvent = new GameEvent("move", new Dictionary<string, object>()
+        var moveCharacterTo = new GameEvent("move", new Dictionary<string, object>()
         {
             {"mover", entity.mover },
             {"cell", destinyCell},
@@ -58,15 +61,15 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         });
         
         // Launch event
-        Game.main.enqueueEvent(showAreaEvent);
+        Game.main.enqueueEvent(moveCharacterTo);
 
-        yield return new WaitForEventFinished(showAreaEvent);
+        yield return new WaitForEventFinished(moveCharacterTo);
 
         callback(true);
     }
 
     // Show calculated area with the character distance requirement
-    public delegate void ShowAreaCallBack(bool result);
+    public delegate void ShowAreaCallBack(Cell selectedCell, bool result);
 
     public void ShowArea(CharacterScript character, ShowAreaCallBack callback)
     {
@@ -80,15 +83,28 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
 
         IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
 
-        entity.mover.maxJumpSize = character.character.height;
+        entity.mover.maxJumpSize = character.character.height;        
+
+        selectedCellEvent = new GameEvent("selected cell", new Dictionary<string, object>()
+            {
+                {"synchronous", true }
+            });
+
+        Game.main.enqueueEvent(selectedCellEvent);
 
         CalculateDistanceArea(entity, characterCurrentCell, character.character.distance, character.character.height);
 
-        yield return true;
+        Dictionary<string, object> outParams;
+        yield return new WaitForEventFinished(selectedCellEvent, out outParams);
 
-        callback(true);
+        IsoUnity.Cell selectedCell = outParams["cell"] as IsoUnity.Cell;
+
+        Cell returnCell = new Cell((int)selectedCell.Map.getCoords(selectedCell.gameObject).x, (int)selectedCell.Map.getCoords(selectedCell.gameObject).y);
+
+        callback(returnCell, true);
     }
 
+    // Speciific class for calculate distance for character
     struct CellWithDistance {
         public IsoUnity.Cell cell;
         public float distanceFromCharacter;
@@ -98,7 +114,7 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
             this.cell = cell;
             this.distanceFromCharacter = distance;
         }
-    };
+    };   
 
     private void CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, int distanceMax, int heighMax)
     {
@@ -106,6 +122,7 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         IsoUnity.Game game = GameObject.Find("Game").GetComponent<IsoUnity.Game>();
         IsoUnityOptions isoUnityOptions = game.transform.GetComponent(typeof(IsoUnityOptions)) as IsoUnityOptions;
         IsoUnity.IsoTexture color = isoUnityOptions.moveCell;
+        IsoUnity.IsoDecoration arrow = isoUnityOptions.arrowDecoration;
         /*******************************************************/
 
         List<CellWithDistance> openList = new List<CellWithDistance>();
@@ -131,7 +148,7 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
                     {
                         if (!openList.Any(x => x.cell == neighbour))
                         {
-                            PaintCell(neighbour, color);
+                            PaintCell(neighbour, color, arrow);
                             openList.Add(new CellWithDistance(neighbour, distanceManhattanFromCharacterToNeigh));
                         }
                     }                    
@@ -140,17 +157,64 @@ public class IsoUnityConnector : MonoBehaviour/*, ITRPGMapConnector*/  {
         }
     }
 
-    private void PaintCell(IsoUnity.Cell cell, IsoTexture texture)
+    private void PaintCell(IsoUnity.Cell cell, IsoTexture texture, IsoDecoration arrow)
     {
+        showSelector(cell, arrow);
+
         cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = texture;
         cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = texture.getTexture();
         cell.forceRefresh();
     }
 
-    // Mostramos una flecha en las casillas en las que podemos realizar la acción
-    public void showSelector(Cell cell)
+    // Specific class for draw arrow in cell if is selectable
+    class SelectableCell : MonoBehaviour
     {
+        public GameEvent selectedCellEvent;
+        public IsoDecoration arrow;
+        public IsoUnity.Cell cell = null;
+        private GameObject arrowObject;        
 
+        public SelectableCell() { }
+
+        private void OnMouseOver()
+        {
+            if (cell == null)
+                cell = this.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+            else if (arrowObject == null)
+                arrowObject = cell.addDecoration(cell.transform.position + new Vector3(0, cell.WalkingHeight, 0), 0, false, true, arrow);
+        }
+
+        void OnMouseExit()
+        {
+            GameObject.Destroy(arrowObject);
+        }
+
+        private void OnMouseDown()
+        {
+            if(selectedCellEvent != null)
+                Game.main.eventFinished(selectedCellEvent, new Dictionary<string, object>
+                {
+                    {"cell", cell}
+                });
+        }
+    }
+
+    // Show an arrow in selectables cells 
+    private void showSelector(IsoUnity.Cell cell, IsoDecoration arrow)
+    {
+        cell.transform.gameObject.AddComponent<SelectableCell>().arrow = arrow;
+        cell.transform.gameObject.GetComponent<SelectableCell>().selectedCellEvent = selectedCellEvent;
+    }
+
+    // Selected cell
+    [GameEvent(true, false)]
+    public IEnumerator SelectedCell()
+    {
+        var starter = Current;
+
+        Dictionary<string, object> outParams;
+
+        yield return new WaitForEventFinished(starter, out outParams);
     }
 
     // Seleccionamos la casilla donde realizaremos la acción

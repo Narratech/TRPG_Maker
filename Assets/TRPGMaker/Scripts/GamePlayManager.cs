@@ -24,7 +24,7 @@ public class GamePlayManager : IsoUnity.EventManager
         CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
         Cell cell = new Cell(13, -10);
         Debug.Log("BIG BOY: ¡Start moving!");
-        connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
+        /*connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
         {
             Debug.Log("BIG BOY: ¡Finish moving!");
             connector.MoveCameraToCharacter(characters[0], MoveCameraToParametrizedCallback(characters[0], (character2, result2) =>
@@ -38,13 +38,31 @@ public class GamePlayManager : IsoUnity.EventManager
                 }));
 
             }));
-        }));
+        }));*/
+
+        walkableLoop(characters, connector);
+
+        /*connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
+        {
+            Debug.Log("LITTLE BOY: ¡Finish calculating distance!");
+        }));*/
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    private void walkableLoop(CharacterScript[] characters, IsoUnityConnector connector)
+    {
+        connector.ShowArea(characters[0], ShowAreaCallBackParametrizedCallback(characters[0], (character3, selectedCell, result3) =>
+        {
+            connector.MoveCharacterTo(characters[0], selectedCell, MoveCharacterToParametrizedCallback(characters[0], (character2, result2) =>
+            {
+                walkableLoop(characters, connector);
+            }));
+        }));
     }
 
     public IsoUnityConnector.MoveCharacterToCallBack MoveCharacterToParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
@@ -62,8 +80,8 @@ public class GamePlayManager : IsoUnity.EventManager
         return (result) => callback(character, result);
     }
 
-    public IsoUnityConnector.ShowAreaCallBack ShowAreaCallBackParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
+    public IsoUnityConnector.ShowAreaCallBack ShowAreaCallBackParametrizedCallback(CharacterScript character, System.Action<CharacterScript, Cell, bool> callback)
     {
-        return (result) => callback(character, result);
+        return (selectedCell, result) => callback(character, selectedCell, result);
     }
 }
