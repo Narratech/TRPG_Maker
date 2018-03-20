@@ -97,6 +97,8 @@ public class IsoUnityConnector : EventedEventManager/*, ITRPGMapConnector*/  {
         Dictionary<string, object> outParams;
         yield return new WaitForEventFinished(selectedCellEvent, out outParams);
 
+        cleanCells();
+
         IsoUnity.Cell selectedCell = outParams["cell"] as IsoUnity.Cell;
 
         Cell returnCell = new Cell((int)selectedCell.Map.getCoords(selectedCell.gameObject).x, (int)selectedCell.Map.getCoords(selectedCell.gameObject).y);
@@ -172,15 +174,14 @@ public class IsoUnityConnector : EventedEventManager/*, ITRPGMapConnector*/  {
         public GameEvent selectedCellEvent;
         public IsoDecoration arrow;
         public IsoUnity.Cell cell = null;
-        private GameObject arrowObject;        
+        public IsoTexture previousTexture;
+        public GameObject arrowObject;        
 
         public SelectableCell() { }
 
         private void OnMouseOver()
         {
-            if (cell == null)
-                cell = this.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
-            else if (arrowObject == null)
+            if (arrowObject == null)
                 arrowObject = cell.addDecoration(cell.transform.position + new Vector3(0, cell.WalkingHeight, 0), 0, false, true, arrow);
         }
 
@@ -191,7 +192,7 @@ public class IsoUnityConnector : EventedEventManager/*, ITRPGMapConnector*/  {
 
         private void OnMouseDown()
         {
-            if(selectedCellEvent != null)
+            if (selectedCellEvent != null)
                 Game.main.eventFinished(selectedCellEvent, new Dictionary<string, object>
                 {
                     {"cell", cell}
@@ -204,6 +205,33 @@ public class IsoUnityConnector : EventedEventManager/*, ITRPGMapConnector*/  {
     {
         cell.transform.gameObject.AddComponent<SelectableCell>().arrow = arrow;
         cell.transform.gameObject.GetComponent<SelectableCell>().selectedCellEvent = selectedCellEvent;
+        cell.transform.gameObject.GetComponent<SelectableCell>().previousTexture = cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping;
+        cell.transform.gameObject.GetComponent<SelectableCell>().cell = cell;
+    }
+
+    private void cleanCells()
+    {
+        SelectableCell[] selectableCells = FindObjectsOfType<SelectableCell>();
+
+        foreach (SelectableCell selectableCell in selectableCells)
+        {
+            IsoUnity.Cell cell = selectableCell.cell;
+            if (selectableCell.previousTexture != null)
+            {
+                cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = selectableCell.previousTexture;
+                cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = selectableCell.previousTexture.getTexture();
+            }
+            else
+            {
+                cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = null;
+                cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = null;
+            }
+            cell.forceRefresh();
+            if (selectableCell.arrowObject != null)
+                Destroy(selectableCell.arrowObject);
+            Destroy(selectableCell);
+        }
+
     }
 
     // Selected cell
@@ -257,8 +285,6 @@ public class IsoUnityConnector : EventedEventManager/*, ITRPGMapConnector*/  {
 
     private IEnumerator MoveCameraToCharacterAsync(CharacterScript character, MoveCameraToCallback callback)
     {
-        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
-
         var lookToEvent = new GameEvent("look to", new Dictionary<string, object>()
         {
             {"gameobject", character.transform.gameObject },

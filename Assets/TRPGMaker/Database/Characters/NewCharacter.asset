@@ -14,7 +14,14 @@ MonoBehaviour:
   name: NewCharacter
   inventory: {fileID: 0}
   Slots: []
-  attributes: []
+  attributes:
+  - name: Experience
+    id: Exp
+    description: Health points
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 1
   specializedClass: []
-  height: 0
-  distance: 0
+  height: 2
+  distance: 4

@@ -57,6 +57,8 @@ namespace IsoUnity
 
         void Start()
         {
+            base.Start();
+
             if (Camera.main == null)
             {
                 GameObject camera = new GameObject();

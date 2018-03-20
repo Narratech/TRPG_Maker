@@ -23,16 +23,16 @@ public class GamePlayManager : IsoUnity.EventManager
         IsoUnityConnector connector = (new GameObject("IsoUnityConector")).AddComponent<IsoUnityConnector>();
         CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
         Cell cell = new Cell(13, -10);
-        
+
         /*connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
         {
             Debug.Log("BIG BOY: ¡Finish moving!");
             connector.MoveCameraToCharacter(characters[0], MoveCameraToParametrizedCallback(characters[0], (character2, result2) =>
             {
 
-                Cell cell2 = new Cell(13, -9);
+                //Cell cell2 = new Cell(13, -9);
                 Debug.Log("LITTLE BOY: ¡Start calculating distance!");
-                connector.ShowArea(characters[0], ShowAreaCallBackParametrizedCallback(characters[0], (character3, result3) =>
+                /*connector.ShowArea(characters[0], ShowAreaCallBackParametrizedCallback(characters[0], (character3, result3) =>
                 {
                     Debug.Log("LITTLE BOY: ¡Finish calculating distance!");
                 }));
@@ -40,7 +40,10 @@ public class GamePlayManager : IsoUnity.EventManager
             }));
         }));*/
 
-        walkableLoop(characters, connector);
+        connector.SetCharacterPosition(characters[1], new Cell(11,-7), SetCharacterPositionParametrizedCallback(characters[1], (character, result) =>
+        {
+            walkableLoop1(characters[1], connector);
+        }));           
 
         /*connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
         {
@@ -54,13 +57,35 @@ public class GamePlayManager : IsoUnity.EventManager
 
     }
 
-    private void walkableLoop(CharacterScript[] characters, IsoUnityConnector connector)
+    private void walkableLoop1(CharacterScript character, IsoUnityConnector connector)
     {
-        connector.ShowArea(characters[0], ShowAreaCallBackParametrizedCallback(characters[0], (character3, selectedCell, result3) =>
+        connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
         {
-            connector.MoveCharacterTo(characters[0], selectedCell, MoveCharacterToParametrizedCallback(characters[0], (character2, result2) =>
+            connector.ShowArea(character, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+             {
+                 connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character2, result2) =>
+                 {
+                     // Alternate characters
+                     CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
+                     walkableLoop2(characters[0], connector);
+                 }));
+             }));
+        }));
+    }
+
+    private void walkableLoop2(CharacterScript character, IsoUnityConnector connector)
+    {
+        connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
+        {
+
+            connector.ShowArea(character, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
             {
-                walkableLoop(characters, connector);
+                connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character2, result2) =>
+                {
+                    // Alternate characters
+                    CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
+                    walkableLoop1(characters[1], connector);
+                }));
             }));
         }));
     }
