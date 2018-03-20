@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Database : ScriptableObject
 {
-    private static Database _instance = null;
+    private static Database _instance;
     public List<Attribute> attributes;
     public List<string> tags;
     public List<string> slotTypes;

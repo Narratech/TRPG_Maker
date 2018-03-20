@@ -8,13 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 169f70efb2d642342bccf93f555f7742, type: 3}
-  m_Name: Casco
+  m_Script: {fileID: 11500000, guid: a4cfe1e2b18c9494b8e22325c9a32ff7, type: 3}
+  m_Name: NewSpecializedClass(3)
   m_EditorClassIdentifier: 
-  name: Casco
-  description: Enter item description
-  tags:
-  - Casco
-  SlotType:
-  - slotsOcupped:
-    - Head
+  name: New Specialized Class (3)
+  tags: []
+  slots: []
+  attributes: []
+  formulas: []

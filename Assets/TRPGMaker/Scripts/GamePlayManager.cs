@@ -23,7 +23,7 @@ public class GamePlayManager : IsoUnity.EventManager
         IsoUnityConnector connector = (new GameObject("IsoUnityConector")).AddComponent<IsoUnityConnector>();
         CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
         Cell cell = new Cell(13, -10);
-        Debug.Log("BIG BOY: ¡Start moving!");
+        
         /*connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
         {
             Debug.Log("BIG BOY: ¡Finish moving!");

@@ -18,6 +18,13 @@ public class Character: ScriptableObject{
     public int height;
     public int distance;
 
+    public void init()
+    {
+        Slots = new List<Slot>();
+        attributes = new List<Attribute>();
+        specializedClass = new List<SpecializedClass>();
+    }
+
     public void refreshAttributes()
     {
         if (attributes == null)

@@ -113,9 +113,32 @@ class SpecializedClassWindow : LayoutWindow
 
         // On new specialized class
         listSpecializedClass.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            SpecializedClass specializedClass = (SpecializedClass)ScriptableObject.CreateInstance(typeof(SpecializedClass));
-            specializedClass.name = "New Specialized Class";
-            AssetDatabase.CreateAsset(specializedClass, "Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass.asset");
+            SpecializedClass specializedClass = (SpecializedClass)ScriptableObject.CreateInstance(typeof(SpecializedClass));            
+
+            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass.asset", typeof(SpecializedClass));
+            if (_exists == null)
+            {
+                specializedClass.name = "New Specialized Class";
+                AssetDatabase.CreateAsset(specializedClass, "Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass.asset");                
+            }
+            else
+            {
+                string[] existAssets = AssetDatabase.FindAssets("NewSpecializedClass");
+                bool seted = false;
+                int i = 0;
+                while(i <= existAssets.Length && !seted)
+                {
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass(" + (i + 1) + ").asset", typeof(SpecializedClass));
+                    if(_existsNumber == null)
+                    {
+                        specializedClass.name = "New Specialized Class (" + (i+1) + ")";
+                        AssetDatabase.CreateAsset(specializedClass, "Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass(" + (i+1) + ").asset");
+                        seted = true;
+                    }
+                    i++;
+                }                
+            }
+
             editor = Editor.CreateEditor(specializedClass);
             Database.Instance.specializedClasses.Add(specializedClass);
             listSpecializedClass.index = Database.Instance.specializedClasses.Count - 1;
@@ -126,6 +149,8 @@ class SpecializedClassWindow : LayoutWindow
         listSpecializedClass.onRemoveCallback = (ReorderableList l) => {
             var specializedClass = l.serializedProperty.GetArrayElementAtIndex(l.index).objectReferenceValue as SpecializedClass;
             removeSpecializedClass(specializedClass);
+            editor = null;
+            DrawMainView();
             DrawButton();
         };
 

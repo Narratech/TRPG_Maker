@@ -38,10 +38,18 @@ MonoBehaviour:
   - Right Hand
   - Left Hand
   items:
-  - {fileID: 11400000, guid: 533554e859f43aa43b609d9a63853ecf, type: 2}
-  - {fileID: 11400000, guid: 6cca57ca003397045a8f3f725d28fd5c, type: 2}
-  - {fileID: 11400000, guid: 32008aadd22dceb498cbcf47f5bb7cd7, type: 2}
-  - {fileID: 11400000, guid: 16929c98679e8174fba1145471865933, type: 2}
-  - {fileID: 11400000, guid: 7f887a7b31a67e748914f174da3933e6, type: 2}
+  - {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
+  - {fileID: 11400000, guid: 242d1289cf2bba54c88d032eafa8eec4, type: 2}
+  - {fileID: 11400000, guid: f6b6622b87c152f4599e44b22cdddc5a, type: 2}
+  - {fileID: 11400000, guid: a06817ff9fca9d14b9df2b85c4fd2c2e, type: 2}
   specializedClasses:
-  - {fileID: 11400000, guid: 8d38410e8c7cb4a12839501c393e1343, type: 2}
+  - {fileID: 11400000, guid: 684c928e26a3b364c9cc9cff30e18082, type: 2}
+  - {fileID: 11400000, guid: 57e9761131c2f2e4b8cb713783bbfca6, type: 2}
+  - {fileID: 11400000, guid: 5a130b73ed10dc547995fc0a2bdb7831, type: 2}
+  - {fileID: 11400000, guid: 142ad94ba0bd4344c87becbe3ad5fb6f, type: 2}
+  characters:
+  - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
+  - {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
+  - {fileID: 11400000, guid: caa5b8cc4b5205b4297289922d3b7e33, type: 2}
+  - {fileID: 11400000, guid: 3eca2b4789a5bc44abd112d60d4af688, type: 2}
+  - {fileID: 11400000, guid: 2ce6ded48f42c8e46b99a9a665a8efda, type: 2}

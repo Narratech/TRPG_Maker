@@ -112,8 +112,31 @@ class ItemWindow : LayoutWindow
         // On new item
         listItems.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
             Item item = (Item)ScriptableObject.CreateInstance(typeof(Item));
-            item.name = "New Item";
-            AssetDatabase.CreateAsset(item, "Assets/TRPGMaker/Database/Items/NewItem.asset");
+
+            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Items/New Item.asset", typeof(Item));
+            if (_exists == null)
+            {
+                item.name = "New Item";
+                AssetDatabase.CreateAsset(item, "Assets/TRPGMaker/Database/Items/New Item.asset");
+            }
+            else
+            {
+                string[] existAssets = AssetDatabase.FindAssets("New Item");
+                bool seted = false;
+                int i = 0;
+                while (i <= existAssets.Length && !seted)
+                {
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Items/New Item(" + (i + 1) + ").asset", typeof(Item));
+                    if (_existsNumber == null)
+                    {
+                        item.name = "New Item(" + (i + 1) + ")";
+                        AssetDatabase.CreateAsset(item, "Assets/TRPGMaker/Database/Items/New Item(" + (i + 1) + ").asset");
+                        seted = true;
+                    }
+                    i++;
+                }
+            }
+
             editor = Editor.CreateEditor(item);
             Database.Instance.items.Add(item);
             listItems.index = Database.Instance.items.Count - 1;
@@ -124,6 +147,8 @@ class ItemWindow : LayoutWindow
         listItems.onRemoveCallback = (ReorderableList l) => {
             var item = l.serializedProperty.GetArrayElementAtIndex(l.index).objectReferenceValue as Item;
             removeItem(item);
+            editor = null;
+            DrawMainView();
             DrawButton();
         };
 

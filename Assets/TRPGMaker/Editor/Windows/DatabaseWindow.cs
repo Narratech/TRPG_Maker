@@ -157,4 +157,11 @@ class DatabaseWindow : EditorWindow
             menuOption = MenuOptions.CHARACTERS;
         } 
     }
+
+    private void OnDestroy()
+    {
+        AssetDatabase.Refresh();
+        EditorUtility.SetDirty(Database.Instance);
+        AssetDatabase.Refresh();
+    }
 }

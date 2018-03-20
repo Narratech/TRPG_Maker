@@ -11,10 +11,6 @@ public class CharacterWindow : LayoutWindow
 
     public override void Init()
     {
-        /* TO CLEAN DATABASE
-        Database.Instance.characters = new List<Character>();
-        */
-
         createButtonReorderableList();
     }
 
@@ -117,12 +113,33 @@ public class CharacterWindow : LayoutWindow
 
         // On new character
         listCharacters.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            Character character = (Character)ScriptableObject.CreateInstance(typeof(Character));
-            character.name = "NewCharacter";
-            character.Slots = new List<Slot>();
-            character.attributes = new List<Attribute>();
-            character.specializedClass = new List<SpecializedClass>();
-            AssetDatabase.CreateAsset(character, "Assets/TRPGMaker/Database/Characters/NewCharacter.asset");
+            Character character = (Character)ScriptableObject.CreateInstance(typeof(Character));            
+            character.init();
+
+            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Characters/NewCharacter.asset", typeof(Character));
+            if (_exists == null)
+            {
+                character.name = "NewCharacter";
+                AssetDatabase.CreateAsset(character, "Assets/TRPGMaker/Database/Characters/NewCharacter.asset");
+            }
+            else
+            {
+                string[] existAssets = AssetDatabase.FindAssets("NewCharacter");
+                bool seted = false;
+                int i = 0;
+                while (i <= existAssets.Length && !seted)
+                {
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Characters/NewCharacter(" + (i + 1) + ").asset", typeof(Character));
+                    if (_existsNumber == null)
+                    {
+                        character.name = "NewCharacter(" + (i + 1) + ")";
+                        AssetDatabase.CreateAsset(character, "Assets/TRPGMaker/Database/Characters/NewCharacter(" + (i + 1) + ").asset");
+                        seted = true;
+                    }
+                    i++;
+                }
+            }
+            
             editor = Editor.CreateEditor(character);
             Database.Instance.characters.Add(character);
             listCharacters.index = Database.Instance.characters.Count - 1;
@@ -133,6 +150,8 @@ public class CharacterWindow : LayoutWindow
         listCharacters.onRemoveCallback = (ReorderableList l) => {
             var character = l.serializedProperty.GetArrayElementAtIndex(l.index).objectReferenceValue as Character;
             removeCharacter(character);
+            editor = null;
+            DrawMainView();
             DrawButton();
         };
 
