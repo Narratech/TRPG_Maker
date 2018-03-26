@@ -31202,6 +31202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveCell: {fileID: 11400000, guid: 1285aa62ffa004945b03dfbda9cf0afd, type: 2}
+  attackCell: {fileID: 11400000, guid: e7bd64f3e7f95d54289deccf42920283, type: 2}
   arrowDecoration: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
 --- !u!43 &771847860
 Mesh:
@@ -45882,7 +45883,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
       propertyPath: walkable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}

@@ -26,6 +26,27 @@ MonoBehaviour:
     minValue: 0
     value: 0
     isCore: 0
+  - name: Health
+    id: HP
+    description: 
+    maxValue: 100
+    minValue: 0
+    value: 100
+    isCore: 1
+  - name: asd
+    id: 
+    description: 
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 1
+  - name: ddddd
+    id: 
+    description: 
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 1
   tags:
   - Espada
   - Mandoble

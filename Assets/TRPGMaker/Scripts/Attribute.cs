@@ -4,16 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Attribute{
+public class Attribute : ICloneable
+{
 
     // Defined in editor
+    [SerializeField]
     public string name;  // Long identifier
+    [SerializeField]
     public string id;  // Three letters identifier      
+    [SerializeField]
     public string description;
+    [SerializeField]
     public int maxValue;
+    [SerializeField]
     public int minValue;
     // Defined in game (now just default values)
+    [SerializeField]
     public int value;
+    [SerializeField]
     public bool isCore;  // 'true' if is a basic or core attribute    
 
     public Attribute(string name, string id, string description, int maxValue, int minValue, int value, bool isCore)
@@ -27,6 +35,11 @@ public class Attribute{
         this.maxValue = maxValue;
         // Defined in game (now just defalut values)
         this.value = value;
+    }
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
     }
 
     protected bool Equals(Attribute other)

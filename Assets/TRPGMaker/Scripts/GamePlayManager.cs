@@ -40,10 +40,10 @@ public class GamePlayManager : IsoUnity.EventManager
             }));
         }));*/
 
-        connector.SetCharacterPosition(characters[1], new Cell(11,-7), SetCharacterPositionParametrizedCallback(characters[1], (character, result) =>
-        {
+        //connector.SetCharacterPosition(characters[1], new Cell(11,-7), SetCharacterPositionParametrizedCallback(characters[1], (character, result) =>
+        //{
             walkableLoop1(characters[1], connector);
-        }));           
+        //}));           
 
         /*connector.MoveCharacterTo(characters[1], cell, MoveCharacterToParametrizedCallback(characters[1], (character, result) =>
         {
@@ -61,12 +61,13 @@ public class GamePlayManager : IsoUnity.EventManager
     {
         connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
         {
-            connector.ShowArea(character, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+            connector.ShowArea(character, EventTypes.MOVE, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
              {
-                 connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character2, result2) =>
+                 connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character5, resul5t) =>
                  {
                      // Alternate characters
                      CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
+                     characters[0].character.attributes.Find(x => x.id == "HP").value = 50;
                      walkableLoop2(characters[0], connector);
                  }));
              }));
@@ -78,14 +79,11 @@ public class GamePlayManager : IsoUnity.EventManager
         connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
         {
 
-            connector.ShowArea(character, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+            connector.ShowArea(character, EventTypes.ATTACK, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
             {
-                connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character2, result2) =>
-                {
-                    // Alternate characters
-                    CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
-                    walkableLoop1(characters[1], connector);
-                }));
+                CharacterScript[] characters = IsoUnity.Map.FindObjectsOfType<CharacterScript>();
+                characters[1].character.attributes.Find(x => x.id == "HP").value = 50;
+                walkableLoop1(characters[1], connector);
             }));
         }));
     }

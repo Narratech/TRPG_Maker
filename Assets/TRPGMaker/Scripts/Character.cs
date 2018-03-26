@@ -10,12 +10,19 @@ using UnityEngine;
 public class Character: ScriptableObject{
 
     //public ... image/texture
+    [SerializeField]
     public string name;
+    [SerializeField]
     public Inventory inventory;
+    [SerializeField]
     public List<Slot> Slots;
+    [SerializeField]
     public List<Attribute> attributes = null;
+    [SerializeField]
     public List<SpecializedClass> specializedClass;
+    [SerializeField]
     public int height;
+    [SerializeField]
     public int distance;
 
     public void init()
@@ -28,13 +35,13 @@ public class Character: ScriptableObject{
     public void refreshAttributes()
     {
         if (attributes == null)
-            attributes = Database.Instance.attributes.Where(x => x.isCore).ToList();
+            attributes = Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => x.isCore).ToList()).ToList();
         else
         {
             List<Attribute> aux = new List<Attribute>();
-            aux = attributes.Where(x => !x.isCore && Database.Instance.attributes.Contains(x)).ToList();
+            aux = Extensions.Clone<Attribute>(attributes.Where(x => !x.isCore && Database.Instance.attributes.Contains(x)).ToList()).ToList();
             attributes = new List<Attribute>();
-            attributes.AddRange(Database.Instance.attributes.Where(x => x.isCore).ToList());
+            attributes.AddRange(Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => x.isCore).ToList()));
             attributes.AddRange(aux);
         }
     }
