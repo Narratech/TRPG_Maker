@@ -6059,7 +6059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
+  character: {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
 --- !u!114 &175549501
 MonoBehaviour:
   m_ObjectHideFlags: 0

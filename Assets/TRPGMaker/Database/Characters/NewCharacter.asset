@@ -25,7 +25,7 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 100
+    maxValue: 200
     minValue: 0
     value: 50
     isCore: 1
@@ -46,3 +46,4 @@ MonoBehaviour:
   specializedClass: []
   height: 2
   distance: 8
+  attackRange: 3

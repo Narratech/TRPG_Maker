@@ -29,9 +29,9 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 100
+    maxValue: 200
     minValue: 0
-    value: 100
+    value: 200
     isCore: 1
   - name: asd
     id: 
@@ -72,5 +72,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
   - {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
   - {fileID: 11400000, guid: caa5b8cc4b5205b4297289922d3b7e33, type: 2}
-  - {fileID: 11400000, guid: 3eca2b4789a5bc44abd112d60d4af688, type: 2}
   - {fileID: 11400000, guid: 2ce6ded48f42c8e46b99a9a665a8efda, type: 2}
+  - {fileID: 11400000, guid: 3eca2b4789a5bc44abd112d60d4af688, type: 2}

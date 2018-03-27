@@ -5,13 +5,11 @@ using IsoUnity;
 using IsoUnity.Entities;
 using System.Linq;
 
-public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
+public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
     private GameEvent selectedCellEvent;
 
-    // Teleport Character to Cell position
-    public delegate void SetCharacterPositionCallBack(bool result);
-
+    // Teleport Character to Cell position   
     public void SetCharacterPosition(CharacterScript character, Cell cell, SetCharacterPositionCallBack callback)
     {
         StartCoroutine(SetCharacterPositionAsync(character, cell, callback));
@@ -38,8 +36,6 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
     }
 
     // Move Character to Cell position
-    public delegate void MoveCharacterToCallBack(bool result);
-
     public void MoveCharacterTo(CharacterScript character, Cell cell, MoveCharacterToCallBack callback /*, caracteristicas*/)
     {
         StartCoroutine(MoveCharacterToAsync(character, cell, callback));
@@ -69,8 +65,6 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
     }
 
     // Show calculated area with the character distance requirement
-    public delegate void ShowAreaCallBack(Cell selectedCell, bool result);
-
     public void ShowArea(CharacterScript character, EventTypes eventType, ShowAreaCallBack callback)
     {
         StartCoroutine(ShowAreaAsync(character, eventType, callback));
@@ -92,7 +86,10 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
 
         Game.main.enqueueEvent(selectedCellEvent);
 
-        CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.distance, character.character.height);
+        if(eventType == EventTypes.MOVE)
+            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.distance, character.character.height);
+        else if (eventType == EventTypes.ATTACK)
+            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attackRange, int.MaxValue);
 
         Dictionary<string, object> outParams;
         yield return new WaitForEventFinished(selectedCellEvent, out outParams);
@@ -230,15 +227,15 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
     // Show an arrow in selectables cells 
     private void showSelector(IsoUnity.Cell cell, EventTypes eventType, IsoDecoration arrow)
     {
-        cell.transform.gameObject.AddComponent<SelectableCell>().arrow = arrow;
-        SelectableCell selectableCell = cell.transform.gameObject.GetComponent<SelectableCell>();
+        SelectableCell selectableCell = cell.transform.gameObject.AddComponent<SelectableCell>();
+        selectableCell.arrow = arrow;
         selectableCell.selectedCellEvent = selectedCellEvent;
         selectableCell.previousTexture = cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping;
         selectableCell.cell = cell;
         selectableCell.eventType = eventType;
     }
 
-    private void cleanCells()
+    public void cleanCells()
     {
         SelectableCell[] selectableCells = FindObjectsOfType<SelectableCell>();
 
@@ -258,7 +255,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
             cell.forceRefresh();
             if (selectableCell.arrowObject != null)
                 Destroy(selectableCell.arrowObject);
-            Destroy(selectableCell);
+            Destroy(selectableCell);            
         }
 
     }
@@ -272,16 +269,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
         Dictionary<string, object> outParams;
 
         yield return new WaitForEventFinished(starter, out outParams);
-    }
-
-    // Seleccionamos la casilla donde realizaremos la acción
-    //ACTION TYPE, da errores
-    /*public void selectCell(ActionType actionType)
-    {
-
-    }*/
-
-    
+    }    
 
     // Calculamos las celdas a las que afectará un ataque
     // en función de su trayectoria
@@ -298,15 +286,17 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector  {
 
     }
 
-    // Obtener el character que se encuentra en una posicion
-    private CharacterScript getCharacterAtCell(IsoUnity.Cell cell)
+    // Get character at selected cell
+    public CharacterScript GetCharacterAtCell(Cell cell)
     {
-        return null; // Si no hay nadie en esa casilla
+        IsoUnity.Cell selectedCell = SearchCellInMap(cell);
+
+        CharacterScript character = selectedCell.transform.GetComponentInChildren<CharacterScript>();
+
+        return character; 
     }
 
     // Camera look to Character
-    public delegate void MoveCameraToCallback(bool result);
-
     public void MoveCameraToCharacter(CharacterScript character, MoveCameraToCallback callback)
     {
         StartCoroutine(MoveCameraToCharacterAsync(character, callback));

@@ -24,6 +24,7 @@ public class Character: ScriptableObject{
     public int height;
     [SerializeField]
     public int distance;
+    public int attackRange;
 
     public void init()
     {
