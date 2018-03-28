@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
-  m_Name: NewCharacter(2)
+  m_Name: NewCharacter(5)
   m_EditorClassIdentifier: 
-  name: NewCharacter(2)
+  name: NewCharacter(5)
   inventory: {fileID: 0}
   Slots: []
   attributes: []

@@ -18,3 +18,4 @@ MonoBehaviour:
   specializedClass: []
   height: 0
   distance: 0
+  attackRange: 0

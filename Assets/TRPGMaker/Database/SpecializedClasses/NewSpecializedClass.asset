@@ -14,5 +14,19 @@ MonoBehaviour:
   name: New Specialized Class
   tags: []
   slots: []
-  attributes: []
+  attributes:
+  - name: Experience
+    id: Exp
+    description: Health points
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 1
+  - name: Health
+    id: HP
+    description: 
+    maxValue: 22
+    minValue: 0
+    value: 22
+    isCore: 1
   formulas: []

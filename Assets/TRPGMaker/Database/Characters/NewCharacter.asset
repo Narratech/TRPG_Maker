@@ -13,7 +13,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: NewCharacter
   inventory: {fileID: 0}
-  Slots: []
+  Slots:
+  - slotType: 
+    modifier: {fileID: 0}
+  - slotType: 
+    modifier: {fileID: 0}
+  - slotType: 
+    modifier: {fileID: 0}
+  - slotType: 
+    modifier: {fileID: 0}
+  - slotType: 
+    modifier: {fileID: 0}
+  - slotType: 
+    modifier: {fileID: 0}
   attributes:
   - name: Experience
     id: Exp
@@ -25,25 +37,11 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 200
+    maxValue: 4
     minValue: 0
-    value: 50
-    isCore: 1
-  - name: asd
-    id: 
-    description: 
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 1
-  - name: ddddd
-    id: 
-    description: 
-    maxValue: 0
-    minValue: 0
-    value: 0
+    value: 4
     isCore: 1
   specializedClass: []
-  height: 2
-  distance: 8
-  attackRange: 3
+  height: 0
+  distance: 0
+  attackRange: 0

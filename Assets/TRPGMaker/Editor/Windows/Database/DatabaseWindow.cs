@@ -20,7 +20,7 @@ class DatabaseWindow : EditorWindow
     private LayoutWindow specilizedWindow;
     private LayoutWindow characterWindow;
 
-    [MenuItem("TRPGMaker/Database editor")]
+    [MenuItem("TRPGMaker/Database editor", false, 0)]
     public static void ShowWindow()
     {
         EditorWindow.GetWindow(typeof(DatabaseWindow), false, "Database Editor");        

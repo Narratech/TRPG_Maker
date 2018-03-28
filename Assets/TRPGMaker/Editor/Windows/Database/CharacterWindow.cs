@@ -8,6 +8,7 @@ public class CharacterWindow : LayoutWindow
 {
     private ReorderableList listCharacters;
     private Editor buttonEditor;
+    private Vector2 scrollPosition;
 
     public override void Init()
     {
@@ -35,6 +36,9 @@ public class CharacterWindow : LayoutWindow
         GUIStyle gsLineOdd = new GUIStyle();
         gsLineOdd.normal.background = MakeTextureColor.MakeTexture(600, 1, new Color(0.5f, 0.5f, 0.5f, 0.0f));
 
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
         for (int i = 0; i < Database.Instance.characters.Count; i++)
         {
             Character character = Database.Instance.characters[i];
@@ -57,6 +61,8 @@ public class CharacterWindow : LayoutWindow
             GUILayout.EndHorizontal();
         }
 
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
     }
 
     public override bool Button(Rect rect)

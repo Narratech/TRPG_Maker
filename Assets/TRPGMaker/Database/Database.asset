@@ -29,23 +29,9 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 200
+    maxValue: 400
     minValue: 0
-    value: 200
-    isCore: 1
-  - name: asd
-    id: 
-    description: 
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 1
-  - name: ddddd
-    id: 
-    description: 
-    maxValue: 0
-    minValue: 0
-    value: 0
+    value: 400
     isCore: 1
   tags:
   - Espada
@@ -68,9 +54,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 57e9761131c2f2e4b8cb713783bbfca6, type: 2}
   - {fileID: 11400000, guid: 5a130b73ed10dc547995fc0a2bdb7831, type: 2}
   - {fileID: 11400000, guid: 142ad94ba0bd4344c87becbe3ad5fb6f, type: 2}
+  - {fileID: 11400000, guid: 06cf66b3a4c86414e97e34dc48960713, type: 2}
+  - {fileID: 11400000, guid: 6f3dd99104fd0b3438870b9989c8700c, type: 2}
+  - {fileID: 11400000, guid: ca16a4926dfe7684c977bb2d1daa201c, type: 2}
+  - {fileID: 11400000, guid: d88038761a673534c9e16084ea9d7f58, type: 2}
   characters:
   - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
   - {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
   - {fileID: 11400000, guid: caa5b8cc4b5205b4297289922d3b7e33, type: 2}
-  - {fileID: 11400000, guid: 2ce6ded48f42c8e46b99a9a665a8efda, type: 2}
   - {fileID: 11400000, guid: 3eca2b4789a5bc44abd112d60d4af688, type: 2}
+  - {fileID: 11400000, guid: 2ce6ded48f42c8e46b99a9a665a8efda, type: 2}
+  - {fileID: 11400000, guid: 75942776545ea02418c221a9273f406b, type: 2}
+  - {fileID: 11400000, guid: 496024b31fb8d604ba8b12317f0d4762, type: 2}
+  - {fileID: 11400000, guid: bac31a58c9f786c4a9d5b67034ba5482, type: 2}

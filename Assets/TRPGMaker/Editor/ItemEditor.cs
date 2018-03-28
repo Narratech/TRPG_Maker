@@ -16,6 +16,9 @@ public class ItemEditor : Editor
     private string lastTag;
     int lastCursorPos = 0;
 
+
+    private Vector2 scrollPosition;
+
     void Init()
     {
         dropDown = new DropDown("Tags:");
@@ -36,6 +39,9 @@ public class ItemEditor : Editor
         customStyle.alignment = TextAnchor.UpperCenter;
         customStyle.fontSize = 17;
         GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Editing \"" + item.name + "\" item:", customStyle);
+
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
@@ -136,6 +142,9 @@ public class ItemEditor : Editor
                 //GUI.FocusControl("Tags:");
             }
         }
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
     }
 
     void dropDownSearch()

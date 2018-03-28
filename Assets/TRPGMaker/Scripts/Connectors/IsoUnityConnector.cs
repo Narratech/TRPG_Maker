@@ -118,8 +118,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
     private void CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, EventTypes eventType, int distanceMax, int heighMax)
     {
         /************ This would be changed! ********************/
-        IsoUnity.Game game = GameObject.Find("Game").GetComponent<IsoUnity.Game>();
-        IsoUnityOptions isoUnityOptions = game.transform.GetComponent(typeof(IsoUnityOptions)) as IsoUnityOptions;
+        IsoUnityOptions isoUnityOptions = GameObject.Find("IsoUnityOptions").GetComponent(typeof(IsoUnityOptions)) as IsoUnityOptions;
         IsoUnity.IsoTexture colorMove = isoUnityOptions.moveCell;
         IsoUnity.IsoTexture colorAttack = isoUnityOptions.attackCell;
         IsoUnity.IsoDecoration arrow = isoUnityOptions.arrowDecoration;

@@ -16,18 +16,24 @@ public class SpecializedClass : ScriptableObject
     public List<Attribute> attributes = null;
     public List<Formula> formulas;
 
+    public void Init()
+    {
+        tags = new List<string>();
+        slots = new List<Slot>();
+        formulas = new List<Formula>();
+    }
+
     // Por si se han añadido nuevos atributos CORE a Database
     public void refreshAttributes()
     {
         if (attributes == null)
-            attributes = Database.Instance.attributes.Where(x => x.isCore).ToList();
+            attributes = Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => x.isCore).ToList()).ToList();
         else
         {
+            attributes.AddRange(Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => !attributes.Any(y => y.id == x.id) && x.isCore).ToList()));
             List<Attribute> aux = new List<Attribute>();
-            aux = attributes.Where(x => !x.isCore && Database.Instance.attributes.Contains(x)).ToList();
-            attributes = new List<Attribute>();
-            attributes.AddRange(Database.Instance.attributes.Where(x => x.isCore).ToList());
-            attributes.AddRange(aux);
+            aux.AddRange(attributes.Where(x => Database.Instance.attributes.Any(y => y.id == x.id)));
+            attributes = aux;
         }
     }
 

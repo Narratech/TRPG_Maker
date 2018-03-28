@@ -29,7 +29,6 @@ public class Character: ScriptableObject{
     public void init()
     {
         Slots = new List<Slot>();
-        attributes = new List<Attribute>();
         specializedClass = new List<SpecializedClass>();
     }
 
@@ -39,11 +38,10 @@ public class Character: ScriptableObject{
             attributes = Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => x.isCore).ToList()).ToList();
         else
         {
+            attributes.AddRange(Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => !attributes.Any(y => y.id == x.id) && x.isCore).ToList()));
             List<Attribute> aux = new List<Attribute>();
-            aux = Extensions.Clone<Attribute>(attributes.Where(x => !x.isCore && Database.Instance.attributes.Contains(x)).ToList()).ToList();
-            attributes = new List<Attribute>();
-            attributes.AddRange(Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => x.isCore).ToList()));
-            attributes.AddRange(aux);
+            aux.AddRange(attributes.Where(x => Database.Instance.attributes.Any(y => y.id == x.id)));
+            attributes = aux;
         }
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 public class SlotTypeWindow : LayoutWindow
 {
 	private ReorderableList listSlotTypes;
+    private Vector2 scrollPosition;
 
     public override void Init()
     {
@@ -24,9 +25,15 @@ public class SlotTypeWindow : LayoutWindow
             "\n - Edit a slot type name." +
 			"\n - Remove any slot type selecting it and clicking on the \"-\" symbol.", MessageType.Info);
 
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
         listSlotTypes.DoLayoutList();
 
         GUILayout.EndVertical();
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
 
         editor.serializedObject.ApplyModifiedProperties();
     }

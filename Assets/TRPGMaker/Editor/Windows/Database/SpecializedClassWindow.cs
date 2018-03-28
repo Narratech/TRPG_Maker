@@ -8,6 +8,7 @@ class SpecializedClassWindow : LayoutWindow
 {
     private ReorderableList listSpecializedClass;
     private Editor buttonEditor;
+    private Vector2 scrollPosition;
 
     public override void Init()
     {
@@ -35,6 +36,9 @@ class SpecializedClassWindow : LayoutWindow
         GUIStyle gsLineOdd = new GUIStyle();
         gsLineOdd.normal.background = MakeTextureColor.MakeTexture(600, 1, new Color(0.5f, 0.5f, 0.5f, 0.0f));
 
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
         for (int i = 0; i < Database.Instance.specializedClasses.Count; i++)
         {
             SpecializedClass specializedClass = Database.Instance.specializedClasses[i];
@@ -57,6 +61,8 @@ class SpecializedClassWindow : LayoutWindow
             GUILayout.EndHorizontal();
         }
 
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
     }
 
     public override bool Button(Rect rect)
@@ -113,7 +119,8 @@ class SpecializedClassWindow : LayoutWindow
 
         // On new specialized class
         listSpecializedClass.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            SpecializedClass specializedClass = (SpecializedClass)ScriptableObject.CreateInstance(typeof(SpecializedClass));            
+            SpecializedClass specializedClass = (SpecializedClass)ScriptableObject.CreateInstance(typeof(SpecializedClass));
+            specializedClass.Init();
 
             var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass.asset", typeof(SpecializedClass));
             if (_exists == null)

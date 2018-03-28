@@ -14,4 +14,6 @@ MonoBehaviour:
   name: New Item(1)
   description: Enter item description
   tags: []
-  SlotType: []
+  SlotType:
+  - slotsOcupped:
+    - Head

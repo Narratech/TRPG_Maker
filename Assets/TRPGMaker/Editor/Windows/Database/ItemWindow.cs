@@ -8,6 +8,7 @@ class ItemWindow : LayoutWindow
 {
     private ReorderableList listItems;
     private Editor buttonEditor;
+    private Vector2 scrollPosition;
 
     public override void Init()
     {
@@ -28,6 +29,9 @@ class ItemWindow : LayoutWindow
         customStyle.alignment = TextAnchor.UpperCenter;
         customStyle.fontSize = 17;
         GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "List of items:", customStyle);
+
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         // Create color for each line
         GUIStyle gsLinePair = new GUIStyle();
@@ -54,7 +58,10 @@ class ItemWindow : LayoutWindow
             }
             GUILayout.EndHorizontal();
         }
-        
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
+
     }
 
     public override bool Button(Rect rect)

@@ -14,6 +14,8 @@ public class SpecializedClassEditor : Editor {
     private ReorderableList listFormulas;
     private SpecializedClass specializedClass;
 
+    private Vector2 scrollPosition;
+
     // Get attributes SpecialClass
     List<Attribute> attributes;
     private string[] attributesStringArray;
@@ -90,12 +92,21 @@ public class SpecializedClassEditor : Editor {
 
         // Draw attributes
         listAttributes.drawElementCallback =
-            (Rect rect, int index, bool isActive, bool isFocused) => {
-                rect.y += 2;
-                EditorGUI.LabelField(
-                    new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
-                    attributes[index].name);
-            };
+             (Rect rectL, int index, bool isActive, bool isFocused) => {
+                 var element = listAttributes.serializedProperty.GetArrayElementAtIndex(index);
+                 rectL.y += 2;
+
+                 if (element.propertyType == SerializedPropertyType.Generic)
+                 {
+                     EditorGUI.LabelField(new Rect(rectL.x + 15, rectL.y, rectL.width, rectL.height), element.displayName);
+                 }
+                 rectL.height = EditorGUI.GetPropertyHeight(element, GUIContent.none, true);
+                 rectL.y += 1;
+                 EditorGUI.PropertyField(rectL, element, GUIContent.none, true);
+                 listAttributes.elementHeight = rectL.height + 4.0f;
+             };
+
+        listAttributes.elementHeightCallback += (idx) => { return Mathf.Max(EditorGUIUtility.singleLineHeight, EditorGUI.GetPropertyHeight(listAttributes.serializedProperty.GetArrayElementAtIndex(idx), GUIContent.none, true)) + 4.0f; };
 
         // Draw formulas
         listFormulas.drawElementCallback =
@@ -192,6 +203,9 @@ public class SpecializedClassEditor : Editor {
         customStyle.fontSize = 17;
         GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Editing \"" + specializedClass.name +  "\" specialized class:", customStyle);
 
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
         if (EditorGUI.EndChangeCheck())
@@ -204,6 +218,9 @@ public class SpecializedClassEditor : Editor {
         listAttributes.DoLayoutList();
         listFormulas.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
     }
 
 	private void clickHandlerAttributes(object target)

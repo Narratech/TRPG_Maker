@@ -7,6 +7,7 @@ using UnityEngine;
 public class AttributesWindow : LayoutWindow
 {
     private ReorderableList listAttributes;
+    private Vector2 scrollPosition;
 
     public override void Init()
     {
@@ -24,9 +25,15 @@ public class AttributesWindow : LayoutWindow
             "\n - Edit an attribute expanding with the arrow and changing any value." +
             "\n - Remove any attribute selecting it and clicking on the \"-\" symbol or right-click on it and select \"Delete array element.\"", MessageType.Info);
 
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
         listAttributes.DoLayoutList();
 
         GUILayout.EndVertical();
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
 
         editor.serializedObject.ApplyModifiedProperties();
     }

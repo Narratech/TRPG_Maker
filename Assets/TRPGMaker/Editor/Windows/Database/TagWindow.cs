@@ -7,6 +7,7 @@ using UnityEngine;
 public class TagWindow : LayoutWindow
 {
 	private ReorderableList listTags;
+    private Vector2 scrollPosition;
 
     public override void Init()
     {
@@ -24,9 +25,15 @@ public class TagWindow : LayoutWindow
             "\n - Edit a tag name." +
 			"\n - Remove any tag selecting it and clicking on the \"-\" symbol.", MessageType.Info);
 
+        EditorGUILayout.BeginVertical();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
         listTags.DoLayoutList();
 
         GUILayout.EndVertical();
+
+        EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
 
         editor.serializedObject.ApplyModifiedProperties();
     }
