@@ -13,6 +13,7 @@ public class Database : ScriptableObject
     public List<Modifier> items;
     public List<SpecializedClass> specializedClasses;
     public List<Character> characters;
+    public List<Team> teams;
 
     public Database()
     {

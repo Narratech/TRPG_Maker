@@ -67,3 +67,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75942776545ea02418c221a9273f406b, type: 2}
   - {fileID: 11400000, guid: 496024b31fb8d604ba8b12317f0d4762, type: 2}
   - {fileID: 11400000, guid: bac31a58c9f786c4a9d5b67034ba5482, type: 2}
+  teams:
+  - {fileID: 11400000, guid: c7870a66a01c2a54e90fa9d468b19807, type: 2}

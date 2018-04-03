@@ -19,6 +19,7 @@ class DatabaseWindow : EditorWindow
     private LayoutWindow itemWindow;
     private LayoutWindow specilizedWindow;
     private LayoutWindow characterWindow;
+    private LayoutWindow teamsWindow;
 
     [MenuItem("TRPGMaker/Database editor", false, 0)]
     public static void ShowWindow()
@@ -39,7 +40,8 @@ class DatabaseWindow : EditorWindow
         SLOT_TYPE,
         ITEMS,
         SPECIALIZED_CLASS,
-        CHARACTERS
+        CHARACTERS,
+        TEAMS
     };
 
     public void createMenuLayouts()
@@ -64,6 +66,9 @@ class DatabaseWindow : EditorWindow
 
         characterWindow = (CharacterWindow)ScriptableObject.CreateInstance(typeof(CharacterWindow));
         characterWindow.Init();
+
+        teamsWindow = (TeamsWindow)ScriptableObject.CreateInstance(typeof(TeamsWindow));
+        teamsWindow.Init();
     }
 
         void OnGUI()
@@ -104,6 +109,9 @@ class DatabaseWindow : EditorWindow
                 break;
             case MenuOptions.CHARACTERS:
                 rightWindow = characterWindow;
+                break;
+            case MenuOptions.TEAMS:
+                rightWindow = teamsWindow;
                 break;
             default:
                 break;
@@ -155,7 +163,13 @@ class DatabaseWindow : EditorWindow
             if (menuOption != MenuOptions.CHARACTERS)
                 rightWindow.selected = false;
             menuOption = MenuOptions.CHARACTERS;
-        } 
+        }
+        if (teamsWindow.Button(windowArea))
+        {
+            if (menuOption != MenuOptions.TEAMS)
+                rightWindow.selected = false;
+            menuOption = MenuOptions.TEAMS;
+        }
     }
 
     private void OnDestroy()
