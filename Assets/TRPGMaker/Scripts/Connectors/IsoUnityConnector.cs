@@ -4,10 +4,50 @@ using UnityEngine;
 using IsoUnity;
 using IsoUnity.Entities;
 using System.Linq;
+using System;
 
 public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
     private GameEvent selectedCellEvent;
+    private IsoUnity.IsoTexture colorMove;
+    private IsoUnity.IsoTexture colorAttack;
+    private IsoUnity.IsoDecoration arrow;
+
+    private Attribute health;
+    private Attribute moveRange;
+    private Attribute moveHeight;
+    private Attribute attackRange;
+    private Attribute attackHeight;
+
+    void Start()
+    {
+        // Get IsoUnityOptions
+        try
+        {
+            IsoUnityOptions isoUnityOptions = GameObject.Find("Game").GetComponent(typeof(IsoUnityOptions)) as IsoUnityOptions;
+            colorMove = isoUnityOptions.moveCell;
+            colorAttack = isoUnityOptions.attackCell;
+            arrow = isoUnityOptions.arrowDecoration;
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log("IsoUnityConnector values are not properly defined");
+        }
+
+        // Get TRPGOptions
+        try
+        {
+            health = Database.Instance.battleOptions.healthAttribute;
+            moveHeight = Database.Instance.battleOptions.moveHeight;
+            moveRange = Database.Instance.battleOptions.moveRange;
+            attackHeight = Database.Instance.battleOptions.attackHeight;
+            attackRange = Database.Instance.battleOptions.attackRange;
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log("TRPGOptions in Battle Options values are not properly defined");
+        }
+    }
 
     // Teleport Character to Cell position   
     public void SetCharacterPosition(CharacterScript character, Cell cell, SetCharacterPositionCallBack callback)
@@ -77,7 +117,13 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
 
-        entity.mover.maxJumpSize = character.character.height;
+        try
+        {
+            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.id == moveHeight.id).value;
+        } catch (NullReferenceException e)
+        {
+            Debug.Log("Character '"+ character.character.name + "' doesn't have attribute '" + moveHeight.name +  "'");
+        }
 
         selectedCellEvent = new GameEvent("selected cell", new Dictionary<string, object>()
             {
@@ -86,10 +132,17 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         Game.main.enqueueEvent(selectedCellEvent);
 
-        if(eventType == EventTypes.MOVE)
-            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.distance, character.character.height);
+        try
+        {
+            if (eventType == EventTypes.MOVE)
+            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.id == moveRange.id).value, character.character.attributes.Find(x => x.id == moveHeight.id).value);
         else if (eventType == EventTypes.ATTACK)
-            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attackRange, int.MaxValue);
+            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.id == attackRange.id).value, int.MaxValue);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log("Character '" + character.character.name + "' doesn't have some or any of this attributes: '" + moveHeight.name + "', '" + moveRange.name + "', '" + attackHeight.name + "', '" + attackRange.name + "'");
+        }
 
         Dictionary<string, object> outParams;
         yield return new WaitForEventFinished(selectedCellEvent, out outParams);
@@ -117,13 +170,6 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
     private void CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, EventTypes eventType, int distanceMax, int heighMax)
     {
-        /************ This would be changed! ********************/
-        IsoUnityOptions isoUnityOptions = GameObject.Find("IsoUnityOptions").GetComponent(typeof(IsoUnityOptions)) as IsoUnityOptions;
-        IsoUnity.IsoTexture colorMove = isoUnityOptions.moveCell;
-        IsoUnity.IsoTexture colorAttack = isoUnityOptions.attackCell;
-        IsoUnity.IsoDecoration arrow = isoUnityOptions.arrowDecoration;
-        /*******************************************************/
-
         List<CellWithDistance> openList = new List<CellWithDistance>();
         List<CellWithDistance> closeList = new List<CellWithDistance>();
 
@@ -147,15 +193,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
                     {
                         if (!openList.Any(x => x.cell == neighbour))
                         {
-                            switch (eventType)
-                            {
-                                case EventTypes.ATTACK:
-                                    PaintCell(neighbour, eventType, colorAttack, arrow);
-                                    break;
-                                case EventTypes.MOVE:
-                                    PaintCell(neighbour, eventType, colorMove, arrow);
-                                    break;
-                            }
+                            PaintCell(neighbour, eventType);
                             openList.Add(new CellWithDistance(neighbour, distanceManhattanFromCharacterToNeigh));
                         }
                     }                    
@@ -164,9 +202,20 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
         }
     }
 
-    private void PaintCell(IsoUnity.Cell cell, EventTypes eventType, IsoTexture texture, IsoDecoration arrow)
+    private void PaintCell(IsoUnity.Cell cell, EventTypes eventType)
     {
-        showSelector(cell, eventType, arrow);
+        showSelector(cell, eventType);
+
+        IsoTexture texture = null;
+        switch (eventType)
+        {
+            case EventTypes.ATTACK:
+                texture = colorAttack;
+                break;
+            case EventTypes.MOVE:
+                texture = colorMove;
+                break;
+        }
 
         cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = texture;
         cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = texture.getTexture();
@@ -224,7 +273,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
     }
 
     // Show an arrow in selectables cells 
-    private void showSelector(IsoUnity.Cell cell, EventTypes eventType, IsoDecoration arrow)
+    private void showSelector(IsoUnity.Cell cell, EventTypes eventType)
     {
         SelectableCell selectableCell = cell.transform.gameObject.AddComponent<SelectableCell>();
         selectableCell.arrow = arrow;

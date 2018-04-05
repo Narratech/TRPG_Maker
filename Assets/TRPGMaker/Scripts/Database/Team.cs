@@ -9,4 +9,5 @@ public class Team : ScriptableObject {
     public string name;
     public int id;
 	public List<Character> characters;
+    public bool playable = false;
 }

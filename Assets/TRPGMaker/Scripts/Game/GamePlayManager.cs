@@ -136,7 +136,7 @@ public class GamePlayManager : MonoBehaviour
         connector.ShowArea(character, EventTypes.ATTACK, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
         {
             CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
-            characterDestAttack.character.attributes.Find(x => x.id == "HP").value = 50; // This is a test. CHANGE THIS!!
+            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 50; // This is a test. CHANGE THIS!!
             Turn();
         }));
     }

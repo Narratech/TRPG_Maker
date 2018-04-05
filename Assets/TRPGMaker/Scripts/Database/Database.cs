@@ -14,6 +14,19 @@ public class Database : ScriptableObject
     public List<SpecializedClass> specializedClasses;
     public List<Character> characters;
     public List<Team> teams;
+    [SerializeField]
+    private TRPGOptions _TRPGOptions;
+
+    public TRPGOptions battleOptions
+    {
+        get
+        {
+            return _TRPGOptions;
+        }
+        set {
+            _TRPGOptions = value;
+        }
+    }
 
     public Database()
     {

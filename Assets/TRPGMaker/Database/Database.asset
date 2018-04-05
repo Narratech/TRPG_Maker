@@ -12,26 +12,40 @@ MonoBehaviour:
   m_Name: Database
   m_EditorClassIdentifier: 
   attributes:
-  - name: Experience
-    id: Exp
-    description: Health points
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 1
-  - name: Mana
-    id: Man
-    description: Health points
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 0
   - name: Health
     id: HP
     description: 
-    maxValue: 400
-    minValue: 0
-    value: 400
+    maxValue: 3
+    minValue: 3
+    value: 3
+    isCore: 1
+  - name: Move Range
+    id: MVR
+    description: 
+    maxValue: 4
+    minValue: 4
+    value: 4
+    isCore: 1
+  - name: Move Height
+    id: MVH
+    description: 
+    maxValue: 2
+    minValue: 2
+    value: 2
+    isCore: 1
+  - name: Attack Range
+    id: ATR
+    description: 
+    maxValue: 3
+    minValue: 3
+    value: 3
+    isCore: 1
+  - name: AttackHeight
+    id: ATH
+    description: 
+    maxValue: 2
+    minValue: 2
+    value: 2
     isCore: 1
   tags:
   - Espada
@@ -69,3 +83,46 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bac31a58c9f786c4a9d5b67034ba5482, type: 2}
   teams:
   - {fileID: 11400000, guid: c7870a66a01c2a54e90fa9d468b19807, type: 2}
+  _TRPGOptions:
+    _gameType: 0
+    _turnType: 0
+    _healthAttribute:
+      name: Health
+      id: HP
+      description: 
+      maxValue: 3
+      minValue: 3
+      value: 3
+      isCore: 1
+    _moveRange:
+      name: Move Range
+      id: MVR
+      description: 
+      maxValue: 4
+      minValue: 4
+      value: 4
+      isCore: 1
+    _moveHeight:
+      name: Move Height
+      id: MVH
+      description: 
+      maxValue: 2
+      minValue: 2
+      value: 2
+      isCore: 1
+    _attackRange:
+      name: Attack Range
+      id: ATR
+      description: 
+      maxValue: 3
+      minValue: 3
+      value: 3
+      isCore: 1
+    _attackHeight:
+      name: Attack Range
+      id: ATR
+      description: 
+      maxValue: 3
+      minValue: 3
+      value: 3
+      isCore: 1

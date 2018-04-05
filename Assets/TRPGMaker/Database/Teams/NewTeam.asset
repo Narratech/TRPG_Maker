@@ -14,5 +14,6 @@ MonoBehaviour:
   name: NewTeam
   id: 0
   characters:
+  - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
   - {fileID: 11400000, guid: caa5b8cc4b5205b4297289922d3b7e33, type: 2}
-  - {fileID: 11400000, guid: 75942776545ea02418c221a9273f406b, type: 2}
+  playable: 1

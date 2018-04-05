@@ -7887,49 +7887,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1687207472}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
---- !u!1 &219964154
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 219964156}
-  - component: {fileID: 219964155}
-  m_Layer: 0
-  m_Name: IsoUnityOptions
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &219964155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 219964154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c204e274cec7e6d47969ec04f8f0a937, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveCell: {fileID: 11400000, guid: 1285aa62ffa004945b03dfbda9cf0afd, type: 2}
-  attackCell: {fileID: 11400000, guid: e7bd64f3e7f95d54289deccf42920283, type: 2}
-  arrowDecoration: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
---- !u!4 &219964156
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 219964154}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!21 &222631429
 Material:
   serializedVersion: 6
@@ -31139,6 +31096,7 @@ GameObject:
   - component: {fileID: 770915872}
   - component: {fileID: 770915871}
   - component: {fileID: 770915877}
+  - component: {fileID: 770915878}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -31232,6 +31190,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68e7a284d9a99294a9b7e4ef2fc2b61c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &770915878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 770915870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c204e274cec7e6d47969ec04f8f0a937, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveCell: {fileID: 11400000, guid: 1285aa62ffa004945b03dfbda9cf0afd, type: 2}
+  attackCell: {fileID: 11400000, guid: e7bd64f3e7f95d54289deccf42920283, type: 2}
+  arrowDecoration: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
 --- !u!43 &771847860
 Mesh:
   m_ObjectHideFlags: 0

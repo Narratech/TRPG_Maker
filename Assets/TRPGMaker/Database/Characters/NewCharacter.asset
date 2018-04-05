@@ -27,21 +27,39 @@ MonoBehaviour:
   - slotType: 
     modifier: {fileID: 0}
   attributes:
-  - name: Experience
-    id: Exp
-    description: Health points
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 1
   - name: Health
     id: HP
     description: 
-    maxValue: 4
+    maxValue: 250
     minValue: 0
+    value: 250
+    isCore: 1
+  - name: Move Range
+    id: MVR
+    description: 
+    maxValue: 4
+    minValue: 4
     value: 4
     isCore: 1
+  - name: Move Height
+    id: MVH
+    description: 
+    maxValue: 2
+    minValue: 2
+    value: 2
+    isCore: 1
+  - name: Attack Range
+    id: ATR
+    description: 
+    maxValue: 3
+    minValue: 3
+    value: 3
+    isCore: 1
+  - name: AttackHeight
+    id: ATH
+    description: 
+    maxValue: 2
+    minValue: 2
+    value: 2
+    isCore: 1
   specializedClass: []
-  height: 0
-  distance: 0
-  attackRange: 0

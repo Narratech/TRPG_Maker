@@ -174,9 +174,6 @@ public class CharacterEditor : Editor {
 
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("distance"), new GUIContent("Distance: "), GUILayout.MinWidth(100));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("height"), new GUIContent("Height: "), GUILayout.MinWidth(100));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("attackRange"), new GUIContent("Attack Range: "), GUILayout.MinWidth(100));
 
         if (EditorGUI.EndChangeCheck())
         {

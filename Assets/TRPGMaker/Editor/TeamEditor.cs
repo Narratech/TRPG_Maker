@@ -63,9 +63,10 @@ public class TeamEditor : Editor {
         EditorGUILayout.PropertyField(serializedObject.FindProperty("id"), new GUIContent("Id: "), GUILayout.MinWidth(100));
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("playable"), new GUIContent("Playable: "), GUILayout.MinWidth(100));
         if (EditorGUI.EndChangeCheck())
         {
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath((SpecializedClass)target), ((Team)target).name + ".asset");
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath((Team)target), ((Team)target).name + ".asset");
         }
         listCharacters.DoLayoutList();
         serializedObject.ApplyModifiedProperties();

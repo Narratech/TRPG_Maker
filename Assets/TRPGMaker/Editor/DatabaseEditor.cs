@@ -122,5 +122,22 @@ public class CustomEditorBase : Editor{
             GUILayout.EndHorizontal();
         }
         GUILayout.EndVertical();
+
+        // Teams
+        GUILayout.BeginVertical("Box");
+        GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Teams:", titleStyle);
+        for (int i = 0; i < Database.Instance.teams.Count; i++)
+        {
+            Team team = Database.Instance.teams[i];
+            // Changing line color
+            if (i % 2 == 0)
+                GUILayout.BeginHorizontal(gsLinePair);
+            else
+                GUILayout.BeginHorizontal(gsLineOdd);
+            Rect rect = EditorGUILayout.GetControlRect();
+            GUI.Label(rect, team.name);
+            GUILayout.EndHorizontal();
+        }
+        GUILayout.EndVertical();
     }
 }

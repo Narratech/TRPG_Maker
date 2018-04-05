@@ -173,9 +173,9 @@ class DatabaseWindow : EditorWindow
     }
 
     private void OnDestroy()
-    {
-        AssetDatabase.Refresh();
+    {        
         EditorUtility.SetDirty(Database.Instance);
+        AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
 }
