@@ -9,11 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7b1fcdece9778478b2575993f98a72, type: 3}
-  m_Name: Prueba
+  m_Name: EnemyTea
   m_EditorClassIdentifier: 
-  name: Prueba
+  name: EnemyTeam
   id: 0
   characters:
-  - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
-  - {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
-  playable: 1
+  - {fileID: 11400000, guid: 3eca2b4789a5bc44abd112d60d4af688, type: 2}
+  - {fileID: 11400000, guid: 2ce6ded48f42c8e46b99a9a665a8efda, type: 2}
+  - {fileID: 11400000, guid: 75942776545ea02418c221a9273f406b, type: 2}
+  playable: 0

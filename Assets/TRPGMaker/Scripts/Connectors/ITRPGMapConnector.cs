@@ -14,9 +14,12 @@ public interface ITRPGMapConnector {
     void cleanCells();
     void MoveCameraToCharacter(CharacterScript character, MoveCameraToCallback callback);
     void MoveCharacterTo(CharacterScript character, Cell cell, MoveCharacterToCallBack callback);
-    IEnumerator SelectedCell();
     void SetCharacterPosition(CharacterScript character, Cell cell, SetCharacterPositionCallBack callback);
     void ShowArea(CharacterScript character, EventTypes eventType, ShowAreaCallBack callback);
     void triggerAnimation(Character character, Cell cell);
     CharacterScript GetCharacterAtCell(Cell cell);
+
+    // IA Methods
+    List<CharacterScript> GetAttackRangeTargets(CharacterScript character);
+    void IAAttack(CharacterScript character, CharacterScript target, ShowAreaCallBack callback);
 }

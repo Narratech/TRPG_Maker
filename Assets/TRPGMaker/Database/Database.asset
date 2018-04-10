@@ -15,15 +15,15 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 3
-    minValue: 3
-    value: 3
+    maxValue: 300
+    minValue: 0
+    value: 300
     isCore: 1
   - name: Move Range
     id: MVR
     description: 
     maxValue: 4
-    minValue: 4
+    minValue: 0
     value: 4
     isCore: 1
   - name: Move Height
@@ -89,7 +89,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 496024b31fb8d604ba8b12317f0d4762, type: 2}
   - {fileID: 11400000, guid: bac31a58c9f786c4a9d5b67034ba5482, type: 2}
   teams:
-  - {fileID: 11400000, guid: c7870a66a01c2a54e90fa9d468b19807, type: 2}
+  - {fileID: 11400000, guid: 6997cfd5caffcfe4c874c9f0ac22d59b, type: 2}
+  - {fileID: 11400000, guid: 6c8f21e3fb66c0346a2b2cc371eb3219, type: 2}
   _TRPGOptions:
     _gameType: 0
     _turnType: 0

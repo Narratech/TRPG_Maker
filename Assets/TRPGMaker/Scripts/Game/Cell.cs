@@ -5,10 +5,10 @@ using UnityEngine;
 public class Cell
 {
 
-    public int x;
-    public int y;
+    public float x;
+    public float y;
 
-    public Cell(int x, int y)
+    public Cell(float x, float y)
     {
         this.x = x;
         this.y = y;

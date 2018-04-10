@@ -137,7 +137,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
             if (eventType == EventTypes.MOVE)
             CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.id == moveRange.id).value, character.character.attributes.Find(x => x.id == moveHeight.id).value);
         else if (eventType == EventTypes.ATTACK)
-            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.id == attackRange.id).value, int.MaxValue);
+            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -308,17 +308,6 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
     }
 
-    // Selected cell
-    [GameEvent(true, false)]
-    public IEnumerator SelectedCell()
-    {
-        var starter = Current;
-
-        Dictionary<string, object> outParams;
-
-        yield return new WaitForEventFinished(starter, out outParams);
-    }    
-
     // Calculamos las celdas a las que afectará un ataque
     // en función de su trayectoria
     // ¿Quizás este método es privado? ¿Debería devolver a que Characters
@@ -384,5 +373,118 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
             Debug.Log("The cell selected (coords x: " + cell.x + ", y: " + cell.y + ") doesn't exists in the current map!");
 
         return isoCell;
+    }
+
+    // IA METHODS//
+
+    public List<CharacterScript> GetAttackRangeTargets(CharacterScript character)
+    {
+        List<CharacterScript> characters = new List<CharacterScript>();
+
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
+        IsoUnity.Cell currentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+        List<CellWithDistance> openList = new List<CellWithDistance>();
+        List<CellWithDistance> closeList = new List<CellWithDistance>();
+        float attackRan = character.character.attributes.Find(x => x.id == attackRange.id).value;
+        float heighMax = character.character.attributes.Find(x => x.id == attackHeight.id).value;
+
+        openList.Add(new CellWithDistance(currentCell, 0));
+
+        while (openList.Count > 0)
+        {
+            CellWithDistance current = openList[0];
+            openList.Remove(current);
+            closeList.Add(current);
+
+            foreach (IsoUnity.Cell neighbour in current.cell.Map.getNeightbours(current.cell))
+            {
+                if (neighbour != null && !closeList.Any(x => x.cell == neighbour) && neighbour.Walkable)
+                {
+                    float distanceManhattanFromCurrentToNeigh = Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).x - neighbour.Map.getCoords(neighbour.gameObject).x) + Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).y - neighbour.Map.getCoords(neighbour.gameObject).y);
+                    float distanceManhattanFromCharacterToNeigh = current.distanceFromCharacter + distanceManhattanFromCurrentToNeigh;
+
+                    if (distanceManhattanFromCurrentToNeigh <= 1 && distanceManhattanFromCharacterToNeigh <= attackRan &&
+                        Mathf.Abs(neighbour.Height - current.cell.Height) <= heighMax)
+                    {
+                        if (!openList.Any(x => x.cell == neighbour))
+                        {
+                            CharacterScript charAtCell = GetCharacterAtCell(new Cell(neighbour.Map.getCoords(neighbour.gameObject).x, neighbour.Map.getCoords(neighbour.gameObject).y));
+                            if (charAtCell != null)
+                                characters.Add(charAtCell);
+                            openList.Add(new CellWithDistance(neighbour, distanceManhattanFromCharacterToNeigh));
+                        }
+                    }
+                }
+            }
+        }
+        return characters;
+    }
+
+    public void IAAttack(CharacterScript character, CharacterScript target, ShowAreaCallBack callback)
+    {
+        StartCoroutine(IAAttackAsync(character, target, callback));
+    }
+
+    private IEnumerator IAAttackAsync(CharacterScript character, CharacterScript target, ShowAreaCallBack callback)
+    {
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
+
+        IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+        IsoUnity.Cell targetCurrentCell = target.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+
+        try
+        {
+            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.id == moveHeight.id).value;
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log("Character '" + character.character.name + "' doesn't have attribute '" + moveHeight.name + "'");
+        }
+
+        try
+        {
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.ATTACK, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log("Character '" + character.character.name + "' doesn't have some or any of this attributes: '" + moveHeight.name + "', '" + moveRange.name + "', '" + attackHeight.name + "', '" + attackRange.name + "'");
+        }
+
+        yield return new WaitForSeconds(1f);
+
+       GameObject arrowObject = targetCurrentCell.addDecoration(targetCurrentCell.transform.position + new Vector3(0, targetCurrentCell.WalkingHeight, 0), 0, false, true, arrow);
+
+        yield return new WaitForSeconds(1f);
+
+        GameObject.Destroy(arrowObject);
+        cleanCells();
+
+        yield return new WaitForSeconds(1f);
+
+        callback(null, true);
+    }
+
+    //// EVENTS ////
+
+    // Selected cell
+    [GameEvent(true, false)]
+    public IEnumerator SelectedCell()
+    {
+        var starter = Current;
+
+        Dictionary<string, object> outParams;
+
+        yield return new WaitForEventFinished(starter, out outParams);
+    }
+
+    // IA move event
+    [GameEvent(true, false)]
+    public IEnumerator iaMove()
+    {
+        var starter = Current;
+
+        Dictionary<string, object> outParams;
+
+        yield return new WaitForEventFinished(starter, out outParams);
     }
 }

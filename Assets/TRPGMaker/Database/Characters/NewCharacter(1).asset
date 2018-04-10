@@ -18,9 +18,9 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 300
+    maxValue: 250
     minValue: 0
-    value: 300
+    value: 250
     isCore: 1
   - name: Move Height
     id: MVH

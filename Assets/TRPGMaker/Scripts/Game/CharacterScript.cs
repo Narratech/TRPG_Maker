@@ -17,7 +17,7 @@ public class CharacterScript : MonoBehaviour {
     }
 
     private void OnGUI()
-    {
+    { 
         if (character != null)
         {
             Attribute attribute = character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id);
@@ -25,8 +25,18 @@ public class CharacterScript : MonoBehaviour {
             float height = renderer.bounds.size.y * 15;
             pos = Camera.main.WorldToScreenPoint(transform.position);
             pos.y = Screen.height - pos.y - height;
-            GUI.Box(new Rect(pos.x - 50, pos.y - 40, 100, 20), attribute.value + "/" + attribute.maxValue);
+            Rect boxRect = new Rect(pos.x - 50, pos.y - 40, 100, 20);          
+
+            if (!boxRect.Contains(Event.current.mousePosition))
+            {
+                GUI.Box(boxRect, attribute.value + "/" + attribute.maxValue);
+            }               
         }  
+    }
+
+    void OnMouseEnter()
+    {
+        Debug.Log("AAA");
     }
 
 
@@ -62,7 +72,7 @@ public class CharacterScriptEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Team");
-        index = EditorGUILayout.Popup(index, Database.Instance.teams.Where(x => x.characters.Exists(y => y.name == characterScript.character.name)).Select(item => item.name).ToArray());
+        if(characterScript.character != null) index = EditorGUILayout.Popup(index, Database.Instance.teams.Where(x => x.characters.Exists(y => y.name == characterScript.character.name)).Select(item => item.name).ToArray());
         EditorGUILayout.EndHorizontal();
 
         if (EditorGUI.EndChangeCheck()) {

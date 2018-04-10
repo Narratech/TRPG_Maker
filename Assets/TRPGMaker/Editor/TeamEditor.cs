@@ -12,7 +12,6 @@ public class TeamEditor : Editor {
 
     private void OnEnable()
     {
-
         // Get characters
         listCharacters = new ReorderableList(serializedObject,
             serializedObject.FindProperty("characters"),

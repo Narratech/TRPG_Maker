@@ -14,8 +14,47 @@ MonoBehaviour:
   name: NewCharacter(4)
   inventory: {fileID: 0}
   Slots: []
-  attributes: []
+  attributes:
+  - name: Health
+    id: HP
+    description: 
+    maxValue: 300
+    minValue: 0
+    value: 250
+    isCore: 1
+  - name: Move Range
+    id: MVR
+    description: 
+    maxValue: 4
+    minValue: 4
+    value: 4
+    isCore: 1
+  - name: Move Height
+    id: MVH
+    description: 
+    maxValue: 8
+    minValue: 0
+    value: 8
+    isCore: 1
+  - name: Attack Range
+    id: ATR
+    description: 
+    maxValue: 20
+    minValue: 3
+    value: 5
+    isCore: 1
+  - name: AttackHeight
+    id: ATH
+    description: 
+    maxValue: 2
+    minValue: 2
+    value: 2
+    isCore: 1
+  - name: Agility
+    id: 
+    description: 
+    maxValue: 100
+    minValue: 0
+    value: 0
+    isCore: 1
   specializedClass: []
-  height: 0
-  distance: 0
-  attackRange: 0

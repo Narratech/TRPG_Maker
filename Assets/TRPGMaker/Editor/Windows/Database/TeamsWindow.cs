@@ -167,5 +167,8 @@ public class TeamsWindow : LayoutWindow {
     {
         Database.Instance.teams.Remove(team);
         AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(team));
+        EditorUtility.SetDirty(Database.Instance);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }

@@ -18,9 +18,9 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 3
-    minValue: 3
-    value: 3
+    maxValue: 300
+    minValue: 0
+    value: 300
     isCore: 1
   - name: Move Range
     id: MVR
@@ -39,9 +39,9 @@ MonoBehaviour:
   - name: Attack Range
     id: ATR
     description: 
-    maxValue: 3
-    minValue: 3
-    value: 3
+    maxValue: 20
+    minValue: 0
+    value: 10
     isCore: 1
   - name: AttackHeight
     id: ATH
@@ -49,5 +49,12 @@ MonoBehaviour:
     maxValue: 2
     minValue: 2
     value: 2
+    isCore: 1
+  - name: Agility
+    id: 
+    description: 
+    maxValue: 100
+    minValue: 0
+    value: 0
     isCore: 1
   specializedClass: []

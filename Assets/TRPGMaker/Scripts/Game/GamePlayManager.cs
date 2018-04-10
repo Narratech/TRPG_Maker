@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class GamePlayManager : MonoBehaviour
 {
@@ -88,23 +89,19 @@ public class GamePlayManager : MonoBehaviour
                          */
                         AttributeTurn();
                         break;
-                    default:
-                        Console.WriteLine("Default case");
+                    default:                        
                         break;
                 }
             }
         }
         else
         {
-            Debug.Log("Must be at least one character");
+            Debug.Log("Must be at least one character in the scene");
         }
     }
 
     private void StartTurn()
     {
-        //check if the character is in a playable team
-
-        Boolean isPlayable = true;
         //Get info about character "health attribute" (battle connection)
 
         int healthValue = characters[index].character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value;
@@ -112,13 +109,10 @@ public class GamePlayManager : MonoBehaviour
         character = characters[index];
         //Actual round here
 
-        isPlayable = character.team.playable;
+        Boolean isPlayable = character.team.playable;
 
-        if (index < characters.Count - 1)
-        {
-            index++;
-        }
-        else if (index == characters.Count - 1)
+        index++;
+        if (index == characters.Count)
         {
             index = 0;
             round++;
@@ -138,16 +132,16 @@ public class GamePlayManager : MonoBehaviour
             }
             else if (!isPlayable)
             {
-                Debug.Log("Character isn't playable");
-                // call to IA and next turn
-                Turn();
+                connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
+                {
+                    IATurnManager();
+                }));
             }
         }
         else if (healthValue <= 0)
         {
             //character is dead, check if this is the last character in the team 
             //Next turn
-            Debug.Log("Character dead");
             Turn();
         }
     }
@@ -159,7 +153,6 @@ public class GamePlayManager : MonoBehaviour
             index = 0;
             start = true;
             Reshuffle();
-            Debug.Log("Random Turn Mode");
         }
 
         StartTurn();
@@ -172,7 +165,6 @@ public class GamePlayManager : MonoBehaviour
             // Create the list with the characters placed according to the "attribute"
             index = 0;
             start = true;
-            Debug.Log("Attribute Turn Mode");
         }
 
         StartTurn();
@@ -191,6 +183,102 @@ public class GamePlayManager : MonoBehaviour
             characters[t] = characters[r];
             characters[r] = tmp;
         }
+    }
+
+    public void MoveEvent(Button button)
+    {
+        connector.cleanCells();
+        if (!move)
+        {
+            connector.ShowArea(character, EventTypes.MOVE, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+            {
+                connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character5, resul5t) =>
+                {
+                    //Check if the character attack? or if move lost turn?
+                    move = true;
+                    button.gameObject.SetActive(false);
+                    if (attack)
+                        Turn();
+
+                }));
+            }));
+        }
+    }
+
+    public void AttackEvent()
+    {
+        connector.cleanCells();
+        connector.ShowArea(character, EventTypes.ATTACK, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+        {
+            CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
+
+            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 150; // This is a test. CHANGE THIS!!
+
+            if (characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
+            {
+                characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
+                // Dead Animation
+                // add to teams list like dead?
+            }
+            attack = true;
+            objectCanvas.SetActive(false);
+            Turn();
+        }));
+    }
+
+    public void attackEventIA(CharacterScript target)
+    {
+        connector.IAAttack(character, target, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+        {
+            target.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 50; // This is a test. CHANGE THIS!!
+            Turn();
+        }));
+    }
+
+    public void moveEventIA()
+    {
+        connector.cleanCells();
+
+    }
+
+    private void IATurnManager()
+    {
+        // Get a list of the characters in attack range
+        List<CharacterScript> targets = connector.GetAttackRangeTargets(character);
+
+        // Filter only other teams characters ordered by max health
+        targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
+
+        // If any character is attackable, attack
+        if(targets.Count > 0)
+        {
+            attackEventIA(targets.First());
+        }
+        else // Move to nearest character
+        {
+            moveEventIA();
+            // Check if now is any attackable character
+            targets = connector.GetAttackRangeTargets(character);
+
+            // Filter only other teams characters ordered by max health
+            targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
+
+            // If any character is attackable, attack
+            if (targets.Count > 0)
+            {
+                attackEventIA(targets.First());
+            } else
+            {
+                Turn();
+            }
+        }
+    }
+
+    public void FinishTurnEvent()
+    {
+        connector.cleanCells();
+        objectCanvas.SetActive(false);
+        Turn();
     }
 
     private void DrawCanvas()
@@ -288,7 +376,8 @@ public class GamePlayManager : MonoBehaviour
         {
             imagebutton.color = UnityEngine.Color.grey;
             MoveEvent(buttonMove);
-            if (!attack) {
+            if (!attack)
+            {
                 imagebuttonAttack.color = UnityEngine.Color.white;
             }
         });
@@ -297,13 +386,14 @@ public class GamePlayManager : MonoBehaviour
         {
             imagebuttonAttack.color = UnityEngine.Color.grey;
             AttackEvent();
-            if (!move) {
+            if (!move)
+            {
                 imagebutton.color = UnityEngine.Color.white;
             }
         });
 
-        buttonFinishTurn.onClick.AddListener(() => 
-        { 
+        buttonFinishTurn.onClick.AddListener(() =>
+        {
             if (!move)
             {
                 imagebutton.color = UnityEngine.Color.white;
@@ -312,56 +402,8 @@ public class GamePlayManager : MonoBehaviour
             {
                 imagebuttonAttack.color = UnityEngine.Color.white;
             }
-            FinishTurnEvent(); 
+            FinishTurnEvent();
         });
-    }
-
-    public void MoveEvent(Button button)
-    {
-        connector.cleanCells();
-        if (!move)
-        {
-            connector.ShowArea(character, EventTypes.MOVE, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
-            {
-                connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character5, resul5t) =>
-                {
-                    //Check if the character attack? or if move lost turn?
-                    move = true;
-                    button.gameObject.SetActive(false);
-                    if (attack)
-                        Turn();
-
-                }));
-            }));
-        }
-    }
-
-    public void AttackEvent()
-    {
-        connector.cleanCells();
-        connector.ShowArea(character, EventTypes.ATTACK, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
-        {
-            CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
-
-            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 150; // This is a test. CHANGE THIS!!
-
-            if (characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
-            {
-                characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
-                // Dead Animation
-                // add to teams list like dead?
-            }
-            attack = true;
-            objectCanvas.SetActive(false);
-            Turn();
-        }));
-    }
-
-    public void FinishTurnEvent()
-    {
-        connector.cleanCells();
-        objectCanvas.SetActive(false);
-        Turn();
     }
 
 
