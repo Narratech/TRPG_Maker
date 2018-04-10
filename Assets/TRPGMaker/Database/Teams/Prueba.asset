@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7b1fcdece9778478b2575993f98a72, type: 3}
-  m_Name: NewTeam
+  m_Name: Prueba
   m_EditorClassIdentifier: 
-  name: NewTeam
+  name: Prueba
   id: 0
   characters:
   - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
-  - {fileID: 11400000, guid: caa5b8cc4b5205b4297289922d3b7e33, type: 2}
+  - {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
   playable: 1

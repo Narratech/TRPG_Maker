@@ -62,4 +62,11 @@ MonoBehaviour:
     minValue: 2
     value: 2
     isCore: 1
+  - name: Agility
+    id: 
+    description: 
+    maxValue: 100
+    minValue: 0
+    value: 10
+    isCore: 1
   specializedClass: []

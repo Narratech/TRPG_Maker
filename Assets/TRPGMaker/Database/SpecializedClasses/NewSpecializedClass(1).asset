@@ -14,5 +14,40 @@ MonoBehaviour:
   name: New Specialized Class (1)
   tags: []
   slots: []
-  attributes: []
+  attributes:
+  - name: Health
+    id: HP
+    description: 
+    maxValue: 3
+    minValue: 3
+    value: 3
+    isCore: 1
+  - name: Move Range
+    id: MVR
+    description: 
+    maxValue: 4
+    minValue: 4
+    value: 4
+    isCore: 1
+  - name: Move Height
+    id: MVH
+    description: 
+    maxValue: 2
+    minValue: 2
+    value: 2
+    isCore: 1
+  - name: Attack Range
+    id: ATR
+    description: 
+    maxValue: 3
+    minValue: 3
+    value: 3
+    isCore: 1
+  - name: AttackHeight
+    id: ATH
+    description: 
+    maxValue: 2
+    minValue: 2
+    value: 2
+    isCore: 1
   formulas: []

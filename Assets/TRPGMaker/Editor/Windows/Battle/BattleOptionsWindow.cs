@@ -59,7 +59,7 @@ public class BattleOptionsWindow : EditorWindow
             EditorGUILayout.LabelField("Turn type:");
             selectedTurnStyle = EditorGUILayout.Popup(selectedTurnStyle, System.Enum.GetNames(typeof(TurnTypes)));
             EditorGUILayout.EndHorizontal();
-
+            
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Health attribute name:");
             selectedHealthAttribte = EditorGUILayout.Popup(selectedHealthAttribte, Database.Instance.attributes.Select(o => o.name).ToArray());

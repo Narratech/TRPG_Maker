@@ -47,6 +47,13 @@ MonoBehaviour:
     minValue: 2
     value: 2
     isCore: 1
+  - name: Agility
+    id: 
+    description: 
+    maxValue: 100
+    minValue: 0
+    value: 0
+    isCore: 1
   tags:
   - Espada
   - Mandoble
@@ -119,10 +126,10 @@ MonoBehaviour:
       value: 3
       isCore: 1
     _attackHeight:
-      name: Attack Range
-      id: ATR
+      name: AttackHeight
+      id: ATH
       description: 
-      maxValue: 3
-      minValue: 3
-      value: 3
+      maxValue: 2
+      minValue: 2
+      value: 2
       isCore: 1

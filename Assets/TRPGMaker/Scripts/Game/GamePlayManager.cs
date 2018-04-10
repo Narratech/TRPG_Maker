@@ -10,12 +10,15 @@ public class GamePlayManager : MonoBehaviour
     private GameObject objectCanvas;
     private ITRPGMapConnector connector;
     private CharacterScript character;
+    private Boolean start = false;
+    private int index;
+    private List<CharacterScript> characters;
 
     // Use this for initialization
     void Start()
     {
         connector = (new GameObject("IsoUnityConector")).AddComponent<IsoUnityConnector>();
-        
+
         startCombat();
     }
 
@@ -27,25 +30,143 @@ public class GamePlayManager : MonoBehaviour
 
     public void startCombat()
     {
-        Turn();         
+        Turn();
     }
 
     private void Turn()
     {
-        CharacterScript[] characters = FindObjectsOfType<CharacterScript>();
-        if (character == characters[1])
+        /*
+         * - Knowing teams in play
+         * - know if they are playable or not
+         * - Manage the turn based on the "turn type" of "battle options"
+         * - Random for all the characters or for equipment? ? VARIOUS TYPES OF TURN!
+         *
+         * - Defeat / victory? IN COMBAT it is analyzed, return true or false depending on...
+         * - If character dies, does not continue
+        */
+
+        TurnTypes turnType = Database.Instance.battleOptions.turnType;
+
+        //Check if the battle is start to don't update constantly the characters' list
+        if (start == false)
         {
-            character = characters[0];
+            CharacterScript[] tempCharacters = FindObjectsOfType<CharacterScript>();
+            characters = new List<CharacterScript>(tempCharacters);
+        }
+
+        if (characters.Count > 0)
+        {
+            if (characters.Exists(x => x.team == null))
+            {
+                Debug.Log("Some character doesn't have any team assigned");
+            }
+            else
+            {
+                switch (turnType)
+                {
+                    case TurnTypes.Random:
+                        // RANDOM mode. Each playable character is randomly selected on the battlefield
+                        /* 
+                         * Given the "teams" in the field, we created a random list with each of the characters, EYE with the non-playable!
+                         * We will pass the turn to each player in the list when performing the operation "ATTACK" or "DEFENDER", move allows you to continue using the turn
+                         * When only one team remains standing, the game is over. Have another list with the characters of each team and their lives.
+                         * A character, when dying, does not disappear from the battlefield, has 0 life and can be revived (future extensions)
+                         */
+                        randomTurn();
+                        break;
+                    case TurnTypes.Attribute:
+                        // ATTRIBUTE mode. Each playable character is selected on the battlefield according to its attribute (What attribute? Add it to battle options)
+                        /*
+                         * A list of characters is created based on the attribute (Attribute selected in battle options
+                         * We will pass the turn to each player in the list when performing the operation "ATTACK" or "DEFENDER", move allows you to continue using the turn
+                         * When only one team remains standing, the game is over. Have another list with the characters of each team and their lives.
+                         * A character, when dying, does not disappear from the battlefield, has 0 life and can be revived (future extensions)
+                         */
+                        attributeTurn();
+                        break;
+                    default:
+                        Console.WriteLine("Default case");
+                        break;
+                }
+            }
         }
         else
         {
-            character = characters[1];
+            Debug.Log("Must be at least one character");
+        }
+    }
+
+    private void StartTurn()
+    {
+        //check if the character is in a playable team
+        Boolean isPlayable = true;
+        //Get info about character "health attribute" (battle connection)
+
+        character = characters[index];
+
+        if (index < characters.Count - 1)
+        {
+            index++;
+        }
+        else if (index == characters.Count - 1)
+        {
+            index = 0;
         }
 
-        connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
+        if (isPlayable) // and health > 0
         {
-            DrawCanvas();
-        }));
+            connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
+            {
+                DrawCanvas();
+            }));
+
+        }
+        else if (!isPlayable)
+        {
+            // call to IA
+        } // else if ( health <= 0) character dead, check if this is the last character in the team
+    }
+
+    private void randomTurn()
+    {
+        if (start == false)
+        {
+            index = 0;
+            start = true;
+            reshuffle();
+            Debug.Log("Random Turn Mode");
+        }
+
+        StartTurn();
+    }
+
+    private void attributeTurn()
+    {
+        if (start == false)
+        {
+            // Create the list with the characters placed according to the "attribute"
+            index = 0;
+            start = true;
+            Debug.Log("Attribute Turn Mode");
+            Debug.Log(characters.Count);
+        }
+
+        StartTurn();
+    }
+
+    /*
+     * Knuth shuffle algorithm
+     */
+    private void reshuffle()
+    {
+
+        for (int t = 0; t < characters.Count; t++)
+        {
+            CharacterScript tmp = characters[t];
+            int r = UnityEngine.Random.Range(t, characters.Count);
+            characters[t] = characters[r];
+            characters[r] = tmp;
+        }
     }
 
     private void DrawCanvas()

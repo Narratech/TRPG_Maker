@@ -43,4 +43,18 @@ MonoBehaviour:
     minValue: 2
     value: 2
     isCore: 1
+  - name: Move Range
+    id: MVR
+    description: 
+    maxValue: 4
+    minValue: 4
+    value: 4
+    isCore: 1
+  - name: Agility
+    id: 
+    description: 
+    maxValue: 100
+    minValue: 0
+    value: 20
+    isCore: 1
   specializedClass: []

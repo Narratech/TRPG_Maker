@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -6060,6 +6060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
+  team: {fileID: 11400000, guid: c7870a66a01c2a54e90fa9d468b19807, type: 2}
 --- !u!114 &175549501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35172,6 +35173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
+  team: {fileID: 0}
 --- !u!114 &930472394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56300,7 +56302,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
       propertyPath: m_RootOrder
-      value: 226
+      value: 225
       objectReference: {fileID: 0}
     - target: {fileID: 6400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
       propertyPath: m_Mesh
