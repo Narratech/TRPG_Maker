@@ -13,13 +13,16 @@ public class GamePlayManager : MonoBehaviour
     private Boolean start = false;
     private int index;
     private List<CharacterScript> characters;
+    private Boolean move;
+    private Boolean attack;
+    private int round = 0;
 
     // Use this for initialization
     void Start()
     {
         connector = (new GameObject("IsoUnityConector")).AddComponent<IsoUnityConnector>();
 
-        startCombat();
+        StartCombat();
     }
 
     // Update is called once per frame
@@ -28,7 +31,7 @@ public class GamePlayManager : MonoBehaviour
 
     }
 
-    public void startCombat()
+    public void StartCombat()
     {
         Turn();
     }
@@ -52,6 +55,7 @@ public class GamePlayManager : MonoBehaviour
         {
             CharacterScript[] tempCharacters = FindObjectsOfType<CharacterScript>();
             characters = new List<CharacterScript>(tempCharacters);
+            round = 0;
         }
 
         if (characters.Count > 0)
@@ -72,7 +76,7 @@ public class GamePlayManager : MonoBehaviour
                          * When only one team remains standing, the game is over. Have another list with the characters of each team and their lives.
                          * A character, when dying, does not disappear from the battlefield, has 0 life and can be revived (future extensions)
                          */
-                        randomTurn();
+                        RandomTurn();
                         break;
                     case TurnTypes.Attribute:
                         // ATTRIBUTE mode. Each playable character is selected on the battlefield according to its attribute (What attribute? Add it to battle options)
@@ -82,7 +86,7 @@ public class GamePlayManager : MonoBehaviour
                          * When only one team remains standing, the game is over. Have another list with the characters of each team and their lives.
                          * A character, when dying, does not disappear from the battlefield, has 0 life and can be revived (future extensions)
                          */
-                        attributeTurn();
+                        AttributeTurn();
                         break;
                     default:
                         Console.WriteLine("Default case");
@@ -99,10 +103,16 @@ public class GamePlayManager : MonoBehaviour
     private void StartTurn()
     {
         //check if the character is in a playable team
+
         Boolean isPlayable = true;
         //Get info about character "health attribute" (battle connection)
 
+        int healthValue = characters[index].character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value;
+
         character = characters[index];
+        //Actual round here
+
+        isPlayable = character.team.playable;
 
         if (index < characters.Count - 1)
         {
@@ -111,36 +121,51 @@ public class GamePlayManager : MonoBehaviour
         else if (index == characters.Count - 1)
         {
             index = 0;
+            round++;
         }
 
-        if (isPlayable) // and health > 0
+        if (healthValue > 0)
         {
-            connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
+            if (isPlayable)
             {
-                DrawCanvas();
-            }));
+                move = false;
+                attack = false;
+                connector.MoveCameraToCharacter(character, MoveCameraToParametrizedCallback(character, (character0, result0) =>
+                {
+                    DrawCanvas();
+                }));
 
+            }
+            else if (!isPlayable)
+            {
+                Debug.Log("Character isn't playable");
+                // call to IA and next turn
+                Turn();
+            }
         }
-        else if (!isPlayable)
+        else if (healthValue <= 0)
         {
-            // call to IA
-        } // else if ( health <= 0) character dead, check if this is the last character in the team
+            //character is dead, check if this is the last character in the team 
+            //Next turn
+            Debug.Log("Character dead");
+            Turn();
+        }
     }
 
-    private void randomTurn()
+    private void RandomTurn()
     {
         if (start == false)
         {
             index = 0;
             start = true;
-            reshuffle();
+            Reshuffle();
             Debug.Log("Random Turn Mode");
         }
 
         StartTurn();
     }
 
-    private void attributeTurn()
+    private void AttributeTurn()
     {
         if (start == false)
         {
@@ -148,7 +173,6 @@ public class GamePlayManager : MonoBehaviour
             index = 0;
             start = true;
             Debug.Log("Attribute Turn Mode");
-            Debug.Log(characters.Count);
         }
 
         StartTurn();
@@ -157,7 +181,7 @@ public class GamePlayManager : MonoBehaviour
     /*
      * Knuth shuffle algorithm
      */
-    private void reshuffle()
+    private void Reshuffle()
     {
 
         for (int t = 0; t < characters.Count; t++)
@@ -210,8 +234,6 @@ public class GamePlayManager : MonoBehaviour
         // Button position        
         rtButtonMove.position = new Vector2(rtButtonMove.position.x - rtCanvas.position.x + (rtButtonMove.sizeDelta.x / 2) + 20, rtButtonMove.position.y - rtCanvas.position.y + (rtButtonMove.sizeDelta.x / 2) + 20);
 
-        buttonMove.onClick.AddListener(() => moveEvent());
-
         // Button Attack
         GameObject objectButtonAttack = new GameObject("Button");
         objectButtonAttack.transform.position = objectCanvas.transform.position;
@@ -236,30 +258,110 @@ public class GamePlayManager : MonoBehaviour
         // Button position        
         rtButtonAttack.position = new Vector2(rtButtonAttack.position.x - rtCanvas.position.x + (rtButtonAttack.sizeDelta.x / 2) + 20, rtButtonAttack.position.y - rtCanvas.position.y + (rtButtonAttack.sizeDelta.x / 2) - 20);
 
-        buttonAttack.onClick.AddListener(() => attackEvent());
+        // Button Defence
+        GameObject objectButtonFinishTurn = new GameObject("Button");
+        objectButtonFinishTurn.transform.position = objectCanvas.transform.position;
+        objectButtonFinishTurn.transform.parent = objectCanvas.transform;
+
+        Button buttonFinishTurn = objectButtonFinishTurn.AddComponent<Button>();
+        Image imagebuttonFinishTurn = objectButtonFinishTurn.AddComponent<Image>();
+
+        RectTransform rtButtonFinishTurn = objectButtonFinishTurn.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+        rtButtonFinishTurn.sizeDelta = new Vector2(100, 20);
+
+        GameObject objectTexFinishTurn = new GameObject("Text");
+        objectTexFinishTurn.transform.position = objectButtonFinishTurn.transform.position;
+        objectTexFinishTurn.transform.parent = objectButtonFinishTurn.transform;
+        Text textFinishTurn = objectTexFinishTurn.AddComponent<Text>();
+        textFinishTurn.text = "Finish turn";
+        textFinishTurn.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+        textFinishTurn.color = Color.black;
+        RectTransform rtTextFinishTurn = objectTexFinishTurn.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+        rtTextFinishTurn.sizeDelta = rtButtonFinishTurn.sizeDelta;
+
+        // Button position        
+        rtButtonFinishTurn.position = new Vector2(rtButtonFinishTurn.position.x - rtCanvas.position.x + (rtButtonFinishTurn.sizeDelta.x / 2) + 20, rtButtonFinishTurn.position.y - rtCanvas.position.y + (rtButtonFinishTurn.sizeDelta.x) + 40);
+
+        //Buttons listeners
+
+        buttonMove.onClick.AddListener(() =>
+        {
+            imagebutton.color = UnityEngine.Color.grey;
+            MoveEvent(buttonMove);
+            if (!attack) {
+                imagebuttonAttack.color = UnityEngine.Color.white;
+            }
+        });
+
+        buttonAttack.onClick.AddListener(() =>
+        {
+            imagebuttonAttack.color = UnityEngine.Color.grey;
+            AttackEvent();
+            if (!move) {
+                imagebutton.color = UnityEngine.Color.white;
+            }
+        });
+
+        buttonFinishTurn.onClick.AddListener(() => 
+        { 
+            if (!move)
+            {
+                imagebutton.color = UnityEngine.Color.white;
+            }
+            if (!attack)
+            {
+                imagebuttonAttack.color = UnityEngine.Color.white;
+            }
+            FinishTurnEvent(); 
+        });
     }
 
-    public void moveEvent()
+    public void MoveEvent(Button button)
     {
         connector.cleanCells();
-        connector.ShowArea(character, EventTypes.MOVE, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+        if (!move)
         {
-            connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character5, resul5t) =>
+            connector.ShowArea(character, EventTypes.MOVE, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
             {
-                Turn();
+                connector.MoveCharacterTo(character, selectedCell, MoveCharacterToParametrizedCallback(character, (character5, resul5t) =>
+                {
+                    //Check if the character attack? or if move lost turn?
+                    move = true;
+                    button.gameObject.SetActive(false);
+                    if (attack)
+                        Turn();
+
+                }));
             }));
-        }));
+        }
     }
 
-    public void attackEvent()
+    public void AttackEvent()
     {
         connector.cleanCells();
         connector.ShowArea(character, EventTypes.ATTACK, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
         {
             CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
-            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 50; // This is a test. CHANGE THIS!!
+
+            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 150; // This is a test. CHANGE THIS!!
+
+            if (characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
+            {
+                characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
+                // Dead Animation
+                // add to teams list like dead?
+            }
+            attack = true;
+            objectCanvas.SetActive(false);
             Turn();
         }));
+    }
+
+    public void FinishTurnEvent()
+    {
+        connector.cleanCells();
+        objectCanvas.SetActive(false);
+        Turn();
     }
 
 
