@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7b1fcdece9778478b2575993f98a72, type: 3}
-  m_Name: EnemyTea
+  m_Name: NewTeam(1)
   m_EditorClassIdentifier: 
-  name: EnemyTeam
+  name: NewTeam(1)
   id: 0
   characters:
   - {fileID: 11400000, guid: 3eca2b4789a5bc44abd112d60d4af688, type: 2}

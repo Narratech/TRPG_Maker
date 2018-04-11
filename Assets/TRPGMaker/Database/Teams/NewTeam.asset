@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7b1fcdece9778478b2575993f98a72, type: 3}
-  m_Name: PlayerTeam
+  m_Name: NewTeam
   m_EditorClassIdentifier: 
-  name: PlayerTeam
+  name: NewTeam
   id: 0
   characters:
   - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}

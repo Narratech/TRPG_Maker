@@ -18,8 +18,11 @@ public interface ITRPGMapConnector {
     void ShowArea(CharacterScript character, EventTypes eventType, ShowAreaCallBack callback);
     void triggerAnimation(Character character, Cell cell);
     CharacterScript GetCharacterAtCell(Cell cell);
+    Cell GetCellAtCharacter(CharacterScript character);
 
     // IA Methods
     List<CharacterScript> GetAttackRangeTargets(CharacterScript character);
+    List<Cell> GetPathFromCharToChar(CharacterScript character, CharacterScript target);
     void IAAttack(CharacterScript character, CharacterScript target, ShowAreaCallBack callback);
+    void IAMove(CharacterScript character, Cell destiny, MoveCharacterToCallBack callback);
 }

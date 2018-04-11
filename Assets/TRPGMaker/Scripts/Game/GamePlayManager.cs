@@ -237,8 +237,55 @@ public class GamePlayManager : MonoBehaviour
 
     public void moveEventIA()
     {
-        connector.cleanCells();
+        //connector.cleanCells();
 
+        // Get nearest character path
+        int nearestDistance = int.MaxValue;
+        List<Cell> nearestPath = null;
+
+        foreach(CharacterScript charact in characters.Where(x => x.team != character.team))
+        {
+            List<Cell> cellsToCharacter = connector.GetPathFromCharToChar(character, charact);
+            if(cellsToCharacter != null && cellsToCharacter.Count < nearestDistance)
+            {
+                nearestPath = cellsToCharacter;
+                nearestDistance = cellsToCharacter.Count;
+            }
+        }
+
+        // If there is any posible nearest path -> move
+        if (nearestPath != null)
+        {
+            // Move to nearest cell
+            int destinyCell = 0;
+            int moveRange = character.character.attributes.Find(x => x.id == Database.Instance.battleOptions.moveRange.id).value;
+            // Can't be 0, because is the enemy target position
+            if (nearestPath.Count == 0)
+                Turn();
+            else { 
+                if (nearestPath.Count - 1 < moveRange)
+                    destinyCell = nearestPath.Count - 2; // -2 because -1 is the enemy target position
+                else
+                    destinyCell = moveRange - 2; // -2 because is 0-based and the position 0 have cost 1
+
+                connector.IAMove(character, nearestPath[destinyCell], MoveCharacterToParametrizedCallback(character, (character1, result1) =>
+                {
+                    // Get a list of the characters in attack range
+                    List<CharacterScript> targets = connector.GetAttackRangeTargets(character);
+
+                    // Filter only other teams characters ordered by max health
+                    targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
+
+                    // Check if now is any attackable character
+                    if (targets.Count > 0)
+                        attackEventIA(targets.First());
+                    else
+                        Turn();
+                }));
+            }
+        }
+        else
+            Turn();
     }
 
     private void IATurnManager()
@@ -257,20 +304,6 @@ public class GamePlayManager : MonoBehaviour
         else // Move to nearest character
         {
             moveEventIA();
-            // Check if now is any attackable character
-            targets = connector.GetAttackRangeTargets(character);
-
-            // Filter only other teams characters ordered by max health
-            targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
-
-            // If any character is attackable, attack
-            if (targets.Count > 0)
-            {
-                attackEventIA(targets.First());
-            } else
-            {
-                Turn();
-            }
         }
     }
 

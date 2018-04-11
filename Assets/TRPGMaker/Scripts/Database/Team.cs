@@ -8,6 +8,7 @@ public class Team : ScriptableObject {
 
     public string name;
     public int id;
+    [SerializeField]
 	public List<Character> characters = new List<Character>();
     public bool playable = false;
 }

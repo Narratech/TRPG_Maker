@@ -16,14 +16,14 @@ public class TeamEditor : Editor {
         listCharacters = new ReorderableList(serializedObject,
             serializedObject.FindProperty("characters"),
             true, true, true, true);
-
+        
         // Draw characters
         listCharacters.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 var element = listCharacters.serializedProperty.GetArrayElementAtIndex(index);
                 Character character = element.objectReferenceValue as Character;
-
                 rect.y += 2;
+
                 EditorGUI.LabelField(
                     new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
                     character.name);
@@ -50,6 +50,14 @@ public class TeamEditor : Editor {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+
+        // Clean array if there are null objects
+        for (int i = 0; i < listCharacters.serializedProperty.arraySize; i++)
+        {
+            var elementProperty = listCharacters.serializedProperty.GetArrayElementAtIndex(i);
+            if (elementProperty.objectReferenceValue == null)
+                listCharacters.serializedProperty.DeleteArrayElementAtIndex(i);
+        }
 
         var customStyle = new GUIStyle();
         customStyle.alignment = TextAnchor.UpperCenter;
@@ -78,6 +86,6 @@ public class TeamEditor : Editor {
     {
         var data = (Character)target;
         ((Team)this.target).characters.Add(data);
-        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(this.target);
     }
 }
