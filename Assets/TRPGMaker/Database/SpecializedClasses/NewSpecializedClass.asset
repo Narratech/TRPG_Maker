@@ -15,18 +15,40 @@ MonoBehaviour:
   tags: []
   slots: []
   attributes:
-  - name: Experience
-    id: Exp
-    description: Health points
+  - name: Health
+    id: HP
+    description: 
     maxValue: 0
     minValue: 0
     value: 0
     isCore: 1
-  - name: Health
-    id: HP
+  - name: Move Range
+    id: MVR
     description: 
-    maxValue: 22
+    maxValue: 30
     minValue: 0
-    value: 22
+    value: 5
     isCore: 1
-  formulas: []
+  - name: Move height
+    id: MVH
+    description: 
+    maxValue: 15
+    minValue: 0
+    value: 1
+    isCore: 1
+  - name: Attack Range
+    id: ATR
+    description: 
+    maxValue: 30
+    minValue: 0
+    value: 4
+    isCore: 1
+  - name: Attack Height
+    id: ATH
+    description: 
+    maxValue: 15
+    minValue: 0
+    value: 1
+    isCore: 1
+  formula: {fileID: 0}
+  skills: []

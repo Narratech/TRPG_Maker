@@ -17,6 +17,7 @@ class DatabaseWindow : EditorWindow
     private LayoutWindow tagWindow;
     private LayoutWindow slotTypeWindow;
     private LayoutWindow itemWindow;
+    private LayoutWindow skillsWindow;
     private LayoutWindow specilizedWindow;
     private LayoutWindow characterWindow;
     private LayoutWindow teamsWindow;
@@ -39,6 +40,7 @@ class DatabaseWindow : EditorWindow
         TAGS,
         SLOT_TYPE,
         ITEMS,
+        SKILLS,
         SPECIALIZED_CLASS,
         CHARACTERS,
         TEAMS
@@ -60,7 +62,10 @@ class DatabaseWindow : EditorWindow
 
         itemWindow = (ItemWindow)ScriptableObject.CreateInstance(typeof(ItemWindow));
         itemWindow.Init();
-        
+
+        skillsWindow = (SkillsWindow)ScriptableObject.CreateInstance(typeof(SkillsWindow));
+        skillsWindow.Init();
+
         specilizedWindow = (SpecializedClassWindow)ScriptableObject.CreateInstance(typeof(SpecializedClassWindow));
         specilizedWindow.Init();
 
@@ -103,6 +108,9 @@ class DatabaseWindow : EditorWindow
                 break;
             case MenuOptions.ITEMS:
                 rightWindow = itemWindow;
+                break;
+            case MenuOptions.SKILLS:
+                rightWindow = skillsWindow;
                 break;
             case MenuOptions.SPECIALIZED_CLASS:
                 rightWindow = specilizedWindow;
@@ -152,6 +160,12 @@ class DatabaseWindow : EditorWindow
                 rightWindow.selected = false;
             menuOption = MenuOptions.ITEMS;
         }
+        if (skillsWindow.Button(windowArea))
+        {
+            if (menuOption != MenuOptions.SKILLS)
+                rightWindow.selected = false;
+            menuOption = MenuOptions.SKILLS;
+        }        
         if (specilizedWindow.Button(windowArea))
         {
             if (menuOption != MenuOptions.SPECIALIZED_CLASS)

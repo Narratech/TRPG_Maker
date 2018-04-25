@@ -31,16 +31,16 @@ namespace IsoUnity.Sequences {
 	    
 	    private string paramError;
 	    
-	    public SequenceFormula SequenceFormula { get; private set; }
+	    public FormulaParser SequenceFormula { get; private set; }
 
 	    void Awake()
 	    {
-	        SequenceFormula = new SequenceFormula();
+	        SequenceFormula = new FormulaParser();
 	    }
 
 	    void OnEnable()
 	    {
-	        SequenceFormula = new SequenceFormula();
+	        SequenceFormula = new FormulaParser();
 	        SequenceFormula.Formula = formula;
 	    }
 

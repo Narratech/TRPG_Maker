@@ -14,6 +14,7 @@ public class Database : ScriptableObject
     public List<SpecializedClass> specializedClasses;
     public List<Character> characters;
     public List<Team> teams;
+    public List<Skills> skills;
     [SerializeField]
     private TRPGOptions _TRPGOptions;
 

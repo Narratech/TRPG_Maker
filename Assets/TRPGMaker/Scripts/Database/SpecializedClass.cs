@@ -10,20 +10,19 @@ using System.Linq;
 public class SpecializedClass : ScriptableObject
 {
     public new string name;
-    // ¿Lo ponemos como String o como "Tag"?
     public List<String> tags;
     public List<Slot> slots;
     public List<Attribute> attributes = null;
-    public List<Formula> formulas;
+    public Formula formula;
+    public List<Skills> skills;
 
     public void Init()
     {
         tags = new List<string>();
         slots = new List<Slot>();
-        formulas = new List<Formula>();
+        formula = ScriptableObject.CreateInstance<Formula>();
     }
 
-    // Por si se han añadido nuevos atributos CORE a Database
     public void refreshAttributes()
     {
         if (attributes == null)

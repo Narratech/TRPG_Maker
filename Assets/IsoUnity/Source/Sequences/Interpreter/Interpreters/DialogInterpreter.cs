@@ -143,11 +143,11 @@ namespace IsoUnity.Sequences {
 	        try
 	        {
 	        toParse = Regex.Replace(toParse, @"\<\$(.+)\$\>", m => {
-	            var formula = new SequenceFormula(m.Groups[1].Value);
+	            var formula = new FormulaParser(m.Groups[1].Value);
 	            return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
 	        }, RegexOptions.Multiline);
 	        toParse = Regex.Replace(toParse, @"\$(\w+)", m => {
-	            var formula = new SequenceFormula(m.Groups[1].Value);
+	            var formula = new FormulaParser(m.Groups[1].Value);
 	            return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
 	        }, RegexOptions.Multiline);
 

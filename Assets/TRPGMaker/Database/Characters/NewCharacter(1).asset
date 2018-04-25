@@ -18,43 +18,36 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 250
+    maxValue: 300
+    minValue: 300
+    value: 0
+    isCore: 0
+  - name: Move Range
+    id: MVR
+    description: 
+    maxValue: 30
     minValue: 0
-    value: 500
+    value: 5
     isCore: 1
-  - name: Move Height
+  - name: Move height
     id: MVH
     description: 
-    maxValue: 2
-    minValue: 2
-    value: 2
+    maxValue: 15
+    minValue: 0
+    value: 1
     isCore: 1
   - name: Attack Range
     id: ATR
     description: 
-    maxValue: 3
-    minValue: 3
-    value: 3
-    isCore: 1
-  - name: AttackHeight
-    id: ATH
-    description: 
-    maxValue: 2
-    minValue: 2
-    value: 2
-    isCore: 1
-  - name: Move Range
-    id: MVR
-    description: 
-    maxValue: 4
-    minValue: 4
+    maxValue: 30
+    minValue: 0
     value: 4
     isCore: 1
-  - name: Agility
-    id: 
+  - name: Attack Height
+    id: ATH
     description: 
-    maxValue: 100
+    maxValue: 15
     minValue: 0
-    value: 20
+    value: 1
     isCore: 1
-  specializedClass: []
+  specializedClasses: []

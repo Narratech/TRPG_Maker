@@ -11,13 +11,14 @@ public class CharacterEditor : Editor {
     private ReorderableList listSpecializedClass;
     private Character character;
     private ReorderableList listSlots;
+    private ReorderableList listSlotsSpecializedClasses;
     private ReorderableList listAttributes;
 
+    List<bool> foldout;
     private Vector2 scrollPosition;
 
     // Get attributes SpecialClass
     List<Attribute> attributes;
-    List<SpecializedClass> specializedClasses;
     private string[] attributesStringArray;
     private int formulaAttributeSelected = -1;
     private int slotTypeSelected = -1;
@@ -27,12 +28,14 @@ public class CharacterEditor : Editor {
     private void reloadAttributes()
     {
         character = (Character) target;
-        character.refreshAttributes();
+        character.refresh();
         attributes = character.attributes;
 
         // String array of class atributes
         attributesStringArray = new string[0];
         attributesStringArray = attributes.Select(I => I.name).ToArray();
+
+        foldout = Enumerable.Repeat(false, attributes.Count).ToList();
     }
 
     private void OnEnable()
@@ -44,6 +47,11 @@ public class CharacterEditor : Editor {
                 serializedObject.FindProperty("Slots"),
                 true, true, true, true);
 
+        // Get slots defined in specialized classes
+        listSlotsSpecializedClasses = new ReorderableList(serializedObject,
+                serializedObject.FindProperty("specializedClasses"),
+                false, true, false, false);
+
         // Get Attributes
         listAttributes = new ReorderableList(serializedObject,
                 serializedObject.FindProperty("attributes"),
@@ -51,8 +59,8 @@ public class CharacterEditor : Editor {
 
         //Get List SpecializedClass 
         listSpecializedClass = new ReorderableList(serializedObject,
-                serializedObject.FindProperty("specializedClass"),
-                false, true, true, true);
+                serializedObject.FindProperty("specializedClasses"),
+                true, true, true, true);
 
         // Draw Slots
         listSlots.drawElementCallback =
@@ -76,37 +84,74 @@ public class CharacterEditor : Editor {
                 }
             };
 
+        // Draw Slots defined in specialized classes
+        listSlotsSpecializedClasses.drawElementCallback =
+            (Rect rect, int index, bool isActive, bool isFocused) => {
+                rect.y += 2;
+
+                var element = listSlotsSpecializedClasses.serializedProperty.GetArrayElementAtIndex(index);
+                SpecializedClass specializedClass = (SpecializedClass)element.objectReferenceValue;
+
+                foreach (Slot slot in specializedClass.slots)
+                {
+                    if (slot.slotType != null && slot.modifier != null)
+                    {
+                        EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), slot.slotType + " - " + slot.modifier.name);
+                    }
+                }                
+            };
+
         //Draw specialzed classes
         listSpecializedClass.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 rect.y += 2;
-                EditorGUI.LabelField(
-                    new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
-                    specializedClasses[index].name);
-            };       
+                if(character.specializedClasses[index] != null)
+                    EditorGUI.LabelField(
+                        new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
+                        character.specializedClasses[index].name);
+            };
 
         // Draw attributes
         listAttributes.drawElementCallback =
-            (Rect rectL, int index, bool isActive, bool isFocused) => {
-                var element = listAttributes.serializedProperty.GetArrayElementAtIndex(index);
-                rectL.y += 2;
+             (Rect rectL, int index, bool isActive, bool isFocused) => {
+                 var element = listAttributes.serializedProperty.GetArrayElementAtIndex(index);
+                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.displayName));
+                 rectL.y += 2;
 
-                if (element.propertyType == SerializedPropertyType.Generic)
-                {
-                    EditorGUI.LabelField(new Rect(rectL.x + 15, rectL.y, rectL.width, rectL.height), element.displayName);
-                }
-                rectL.height = EditorGUI.GetPropertyHeight(element, GUIContent.none, true);
-                rectL.y += 1;
-                EditorGUI.PropertyField(rectL, element, GUIContent.none, true);
-                listAttributes.elementHeight = rectL.height + 4.0f;
+                 foldout[index] = EditorGUI.Foldout(new Rect(rectL.x, rectL.y, textDimensions.x + 5, rectL.height), foldout[index], element.displayName);
+                 if (foldout[index])
+                 {
+                     rectL.height = EditorGUIUtility.singleLineHeight;
+                     rectL.x += 15;
+                     rectL.y += EditorGUIUtility.singleLineHeight;
+                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("value"));
+                     rectL.y += EditorGUIUtility.singleLineHeight;
+                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("minValue"));
+                     rectL.y += EditorGUIUtility.singleLineHeight;
+                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("maxValue"));
+                     listAttributes.elementHeight = EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
+                 }
+                 else
+                 {
+
+                     listAttributes.elementHeight = EditorGUIUtility.singleLineHeight + 4.0f;
+                 }
+             };
+
+        listAttributes.elementHeightCallback += (idx) => {
+            if (foldout[idx]) return EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
+            else return EditorGUIUtility.singleLineHeight + 4.0f;
         };
-
-        listAttributes.elementHeightCallback += (idx) => { return Mathf.Max(EditorGUIUtility.singleLineHeight, EditorGUI.GetPropertyHeight(listAttributes.serializedProperty.GetArrayElementAtIndex(idx), GUIContent.none, true)) + 4.0f; };
 
         // Slots header
         listSlots.drawHeaderCallback = (Rect rect) => {
         	EditorGUI.LabelField(rect, "Slots");
        	};
+
+        // Slots defined in specialized classes header
+        listSlotsSpecializedClasses.drawHeaderCallback = (Rect rect) => {
+            EditorGUI.LabelField(rect, "Slots defined in specialized classes");
+        };
 
         // listAttributes header
         listAttributes.drawHeaderCallback = (Rect rect) => {
@@ -137,7 +182,7 @@ public class CharacterEditor : Editor {
             menu.ShowAsContext();
         };
 
-        // add specialiced class
+        // Add specialized class
         listSpecializedClass.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
             var menu = new GenericMenu();
             foreach (SpecializedClass spec in Database.Instance.specializedClasses)
@@ -159,10 +204,15 @@ public class CharacterEditor : Editor {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        //EditorGUILayout.LabelField();
 
+        // Clean array if there are null objects
+        for (int i = 0; i < listSpecializedClass.serializedProperty.arraySize; i++)
+        {
+            var elementProperty = listSpecializedClass.serializedProperty.GetArrayElementAtIndex(i);
+            if (elementProperty.objectReferenceValue == null)
+                listSpecializedClass.serializedProperty.DeleteArrayElementAtIndex(i);
+        }
 
-        serializedObject.Update();
 
         var customStyle = new GUIStyle();
         customStyle.alignment = TextAnchor.UpperCenter;
@@ -180,26 +230,32 @@ public class CharacterEditor : Editor {
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath((Character)target), character.name + ".asset");
         }
 
-		listSlots.DoLayoutList();
         listAttributes.DoLayoutList();
-        //listSpecializedClass.DoLayoutList();
-        serializedObject.ApplyModifiedProperties();
+        listSlots.DoLayoutList();
+        listSlotsSpecializedClasses.DoLayoutList();        
+        listSpecializedClass.DoLayoutList();
 
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
+
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
     }
 
 	private void clickHandlerAttributes(object target)
     {
         var data = (Attribute) target;
         attributes.Add(data);
+        foldout.Add(false);
         serializedObject.ApplyModifiedProperties();
     }
 
     private void clickHandlerSpecializedClass(object target)
     {
         var data = (SpecializedClass) target;
-        specializedClasses.Add(data);
+        character.specializedClasses.Add(data);
         serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(this.target);
+        reloadAttributes();
     }
 }

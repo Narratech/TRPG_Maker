@@ -14,10 +14,10 @@ MonoBehaviour:
   name: NewCharacter
   inventory: {fileID: 0}
   Slots:
-  - slotType: 
-    modifier: {fileID: 0}
-  - slotType: 
-    modifier: {fileID: 0}
+  - slotType: Head
+    modifier: {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
+  - slotType: Right Hand
+    modifier: {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
   - slotType: 
     modifier: {fileID: 0}
   - slotType: 
@@ -30,43 +30,36 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
-    maxValue: 250
+    maxValue: 300
     minValue: 0
-    value: 500
-    isCore: 1
+    value: 300
+    isCore: 0
   - name: Move Range
     id: MVR
     description: 
-    maxValue: 4
-    minValue: 4
-    value: 4
+    maxValue: 30
+    minValue: 0
+    value: 5
     isCore: 1
-  - name: Move Height
+  - name: Move height
     id: MVH
     description: 
-    maxValue: 2
-    minValue: 2
-    value: 2
+    maxValue: 15
+    minValue: 0
+    value: 1
     isCore: 1
   - name: Attack Range
     id: ATR
     description: 
-    maxValue: 3
-    minValue: 3
-    value: 3
+    maxValue: 30
+    minValue: 0
+    value: 4
     isCore: 1
-  - name: AttackHeight
+  - name: Attack Height
     id: ATH
     description: 
-    maxValue: 2
-    minValue: 2
-    value: 2
-    isCore: 1
-  - name: Agility
-    id: 
-    description: 
-    maxValue: 100
+    maxValue: 15
     minValue: 0
-    value: 10
+    value: 1
     isCore: 1
-  specializedClass: []
+  specializedClasses: []

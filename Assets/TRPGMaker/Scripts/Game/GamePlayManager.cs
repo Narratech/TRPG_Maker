@@ -349,11 +349,12 @@ public class GamePlayManager : MonoBehaviour
         textMove.text = "Move";
         textMove.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
         textMove.color = Color.black;
+        textMove.alignment = TextAnchor.MiddleCenter;
         RectTransform rtTextMove = objectTextMove.transform.GetComponent(typeof(RectTransform)) as RectTransform;
         rtTextMove.sizeDelta = rtButtonMove.sizeDelta;
 
         // Button position        
-        rtButtonMove.position = new Vector2(rtButtonMove.position.x - rtCanvas.position.x + (rtButtonMove.sizeDelta.x / 2) + 20, rtButtonMove.position.y - rtCanvas.position.y + (rtButtonMove.sizeDelta.x / 2) + 20);
+        rtButtonMove.position = new Vector2(rtButtonMove.position.x - rtCanvas.position.x + (rtButtonMove.sizeDelta.x / 2) + 20, rtButtonMove.position.y - rtCanvas.position.y + (rtButtonMove.sizeDelta.x / 2) + 70);
 
         // Button Attack
         GameObject objectButtonAttack = new GameObject("Button");
@@ -373,11 +374,37 @@ public class GamePlayManager : MonoBehaviour
         textAttack.text = "Attack";
         textAttack.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
         textAttack.color = Color.black;
+        textAttack.alignment = TextAnchor.MiddleCenter;
         RectTransform rtTextAttack = objectTextAttack.transform.GetComponent(typeof(RectTransform)) as RectTransform;
         rtTextAttack.sizeDelta = rtButtonAttack.sizeDelta;
 
         // Button position        
-        rtButtonAttack.position = new Vector2(rtButtonAttack.position.x - rtCanvas.position.x + (rtButtonAttack.sizeDelta.x / 2) + 20, rtButtonAttack.position.y - rtCanvas.position.y + (rtButtonAttack.sizeDelta.x / 2) - 20);
+        rtButtonAttack.position = new Vector2(rtButtonAttack.position.x - rtCanvas.position.x + (rtButtonAttack.sizeDelta.x / 2) + 20, rtButtonAttack.position.y - rtCanvas.position.y + (rtButtonAttack.sizeDelta.x / 2) + 40);
+
+        // Button Skills
+        GameObject objectButtonSkill = new GameObject("Button");
+        objectButtonSkill.transform.position = objectCanvas.transform.position;
+        objectButtonSkill.transform.parent = objectCanvas.transform;
+
+        Button buttonSkill = objectButtonSkill.AddComponent<Button>();
+        Image imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
+
+        RectTransform rtButtonSkill = objectButtonSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+        rtButtonSkill.sizeDelta = new Vector2(100, 20);
+
+        GameObject objectTexSkill = new GameObject("Text");
+        objectTexSkill.transform.position = objectButtonSkill.transform.position;
+        objectTexSkill.transform.parent = objectButtonSkill.transform;
+        Text textSkills = objectTexSkill.AddComponent<Text>();
+        textSkills.text = "Skills";
+        textSkills.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+        textSkills.color = Color.black;
+        textSkills.alignment = TextAnchor.MiddleCenter;
+        RectTransform rtTextSkills = objectTexSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+        rtTextSkills.sizeDelta = rtButtonSkill.sizeDelta;
+
+        // Button position        
+        rtButtonSkill.position = new Vector2(rtButtonSkill.position.x - rtCanvas.position.x + (rtButtonSkill.sizeDelta.x / 2) + 20, rtButtonSkill.position.y - rtCanvas.position.y + (rtButtonSkill.sizeDelta.x) - 40);
 
         // Button Defence
         GameObject objectButtonFinishTurn = new GameObject("Button");
@@ -397,14 +424,14 @@ public class GamePlayManager : MonoBehaviour
         textFinishTurn.text = "Finish turn";
         textFinishTurn.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
         textFinishTurn.color = Color.black;
+        textFinishTurn.alignment = TextAnchor.MiddleCenter;
         RectTransform rtTextFinishTurn = objectTexFinishTurn.transform.GetComponent(typeof(RectTransform)) as RectTransform;
         rtTextFinishTurn.sizeDelta = rtButtonFinishTurn.sizeDelta;
 
         // Button position        
-        rtButtonFinishTurn.position = new Vector2(rtButtonFinishTurn.position.x - rtCanvas.position.x + (rtButtonFinishTurn.sizeDelta.x / 2) + 20, rtButtonFinishTurn.position.y - rtCanvas.position.y + (rtButtonFinishTurn.sizeDelta.x) + 40);
+        rtButtonFinishTurn.position = new Vector2(rtButtonFinishTurn.position.x - rtCanvas.position.x + (rtButtonFinishTurn.sizeDelta.x / 2) + 20, rtButtonFinishTurn.position.y - rtCanvas.position.y + (rtButtonFinishTurn.sizeDelta.x) - 70);
 
         //Buttons listeners
-
         buttonMove.onClick.AddListener(() =>
         {
             imagebutton.color = UnityEngine.Color.grey;
@@ -423,6 +450,11 @@ public class GamePlayManager : MonoBehaviour
             {
                 imagebutton.color = UnityEngine.Color.white;
             }
+        });
+
+        buttonSkill.onClick.AddListener(() =>
+        {
+            
         });
 
         buttonFinishTurn.onClick.AddListener(() =>

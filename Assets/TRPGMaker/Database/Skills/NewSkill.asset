@@ -8,11 +8,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4cfe1e2b18c9494b8e22325c9a32ff7, type: 3}
-  m_Name: NewSpecializedClass(6)
+  m_Script: {fileID: 11500000, guid: 2fcfda68e797b224485786ca9e52d4b9, type: 3}
+  m_Name: NewSkill
   m_EditorClassIdentifier: 
-  name: New Specialized Class (6)
-  tags: []
-  slots: []
-  attributes: []
-  formulas: []
+  name: NewSkill
+  description: 
+  skillType: 3
+  damage: 0

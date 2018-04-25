@@ -24,6 +24,9 @@ public class ItemEditor : Editor
         dropDown = new DropDown("Tags:");
         item = (Item)target;
 
+        if(item.formula == null)
+            item.formula = ScriptableObject.CreateInstance<Formula>();
+
         // Draw stored tags
         drawTags();
     }
@@ -39,6 +42,11 @@ public class ItemEditor : Editor
         customStyle.alignment = TextAnchor.UpperCenter;
         customStyle.fontSize = 17;
         GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Editing \"" + item.name + "\" item:", customStyle);
+        var iconStyle = new GUIStyle();
+        iconStyle.alignment = TextAnchor.MiddleCenter;
+        iconStyle.margin = new RectOffset(0, 0, 0, 10);
+        if (item.icon != null)
+            GUILayout.Label(item.icon, iconStyle, GUILayout.MaxHeight(64));
 
         EditorGUILayout.BeginVertical();
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
@@ -46,7 +54,7 @@ public class ItemEditor : Editor
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("name"), new GUIContent("Name: "), GUILayout.MinWidth(100));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("description"), new GUIContent("Description: "), GUILayout.MinWidth(100));
-        Rect rect = EditorGUILayout.GetControlRect();
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("icon"), new GUIContent("Icon: "), GUILayout.MinWidth(100));
 
         // Tags dropdown
         dropDownSearch();
@@ -141,6 +149,17 @@ public class ItemEditor : Editor
                 lastTag = dropDown.Value;
                 //GUI.FocusControl("Tags:");
             }
+        }
+
+        // For formulas  
+        EditorGUI.BeginChangeCheck();
+        EditorGUILayout.LabelField("Formula:", EditorStyles.boldLabel);
+        var f = item.formula;
+        f.formula = EditorGUILayout.TextField(f.formula);
+
+        if (!f.FormulaParser.IsValidExpression)
+        {
+            EditorGUILayout.LabelField(f.FormulaParser.Error);
         }
 
         EditorGUILayout.EndScrollView();

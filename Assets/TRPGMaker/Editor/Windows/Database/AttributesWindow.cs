@@ -23,7 +23,8 @@ public class AttributesWindow : LayoutWindow
         EditorGUILayout.HelpBox("This is the attributes list editor. You can:" +
             "\n - Add a new attribute clicking on the \"+\" symbol." +
             "\n - Edit an attribute expanding with the arrow and changing any value." +
-            "\n - Remove any attribute selecting it and clicking on the \"-\" symbol or right-click on it and select \"Delete array element.\"", MessageType.Info);
+            "\n - Remove any attribute selecting it and clicking on the \"-\" symbol or right-click on it and select \"Delete array element.\"" +
+            "\n NOTE: If you edit or remove an attribute that already exists in a specialized class it would be deleted from it!", MessageType.Info);
 
         EditorGUILayout.BeginVertical();
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
@@ -74,7 +75,7 @@ public class AttributesWindow : LayoutWindow
 
         // Add attributes
         listAttributes.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            Database.Instance.attributes.Add(new Attribute("", "", "", 0, 0, 0, false));
+            Database.Instance.attributes.Add(new Attribute("New Attrbiute " + Database.Instance.attributes.Count.ToString("D3"), Database.Instance.attributes.Count.ToString("D3"), "", 0, 0, 0, false));
         };
     }
 

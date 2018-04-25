@@ -19,16 +19,23 @@ public class Character: ScriptableObject{
     [SerializeField]
     public List<Attribute> attributes = null;
     [SerializeField]
-    public List<SpecializedClass> specializedClass;
+    public List<SpecializedClass> specializedClasses;
 
     public void init()
     {
         Slots = new List<Slot>();
-        specializedClass = new List<SpecializedClass>();
+        specializedClasses = new List<SpecializedClass>();
     }
 
-    public void refreshAttributes()
+    public void refresh()
     {
+
+        // Clear deleted specializedClasses
+        for (int i = 0; i < specializedClasses.Count; i++)
+            if (specializedClasses[i] == null)
+                specializedClasses.RemoveAt(i);
+
+        // Refrresh Attributes
         if (attributes == null)
             attributes = Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => x.isCore).ToList()).ToList();
         else
@@ -37,6 +44,8 @@ public class Character: ScriptableObject{
             List<Attribute> aux = new List<Attribute>();
             aux.AddRange(attributes.Where(x => Database.Instance.attributes.Any(y => y.id == x.id)));
             attributes = aux;
+            // Add attributes of specialized classes
+            attributes.AddRange(specializedClasses.SelectMany(z => z.attributes).Where(x => !attributes.Any(y => y.id == x.id)));
         }
     }
 }
