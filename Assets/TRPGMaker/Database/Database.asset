@@ -19,6 +19,13 @@ MonoBehaviour:
     minValue: 0
     value: 0
     isCore: 1
+  - name: Damage
+    id: DMG
+    description: Damage
+    maxValue: 300
+    minValue: 0
+    value: 50
+    isCore: 1
   - name: Move Range
     id: MVR
     description: 
@@ -47,22 +54,23 @@ MonoBehaviour:
     minValue: 0
     value: 1
     isCore: 1
+  - name: Mana
+    id: MAN
+    description: 
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 0
   tags:
-  - Espada
-  - Mandoble
-  - Casco
-  - Vara
-  - Escudo
-  - Armadura ligera
+  - Light armour
   slotTypes:
   - Head
-  - Right Hand
-  - Left Hand
+  - Right hand
+  - Left hand
   items:
-  - {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
   - {fileID: 11400000, guid: 242d1289cf2bba54c88d032eafa8eec4, type: 2}
-  - {fileID: 11400000, guid: f6b6622b87c152f4599e44b22cdddc5a, type: 2}
-  - {fileID: 11400000, guid: a06817ff9fca9d14b9df2b85c4fd2c2e, type: 2}
+  - {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
+  - {fileID: 11400000, guid: 7182cd41f7eb67743a3612a0fd7c9ac5, type: 2}
   specializedClasses:
   - {fileID: 11400000, guid: 684c928e26a3b364c9cc9cff30e18082, type: 2}
   characters:
@@ -72,13 +80,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75942776545ea02418c221a9273f406b, type: 2}
   - {fileID: 11400000, guid: bac31a58c9f786c4a9d5b67034ba5482, type: 2}
   - {fileID: 11400000, guid: 496024b31fb8d604ba8b12317f0d4762, type: 2}
+  - {fileID: 11400000, guid: a0544f3bb46f87e4b902b7442a6702ca, type: 2}
   teams:
   - {fileID: 11400000, guid: 15bb40f2e1f0dd04a8ec14b3c2bb0cc4, type: 2}
   - {fileID: 11400000, guid: edbd6fc84edad7749b2192b14449f153, type: 2}
-  skills:
-  - {fileID: 11400000, guid: e0fa9d1311b88f547beee49449fc519f, type: 2}
-  - {fileID: 11400000, guid: dfe22705bcdd79847ba1a5df96149c38, type: 2}
-  - {fileID: 11400000, guid: 9216a251e61bcfe4d80b1430c9b830a7, type: 2}
+  skills: []
   _TRPGOptions:
     _gameType: 0
     _turnType: 0
@@ -89,6 +95,14 @@ MonoBehaviour:
       maxValue: 0
       minValue: 0
       value: 0
+      isCore: 1
+    _damageAttribute:
+      name: Damage
+      id: DMG
+      description: Damage
+      maxValue: 300
+      minValue: 0
+      value: 50
       isCore: 1
     _moveRange:
       name: Move Range

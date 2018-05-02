@@ -7,17 +7,23 @@ using UnityEngine;
 public class Slot{
 
     public string slotType;
-    public Modifier modifier;
+    public Modifier _modifier;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public Modifier modifier
+    {
+        get
+        {
+            return _modifier;
+        }
+
+        set
+        {
+            //#3
+            _modifier = value;
+            calculatedFormula = false;
+        }
+    }
+    public bool calculatedFormula;
 
     public void setModifier(Modifier modifier)    {
 
@@ -136,4 +142,5 @@ public class Slot{
 
         return slotExist;
     }
+
 }

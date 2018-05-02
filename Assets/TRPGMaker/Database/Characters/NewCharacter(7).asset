@@ -50,4 +50,11 @@ MonoBehaviour:
     minValue: 0
     value: 1
     isCore: 1
+  - name: Damage
+    id: DMG
+    description: Damage
+    maxValue: 300
+    minValue: 0
+    value: 50
+    isCore: 1
   specializedClasses: []

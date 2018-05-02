@@ -51,6 +51,21 @@ public class TRPGOptions  {
     }
 
     [SerializeField]
+    private Attribute _damageAttribute;
+
+    public Attribute damageAttribute
+    {
+        get
+        {
+            return _damageAttribute;
+        }
+        set
+        {
+            _damageAttribute = value;
+        }
+    }
+
+    [SerializeField]
     private Attribute _moveRange;
 
     public Attribute moveRange

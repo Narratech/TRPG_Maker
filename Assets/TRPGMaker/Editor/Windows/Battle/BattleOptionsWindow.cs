@@ -9,6 +9,7 @@ public class BattleOptionsWindow : EditorWindow
     private int selectedGameType = -1;
     private int selectedTurnStyle = -1;
     private int selectedHealthAttribte = -1;
+    private int selectedDamageAttribute = -1;
     private int selectedMovementRange = -1;
     private int selectedMovementHeight = -1;
     private int selectedAttackRange = -1;
@@ -29,6 +30,7 @@ public class BattleOptionsWindow : EditorWindow
             {
                 this.selectedTurnStyle = (int) Database.Instance.battleOptions.turnType;
                 this.selectedHealthAttribte = Database.Instance.attributes.IndexOf(Database.Instance.battleOptions.healthAttribute);
+                this.selectedDamageAttribute = Database.Instance.attributes.IndexOf(Database.Instance.battleOptions.damageAttribute);
                 this.selectedMovementRange = Database.Instance.attributes.IndexOf(Database.Instance.battleOptions.moveRange);
                 this.selectedMovementHeight = Database.Instance.attributes.IndexOf(Database.Instance.battleOptions.moveHeight);
                 this.selectedAttackRange = Database.Instance.attributes.IndexOf(Database.Instance.battleOptions.attackRange);
@@ -66,6 +68,11 @@ public class BattleOptionsWindow : EditorWindow
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Damage attribute name:");
+            selectedDamageAttribute = EditorGUILayout.Popup(selectedDamageAttribute, Database.Instance.attributes.Select(o => o.name).ToArray());
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Movement range attribute name:");
             selectedMovementRange = EditorGUILayout.Popup(selectedMovementRange, Database.Instance.attributes.Select(o => o.name).ToArray());
             EditorGUILayout.EndHorizontal();
@@ -89,6 +96,7 @@ public class BattleOptionsWindow : EditorWindow
             {
                 if (selectedTurnStyle != -1) Database.Instance.battleOptions.turnType = (TurnTypes) selectedTurnStyle;
                 if(selectedHealthAttribte != -1) Database.Instance.battleOptions.healthAttribute = Database.Instance.attributes[selectedHealthAttribte];
+                if (selectedDamageAttribute != -1) Database.Instance.battleOptions.damageAttribute = Database.Instance.attributes[selectedDamageAttribute];
                 if (selectedMovementRange != -1) Database.Instance.battleOptions.moveRange = Database.Instance.attributes[selectedMovementRange];
                 if (selectedMovementHeight != -1) Database.Instance.battleOptions.moveHeight = Database.Instance.attributes[selectedMovementHeight];
                 if (selectedAttackRange != -1) Database.Instance.battleOptions.attackRange = Database.Instance.attributes[selectedAttackRange];

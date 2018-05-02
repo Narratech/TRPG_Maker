@@ -2,7 +2,9 @@
 using NCalc;
 using System.Reflection;
 using System.Linq;
+using System;
 
+[Serializable]
 public class FormulaParser {
 
 	private Expression expression;
@@ -91,7 +93,7 @@ public class FormulaParser {
 		if (Database.Instance.attributes.Any(x => x.id == param)) 
 		{
 			args.HasResult = true;
-			args.Result = Database.Instance.attributes.Select(x => x.id == param);
+            args.Result = Database.Instance.attributes.Find(x => x.id == param).value;
 		} 
 	    else
 		{
@@ -102,91 +104,10 @@ public class FormulaParser {
 
 	private void EvaluateFunction(string name, FunctionArgs args)
 	{
-	    functionError = "";
-
-	    switch (name)
-	    {
-	        case "var":
-	            {
-	                if (args.Parameters.Length < 3)
-	                {
-	                    functionError = "Function 'var' requires 3 arguments.";
-	                    return;
-	                }
-
-	                var gameObject = (string)args.Parameters[0].Evaluate();
-	                if (!(gameObject is string))
-	                {
-	                    functionError = "Function 'var' 1st parameter is not string.";
-	                    return;
-	                }
-	                var component = (string)args.Parameters[1].Evaluate();
-	                if (!(component is string))
-	                {
-	                    functionError = "Function 'var' 2nd parameter is not string.";
-	                    return;
-	                }
-	                var property = (string)args.Parameters[2].Evaluate();
-	                if (!(property is string))
-	                {
-	                    functionError = "Function 'var' 3rd parameter is not string.";
-	                    return;
-	                }
-
-	                if (Application.isPlaying) // Only real check runtime
-	                {
-	                    GameObject go = GameObject.Find(gameObject);
-	                    Component co = null;
-	                    PropertyInfo p = null;
-
-	                    if (go) co = go.GetComponent(component);
-	                    if (co) p = co.GetType().GetProperty(property);
-
-	                    // Result
-	                    args.HasResult = go != null && co != null && p != null;
-	                    if (args.HasResult) args.Result = p.GetValue(co, null);
-	                    else
-	                    {
-	                        if (go == null)
-	                            functionError = "Formula '" + name + "' function error: GameObject \"" + gameObject + "\" not found in scene.";
-	                        else if (co == null)
-	                            functionError = "Formula '" + name + "' function error: Component \"" + component + "\" not found in \"" + gameObject + "\" gameObject.";
-	                        else if (p == null)
-	                            functionError = "Formula '" + name + "' function error: Property \"" + property + "\" not found in \"" + component + "\" component.";
-	                    }
-	                }
-	            }
-
-	            break;
-
-	        case "varObject":
-	        case "objectVar":
-	            {
-	                if (args.Parameters.Length < 2)
-	                {
-	                    functionError = "Function '" + name + "' requires 2 arguments.";
-	                    return;
-	                } 
-
-	                var objectName = (string)args.Parameters[0].Evaluate();
-	                if (!(objectName is string))
-	                {
-	                    functionError = "Function '" + name + "' 1st parameter is not string.";
-	                    return;
-	                }
-	                var property = (string)args.Parameters[1].Evaluate();
-	                if (!(property is string))
-	                {
-	                    functionError = "Function '" + name + "' 2nd parameter is not string.";
-	                    return;
-	                }
-	            }
-	            break;
-	        /*default:
-	            functionError = "Missing function \"" + name + "\"";
-	            break;*/
-	    }
+	    
 	}
+
+
 
 	public object Evaluate()
 	{

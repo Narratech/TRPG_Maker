@@ -19,7 +19,10 @@ public class Character: ScriptableObject{
     [SerializeField]
     public List<Attribute> attributes = null;
     [SerializeField]
+    public List<Attribute> attributesWithFormulas = null;
+    [SerializeField]
     public List<SpecializedClass> specializedClasses;
+    public int specializedClassesCount = 0;
 
     public void init()
     {
@@ -47,5 +50,35 @@ public class Character: ScriptableObject{
             // Add attributes of specialized classes
             attributes.AddRange(specializedClasses.SelectMany(z => z.attributes).Where(x => !attributes.Any(y => y.id == x.id)));
         }
+    }
+
+    public void calculateFormulas()
+    {
+        var f = FormulaScript.Create("");
+        attributesWithFormulas = Extensions.Clone<Attribute>(attributes).ToList();
+        // Formulas in slots
+        foreach (Slot slot in Slots)
+        {
+           foreach(Formula formula in slot.modifier.formulas)
+           {
+               f.formula = formula.formula;
+               var r = f.FormulaParser.Evaluate();
+                attributesWithFormulas.Find(x => x.id == formula.attributeID).value += (int) r;                    
+           }
+        }
+        // Formulas in slots of specialized classes
+        foreach (SpecializedClass specializedClass in specializedClasses)
+        {
+            foreach (Slot slot in specializedClass.slots)
+            {
+                foreach (Formula formula in slot.modifier.formulas)
+                {
+                    f.formula = formula.formula;
+                    var r = f.FormulaParser.Evaluate();
+                    attributesWithFormulas.Find(x => x.id == formula.attributeID).value += (int)r;
+                }
+            }
+        }
+        specializedClassesCount = specializedClasses.Count;
     }
 }

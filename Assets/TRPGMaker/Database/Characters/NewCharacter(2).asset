@@ -9,19 +9,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
-  m_Name: NewCharacter(1)
+  m_Name: NewCharacter(2)
   m_EditorClassIdentifier: 
-  name: NewCharacter(1)
+  name: NewCharacter(2)
   inventory: {fileID: 0}
   Slots: []
   attributes:
   - name: Health
     id: HP
     description: 
-    maxValue: 300
-    minValue: 300
+    maxValue: 0
+    minValue: 0
     value: 0
-    isCore: 0
+    isCore: 1
+  - name: Damage
+    id: DMG
+    description: Damage
+    maxValue: 300
+    minValue: 0
+    value: 50
+    isCore: 1
   - name: Move Range
     id: MVR
     description: 
@@ -50,12 +57,6 @@ MonoBehaviour:
     minValue: 0
     value: 1
     isCore: 1
-  - name: Damage
-    id: DMG
-    description: Damage
-    maxValue: 300
-    minValue: 0
-    value: 50
-    isCore: 1
   attributesWithFormulas: []
   specializedClasses: []
+  specializedClassesCount: 0

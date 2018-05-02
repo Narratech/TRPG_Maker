@@ -245,19 +245,16 @@ public class SpecializedClassEditor : Editor {
             }
             menu.ShowAsContext();
         };
+
+        // Remove skill
+        listSkills.onRemoveCallback = (ReorderableList l) => {
+            specializedClass.skills.Remove(listSkills.serializedProperty.GetArrayElementAtIndex(l.index).objectReferenceValue as Skills);
+        };
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-
-        // Clean array if there are null objects
-        for (int i = 0; i < listSkills.serializedProperty.arraySize; i++)
-        {
-            var elementProperty = listSkills.serializedProperty.GetArrayElementAtIndex(i);
-            if (elementProperty.objectReferenceValue == null)
-                listSkills.serializedProperty.DeleteArrayElementAtIndex(i);
-        }
 
         var customStyle = new GUIStyle();
         customStyle.alignment = TextAnchor.UpperCenter;
@@ -280,7 +277,7 @@ public class SpecializedClassEditor : Editor {
         listSkills.DoLayoutList();
         //listFormulas.DoLayoutList();
 
-        // For formulas  
+        /* // For formulas  
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.LabelField("Formula:", EditorStyles.boldLabel);
         var f = specializedClass.formula;
@@ -289,7 +286,7 @@ public class SpecializedClassEditor : Editor {
         if (!f.FormulaParser.IsValidExpression)
         {
             EditorGUILayout.LabelField(f.FormulaParser.Error);
-        }
+        }*/
 
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();

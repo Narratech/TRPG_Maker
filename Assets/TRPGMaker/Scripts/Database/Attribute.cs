@@ -57,6 +57,6 @@ public class Attribute : ICloneable
 
     public override int GetHashCode()
     {
-        return Int32.Parse(id);
+        return id.GetHashCode();
     }
 }

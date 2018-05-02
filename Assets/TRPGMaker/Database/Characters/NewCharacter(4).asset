@@ -13,7 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: NewCharacter(4)
   inventory: {fileID: 0}
-  Slots: []
+  Slots:
+  - slotType: Head
+    _modifier: {fileID: 11400000, guid: 242d1289cf2bba54c88d032eafa8eec4, type: 2}
+    calculatedFormula: 1
   attributes:
   - name: Health
     id: HP
@@ -50,4 +53,13 @@ MonoBehaviour:
     minValue: 0
     value: 1
     isCore: 1
+  - name: Damage
+    id: DMG
+    description: Damage
+    maxValue: 300
+    minValue: 0
+    value: 50
+    isCore: 1
+  attributesWithFormulas: []
   specializedClasses: []
+  specializedClassesCount: 0

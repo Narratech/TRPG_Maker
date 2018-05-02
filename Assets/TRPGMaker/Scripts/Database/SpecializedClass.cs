@@ -13,14 +13,14 @@ public class SpecializedClass : ScriptableObject
     public List<String> tags;
     public List<Slot> slots;
     public List<Attribute> attributes = null;
-    public Formula formula;
+    public FormulaScript formula;
     public List<Skills> skills;
 
     public void Init()
     {
         tags = new List<string>();
         slots = new List<Slot>();
-        formula = ScriptableObject.CreateInstance<Formula>();
+        formula = ScriptableObject.CreateInstance<FormulaScript>();
     }
 
     public void refreshAttributes()

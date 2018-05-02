@@ -13,6 +13,7 @@ public class CharacterEditor : Editor {
     private ReorderableList listSlots;
     private ReorderableList listSlotsSpecializedClasses;
     private ReorderableList listAttributes;
+    private ReorderableList listAttributesFormulas;
 
     List<bool> foldout;
     private Vector2 scrollPosition;
@@ -55,7 +56,12 @@ public class CharacterEditor : Editor {
         // Get Attributes
         listAttributes = new ReorderableList(serializedObject,
                 serializedObject.FindProperty("attributes"),
-                false, true, true, true);   
+                false, true, true, true);
+
+        // Get Attributes Formulas
+        listAttributesFormulas = new ReorderableList(serializedObject,
+                serializedObject.FindProperty("attributesWithFormulas"),
+                false, true, true, true);
 
         //Get List SpecializedClass 
         listSpecializedClass = new ReorderableList(serializedObject,
@@ -92,14 +98,35 @@ public class CharacterEditor : Editor {
                 var element = listSlotsSpecializedClasses.serializedProperty.GetArrayElementAtIndex(index);
                 SpecializedClass specializedClass = (SpecializedClass)element.objectReferenceValue;
 
+                int i = 0;
                 foreach (Slot slot in specializedClass.slots)
                 {
                     if (slot.slotType != null && slot.modifier != null)
                     {
-                        EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), slot.slotType + " - " + slot.modifier.name);
+                        EditorGUI.LabelField(new Rect(rect.x, rect.y + (EditorGUIUtility.singleLineHeight * i), rect.width, EditorGUIUtility.singleLineHeight), slot.slotType + " - " + slot.modifier.name);
+                        //listSlotsSpecializedClasses.elementHeight += EditorGUIUtility.singleLineHeight;
+                        i++;
                     }
-                }                
+                }
+                
             };
+
+        // Set height of Slots defined in specialized classes
+        listSlotsSpecializedClasses.elementHeightCallback = (index) =>
+        {
+            var element = listSlotsSpecializedClasses.serializedProperty.GetArrayElementAtIndex(index);
+            SpecializedClass specializedClass = (SpecializedClass)element.objectReferenceValue;
+
+            int i = 0;
+            foreach (Slot slot in specializedClass.slots)
+            {
+                if (slot.slotType != null && slot.modifier != null)
+                {
+                    i++;
+                }
+            }
+            return EditorGUIUtility.singleLineHeight * i;
+        };
 
         //Draw specialzed classes
         listSpecializedClass.drawElementCallback =
@@ -143,6 +170,18 @@ public class CharacterEditor : Editor {
             else return EditorGUIUtility.singleLineHeight + 4.0f;
         };
 
+        // Draw attributes with formulas
+        listAttributesFormulas.drawElementCallback =
+             (Rect rectL, int index, bool isActive, bool isFocused) => {
+                 var element = character.attributesWithFormulas[index];
+                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.name));
+                 rectL.y += 2;
+
+                 EditorGUI.LabelField(new Rect(rectL.x, rectL.y, textDimensions.x, rectL.height), element.name);
+                 EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x - 5, rectL.y, 10, rectL.height), " = ");
+                 EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x + 5, rectL.y, rectL.width - textDimensions.x - 5, rectL.height), element.value.ToString());
+             };
+
         // Slots header
         listSlots.drawHeaderCallback = (Rect rect) => {
         	EditorGUI.LabelField(rect, "Slots");
@@ -156,6 +195,11 @@ public class CharacterEditor : Editor {
         // listAttributes header
         listAttributes.drawHeaderCallback = (Rect rect) => {
             EditorGUI.LabelField(rect, "Attributes");
+        };
+
+        // listAttributes with Formulas header
+        listAttributesFormulas.drawHeaderCallback = (Rect rect) => {
+            EditorGUI.LabelField(rect, "Attributes from Formulas");
         };
 
         //listSpecializedClass header
@@ -199,19 +243,34 @@ public class CharacterEditor : Editor {
             else
                 return true;
         };
+
+        // Remove specialized classes
+        listSpecializedClass.onRemoveCallback = (ReorderableList l) => {
+            character.specializedClasses.Remove(listSpecializedClass.serializedProperty.GetArrayElementAtIndex(l.index).objectReferenceValue as SpecializedClass);
+        };
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
-        // Clean array if there are null objects
-        for (int i = 0; i < listSpecializedClass.serializedProperty.arraySize; i++)
+        // Check if slots changed
+        foreach (Slot s in character.Slots)
         {
-            var elementProperty = listSpecializedClass.serializedProperty.GetArrayElementAtIndex(i);
-            if (elementProperty.objectReferenceValue == null)
-                listSpecializedClass.serializedProperty.DeleteArrayElementAtIndex(i);
+            var calculate = false;
+            if (s.modifier != null && !s.calculatedFormula)
+            {
+                Debug.Log(s.modifier.name);
+                calculate = true;
+                s.calculatedFormula = true;
+            }
+            if (calculate)
+                character.calculateFormulas();
         }
+
+        // Check is specialiazed Classes changed
+        if(character.specializedClasses.Count != character.specializedClassesCount)
+            character.calculateFormulas();
 
 
         var customStyle = new GUIStyle();
@@ -231,6 +290,7 @@ public class CharacterEditor : Editor {
         }
 
         listAttributes.DoLayoutList();
+        listAttributesFormulas.DoLayoutList();
         listSlots.DoLayoutList();
         listSlotsSpecializedClasses.DoLayoutList();        
         listSpecializedClass.DoLayoutList();

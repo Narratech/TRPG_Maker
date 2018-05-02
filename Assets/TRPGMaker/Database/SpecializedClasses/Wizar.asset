@@ -9,18 +9,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4cfe1e2b18c9494b8e22325c9a32ff7, type: 3}
-  m_Name: NewSpecializedClass
+  m_Name: Wizar
   m_EditorClassIdentifier: 
-  name: New Specialized Class
+  name: Wizard
   tags: []
-  slots: []
+  slots:
+  - slotType: Right hand
+    _modifier: {fileID: 11400000, guid: 7182cd41f7eb67743a3612a0fd7c9ac5, type: 2}
+    calculatedFormula: 0
   attributes:
   - name: Health
     id: HP
     description: 
     maxValue: 0
     minValue: 0
-    value: 0
+    value: 10
     isCore: 1
   - name: Move Range
     id: MVR
@@ -50,5 +53,19 @@ MonoBehaviour:
     minValue: 0
     value: 1
     isCore: 1
+  - name: Damage
+    id: DMG
+    description: Damage
+    maxValue: 300
+    minValue: 0
+    value: 50
+    isCore: 1
+  - name: Mana
+    id: MAN
+    description: 
+    maxValue: 0
+    minValue: 0
+    value: 0
+    isCore: 0
   formula: {fileID: 0}
   skills: []

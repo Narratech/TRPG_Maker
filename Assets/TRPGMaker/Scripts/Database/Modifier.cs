@@ -15,7 +15,21 @@ public class Modifier: ScriptableObject {
     public new string name = "Enter item name";
     public string description = "Enter item description";
     public List<string> tags = new List<String>();
-    public Formula formula;
+    [SerializeField]
+    private List<Formula> _formulas = new List<Formula>();
+    public List<Formula> formulas
+    {
+        get
+        {
+            return _formulas;
+        }
+        set
+        {
+            _formulas = value;
+        }
+    }
+
+
     public Texture2D icon;
 
     [Serializable]

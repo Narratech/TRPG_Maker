@@ -14,7 +14,13 @@ MonoBehaviour:
   name: Axe
   description: Enter item description
   tags: []
+  _formulas:
+  - attributeID: HP
+    formula: HP + 15
+  - attributeID: DMG
+    formula: DMG + 10
   icon: {fileID: 2800000, guid: c0470fcd9b1259b4c972a2f119f22e43, type: 3}
   SlotType:
   - slotsOcupped:
-    - Head
+    - Right hand
+    - Left hand

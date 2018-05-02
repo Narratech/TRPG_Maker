@@ -1,51 +1,11 @@
-﻿using UnityEngine;
-using NCalc;
-using System.Reflection;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Formula : ScriptableObject {
+[Serializable]
+public class Formula {
 
-	public static Formula Create(string formula)
-	{
-	    var r = ScriptableObject.CreateInstance<Formula>();
-	    r.formula = formula;
-	    return r;
-	}
-
-	[SerializeField]
-	private string _formula = "";
-	public string formula
-	{
-	    get { return _formula; }
-	    set
-	    {
-	        name = value;
-	        _formula = value;
-            FormulaParser.Formula = _formula;
-	    }
-	}
-
-	public FormulaParser FormulaParser { get; private set; }
-
-	void Awake()
-	{
-        FormulaParser = new FormulaParser();
-	}
-
-	void OnEnable()
-	{
-        FormulaParser = new FormulaParser();
-        FormulaParser.Formula = _formula;
-	}
-
-
-	public bool check()
-	{
-	    var r = FormulaParser.Evaluate();
-	    return r is bool ? (bool)r : false;
-	}
-
-	public override string ToString()
-	{
-	    return this._formula;
-	}
+    public string attributeID = "";
+    public string formula = "";
 }

@@ -212,7 +212,7 @@ public class GamePlayManager : MonoBehaviour
         {
             CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
 
-            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 150; // This is a test. CHANGE THIS!!
+            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.id == Database.Instance.battleOptions.damageAttribute.id).value; 
 
             if (characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
             {
@@ -230,7 +230,7 @@ public class GamePlayManager : MonoBehaviour
     {
         connector.IAAttack(character, target, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
         {
-            target.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= 50; // This is a test. CHANGE THIS!!
+            target.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.id == Database.Instance.battleOptions.damageAttribute.id).value;
             Turn();
         }));
     }

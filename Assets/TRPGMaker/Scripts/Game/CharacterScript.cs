@@ -13,7 +13,7 @@ public class CharacterScript : MonoBehaviour {
 
     private void Start()
     {
-
+        
     }
 
     private void OnGUI()
@@ -36,13 +36,24 @@ public class CharacterScript : MonoBehaviour {
 
     void OnMouseEnter()
     {
-        Debug.Log("AAA");
+       
     }
 
 
     void Update()
     {
-        
+        foreach(Slot s in character.Slots)
+        {
+            var calculate = false;
+            if (s.modifier != null && !s.calculatedFormula)
+            {
+                Debug.Log(s.modifier.name);
+                calculate = true;
+                s.calculatedFormula = true;
+            }
+            if (calculate)
+                character.calculateFormulas();
+        }
     }
 }
 

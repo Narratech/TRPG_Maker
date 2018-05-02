@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   name: Sword
-  description: Enter item description
-  tags:
-  - Espada
+  description: sgrgsdrgd
+  tags: []
+  _formulas: []
   icon: {fileID: 2800000, guid: c547d731c4e32864b989aab9fe59d085, type: 3}
-  SlotType: []
+  SlotType:
+  - slotsOcupped:
+    - Right hand
+  - slotsOcupped:
+    - Left hand

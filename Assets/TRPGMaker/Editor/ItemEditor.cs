@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,8 +17,9 @@ public class ItemEditor : Editor
     private string tag;
     private string lastTag;
     int lastCursorPos = 0;
+    int indexFormula;
 
-
+    private ReorderableList listFormulas;
     private Vector2 scrollPosition;
 
     void Init()
@@ -24,11 +27,62 @@ public class ItemEditor : Editor
         dropDown = new DropDown("Tags:");
         item = (Item)target;
 
-        if(item.formula == null)
-            item.formula = ScriptableObject.CreateInstance<Formula>();
-
         // Draw stored tags
         drawTags();
+    }
+
+    private void OnEnable()
+    {
+        // Get Formulas
+        listFormulas = new ReorderableList(serializedObject,
+                serializedObject.FindProperty("_formulas"),
+                true, true, true, true);
+
+        // Draw formulas
+        listFormulas.drawElementCallback =
+            (Rect rect, int index, bool isActive, bool isFocused) => {
+                var element = listFormulas.serializedProperty.GetArrayElementAtIndex(index);
+                var formula = item.formulas[index];
+                rect.y += 2;
+
+                indexFormula = Database.Instance.attributes.IndexOf(Database.Instance.attributes.Find(x => x.id == formula.attributeID));
+
+                EditorGUI.BeginChangeCheck();
+                indexFormula = EditorGUI.Popup(new Rect(rect.x, rect.y, 50, EditorGUIUtility.singleLineHeight), indexFormula, Database.Instance.attributes.Select(x => x.id).ToArray());
+
+                EditorGUI.LabelField(new Rect(rect.x + 55, rect.y, 10, EditorGUIUtility.singleLineHeight), "=", EditorStyles.boldLabel);
+
+                formula.formula = EditorGUI.TextField(new Rect(rect.x + 70, rect.y, rect.width - 70, EditorGUIUtility.singleLineHeight), formula.formula);
+
+                var f = FormulaScript.Create(formula.formula);
+                if (!f.FormulaParser.IsValidExpression)
+                {
+                    EditorGUI.LabelField(new Rect(rect.x + 70, rect.y + EditorGUIUtility.singleLineHeight + 2.0f, rect.width, EditorGUIUtility.singleLineHeight), f.FormulaParser.Error);
+                }
+
+                if (EditorGUI.EndChangeCheck())
+                    formula.attributeID = Database.Instance.attributes[indexFormula].id;
+            };
+
+        listFormulas.elementHeight = (EditorGUIUtility.singleLineHeight * 2) + 4.0f;
+
+        // listFormulas header
+        listFormulas.drawHeaderCallback = (Rect rect) => {
+            EditorGUI.LabelField(rect, "Formulas");
+        };
+
+        // Add formula
+        listFormulas.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
+            item.formulas.Add(new Formula());
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(target);
+        };
+
+        // Remove formula
+        listFormulas.onRemoveCallback = (ReorderableList l) => {
+            item.formulas.Remove(item.formulas[l.index]);
+            serializedObject.ApplyModifiedProperties();
+        };
     }
 
     public override void OnInspectorGUI()
@@ -114,7 +168,10 @@ public class ItemEditor : Editor
             if(i != item.SlotType.Count - 1)
                 GUILayout.Label("OR", centeredStyle);
         }
-        
+
+        // For formulas
+        listFormulas.DoLayoutList();        
+
         // Detect if text changed
         if (EditorGUI.EndChangeCheck())
         {
@@ -134,7 +191,6 @@ public class ItemEditor : Editor
         {
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(target);
-            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath((Item)target), item.name + ".asset");
         }
@@ -151,19 +207,11 @@ public class ItemEditor : Editor
             }
         }
 
-        // For formulas  
-        EditorGUI.BeginChangeCheck();
-        EditorGUILayout.LabelField("Formula:", EditorStyles.boldLabel);
-        var f = item.formula;
-        f.formula = EditorGUILayout.TextField(f.formula);
-
-        if (!f.FormulaParser.IsValidExpression)
-        {
-            EditorGUILayout.LabelField(f.FormulaParser.Error);
-        }
-
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
+
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
     }
 
     void dropDownSearch()
