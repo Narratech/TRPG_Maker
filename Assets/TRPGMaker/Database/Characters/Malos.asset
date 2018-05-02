@@ -9,11 +9,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
-  m_Name: NewCharacter
+  m_Name: Malos
   m_EditorClassIdentifier: 
-  name: NewCharacter
+  name: Maloso
   inventory: {fileID: 0}
   Slots:
+  - slotType: Right hand
+    _modifier: {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
+    calculatedFormula: 1
   - slotType: Left hand
     _modifier: {fileID: 11400000, guid: 242d1289cf2bba54c88d032eafa8eec4, type: 2}
     calculatedFormula: 1
@@ -21,10 +24,17 @@ MonoBehaviour:
   - name: Health
     id: HP
     description: 
+    maxValue: 100
+    minValue: 0
+    value: 100
+    isCore: 1
+  - name: Damage
+    id: DMG
+    description: Damage
     maxValue: 300
     minValue: 0
-    value: 250
-    isCore: 0
+    value: 100
+    isCore: 1
   - name: Move Range
     id: MVR
     description: 
@@ -53,28 +63,21 @@ MonoBehaviour:
     minValue: 0
     value: 1
     isCore: 1
-  - name: Damage
-    id: DMG
-    description: Damage
-    maxValue: 300
-    minValue: 0
-    value: 50
-    isCore: 1
-  - name: Mana
-    id: MAN
-    description: 
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 0
   attributesWithFormulas:
   - name: Health
     id: HP
     description: 
+    maxValue: 100
+    minValue: 0
+    value: 115
+    isCore: 1
+  - name: Damage
+    id: DMG
+    description: Damage
     maxValue: 300
     minValue: 0
-    value: 265
-    isCore: 0
+    value: 160
+    isCore: 1
   - name: Move Range
     id: MVR
     description: 
@@ -103,20 +106,5 @@ MonoBehaviour:
     minValue: 0
     value: 1
     isCore: 1
-  - name: Damage
-    id: DMG
-    description: Damage
-    maxValue: 300
-    minValue: 0
-    value: 110
-    isCore: 1
-  - name: Mana
-    id: MAN
-    description: 
-    maxValue: 0
-    minValue: 0
-    value: 0
-    isCore: 0
-  specializedClasses:
-  - {fileID: 11400000, guid: 684c928e26a3b364c9cc9cff30e18082, type: 2}
-  specializedClassesCount: 1
+  specializedClasses: []
+  specializedClassesCount: 0

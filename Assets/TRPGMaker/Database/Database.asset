@@ -75,15 +75,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 684c928e26a3b364c9cc9cff30e18082, type: 2}
   characters:
   - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
-  - {fileID: 11400000, guid: 2ce6ded48f42c8e46b99a9a665a8efda, type: 2}
-  - {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
-  - {fileID: 11400000, guid: 75942776545ea02418c221a9273f406b, type: 2}
-  - {fileID: 11400000, guid: bac31a58c9f786c4a9d5b67034ba5482, type: 2}
-  - {fileID: 11400000, guid: 496024b31fb8d604ba8b12317f0d4762, type: 2}
-  - {fileID: 11400000, guid: a0544f3bb46f87e4b902b7442a6702ca, type: 2}
+  - {fileID: 11400000, guid: cf419c7018e904807b7865c05188a2ab, type: 2}
   teams:
-  - {fileID: 11400000, guid: 15bb40f2e1f0dd04a8ec14b3c2bb0cc4, type: 2}
-  - {fileID: 11400000, guid: edbd6fc84edad7749b2192b14449f153, type: 2}
+  - {fileID: 11400000, guid: a025c73b6ee164c2aa04ca15512ca80c, type: 2}
+  - {fileID: 11400000, guid: 165b657570bad4c7784c64b6a07879a0, type: 2}
   skills: []
   _TRPGOptions:
     _gameType: 0

@@ -9,11 +9,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7b1fcdece9778478b2575993f98a72, type: 3}
-  m_Name: Playable Tea
+  m_Name: Player Team
   m_EditorClassIdentifier: 
-  name: Playable Team
-  id: 0
+  name: Player Team
+  id: 1
   characters:
-  - {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
-  - {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
+  - {fileID: 11400000, guid: cf419c7018e904807b7865c05188a2ab, type: 2}
   playable: 1
