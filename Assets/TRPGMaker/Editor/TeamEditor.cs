@@ -45,19 +45,26 @@ public class TeamEditor : Editor {
             }
             menu.ShowAsContext();
         };
+
+        // Remove character
+        listCharacters.onRemoveCallback = (ReorderableList l) =>
+        {
+            Team team = (Team)target;
+            team.characters.Remove(listCharacters.serializedProperty.GetArrayElementAtIndex(l.index).objectReferenceValue as Character);
+        };
     }
 
     public override void OnInspectorGUI()
     {
-        serializedObject.Update();
-
+        Team team = (Team)target;
         // Clean array if there are null objects
-        for (int i = 0; i < listCharacters.serializedProperty.arraySize; i++)
+        for (int i = 0; i < team.characters.Count; i++)
         {
-            var elementProperty = listCharacters.serializedProperty.GetArrayElementAtIndex(i);
-            if (elementProperty.objectReferenceValue == null)
-                listCharacters.serializedProperty.DeleteArrayElementAtIndex(i);
+            if (team.characters[i] == null)
+                team.characters.RemoveAt(i);
         }
+
+        serializedObject.Update();
 
         var customStyle = new GUIStyle();
         customStyle.alignment = TextAnchor.UpperCenter;
