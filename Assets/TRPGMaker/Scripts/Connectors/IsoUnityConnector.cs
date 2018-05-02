@@ -189,7 +189,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         try
         {
-            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.ATTACK, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_ATTACK, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -229,7 +229,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         try
         {
-            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.MOVE, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_MOVE, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -453,9 +453,11 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
         switch (eventType)
         {
             case EventTypes.ATTACK:
+            case EventTypes.IA_ATTACK:
                 texture = colorAttack;
                 break;
             case EventTypes.MOVE:
+            case EventTypes.IA_MOVE:
                 texture = colorMove;
                 break;
         }
