@@ -8,10 +8,17 @@ public class TagWindow : LayoutWindow
 {
 	private ReorderableList listTags;
     private Vector2 scrollPosition;
+    private Texture2D removeTexture;
+    private GUIStyle removeStyle;
 
     public override void Init()
     {
         createReorderableList();
+
+        // Remove button
+        removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
     }
 
     public override void Draw(Rect rect)
@@ -54,6 +61,11 @@ public class TagWindow : LayoutWindow
                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.stringValue));
                 if (isActive) EditorGUI.PropertyField(new Rect(rect.x, rect.y, textDimensions.x + 5, rect.height), element, GUIContent.none, true);
                 else EditorGUI.LabelField(rect, element.stringValue);
+
+                if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                {
+                    Database.Instance.tags.RemoveAt(index);
+                }
             };
 
         // On new tag

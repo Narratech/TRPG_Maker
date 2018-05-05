@@ -9,9 +9,16 @@ public class TeamEditor : Editor {
 
     private ReorderableList listCharacters;
     private Vector2 scrollPosition;
+    private Texture2D removeTexture;
+    private GUIStyle removeStyle;
 
     private void OnEnable()
     {
+        // Remove button
+        removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         // Get characters
         listCharacters = new ReorderableList(serializedObject,
             serializedObject.FindProperty("characters"),
@@ -27,6 +34,11 @@ public class TeamEditor : Editor {
                 EditorGUI.LabelField(
                     new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
                     character.name);
+
+                if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                {
+                    ((Team)target).characters.RemoveAt(index);
+                }
             };
 
         // Characters header
@@ -84,6 +96,7 @@ public class TeamEditor : Editor {
         }
         listCharacters.DoLayoutList();
         serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(this.target);
 
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();

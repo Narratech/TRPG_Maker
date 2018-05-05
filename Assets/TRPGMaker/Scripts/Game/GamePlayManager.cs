@@ -104,7 +104,7 @@ public class GamePlayManager : MonoBehaviour
     {
         //Get info about character "health attribute" (battle connection)
 
-        int healthValue = characters[index].character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value;
+        int healthValue = characters[index].character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value;
 
         character = characters[index];
         //Actual round here
@@ -212,11 +212,11 @@ public class GamePlayManager : MonoBehaviour
         {
             CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
 
-            characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.id == Database.Instance.battleOptions.damageAttribute.id).value; 
+            characterDestAttack.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value; 
 
-            if (characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
+            if (characterDestAttack.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
             {
-                characterDestAttack.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
+                characterDestAttack.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
                 // Dead Animation
                 // add to teams list like dead?
             }
@@ -230,7 +230,7 @@ public class GamePlayManager : MonoBehaviour
     {
         connector.IAAttack(character, target, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
         {
-            target.character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.id == Database.Instance.battleOptions.damageAttribute.id).value;
+            target.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value;
             Turn();
         }));
     }
@@ -258,7 +258,7 @@ public class GamePlayManager : MonoBehaviour
         {
             // Move to nearest cell
             int destinyCell = 0;
-            int moveRange = character.character.attributes.Find(x => x.id == Database.Instance.battleOptions.moveRange.id).value;
+            int moveRange = character.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.moveRange.id).value;
             // Can't be 0, because is the enemy target position
             if (nearestPath.Count == 0)
                 Turn();
@@ -274,7 +274,7 @@ public class GamePlayManager : MonoBehaviour
                     List<CharacterScript> targets = connector.GetAttackRangeTargets(character);
 
                     // Filter only other teams characters ordered by max health
-                    targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
+                    targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
 
                     // Check if now is any attackable character
                     if (targets.Count > 0)
@@ -294,7 +294,7 @@ public class GamePlayManager : MonoBehaviour
         List<CharacterScript> targets = connector.GetAttackRangeTargets(character);
 
         // Filter only other teams characters ordered by max health
-        targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
+        targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
 
         // If any character is attackable, attack
         if(targets.Count > 0)

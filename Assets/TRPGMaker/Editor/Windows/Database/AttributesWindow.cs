@@ -8,10 +8,17 @@ public class AttributesWindow : LayoutWindow
 {
     private ReorderableList listAttributes;
     private Vector2 scrollPosition;
+    private Texture2D removeTexture;
+    private GUIStyle removeStyle;
 
     public override void Init()
     {
         createReorderableList();
+
+        // Remove button
+        removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
     }
 
     public override void Draw(Rect rect)
@@ -57,6 +64,10 @@ public class AttributesWindow : LayoutWindow
                 if (element.propertyType == SerializedPropertyType.Generic)
                 {
                     EditorGUI.LabelField(new Rect(rectL.x + 15, rectL.y, rectL.width, rectL.height), element.displayName);
+                    if (GUI.Button(new Rect(rectL.width, rectL.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                    {
+                        Database.Instance.attributes.RemoveAt(index);
+                    }
                 }
                 rectL.height = EditorGUI.GetPropertyHeight(element, GUIContent.none, true);
                 rectL.y += 1;
@@ -75,7 +86,7 @@ public class AttributesWindow : LayoutWindow
 
         // Add attributes
         listAttributes.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            Database.Instance.attributes.Add(new Attribute("New Attrbiute " + Database.Instance.attributes.Count.ToString("D3"), Database.Instance.attributes.Count.ToString("D3"), "", 0, 0, 0, false));
+            Database.Instance.attributes.Add(new Attribute("New Attribute " + Database.Instance.attributes.Count.ToString("D3"), Database.Instance.attributes.Count.ToString("D3"), "", false));
         };
     }
 

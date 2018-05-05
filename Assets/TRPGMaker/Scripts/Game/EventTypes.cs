@@ -3,5 +3,7 @@ using System.Collections;
 
 public enum EventTypes{
     ATTACK,
-    MOVE
+    MOVE, 
+    IA_ATTACK,
+    IA_MOVE
 };

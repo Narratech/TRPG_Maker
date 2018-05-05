@@ -21,6 +21,8 @@ public class ItemEditor : Editor
 
     private ReorderableList listFormulas;
     private Vector2 scrollPosition;
+    private Texture2D removeTexture;
+    private GUIStyle removeStyle;
 
     void Init()
     {
@@ -33,6 +35,11 @@ public class ItemEditor : Editor
 
     private void OnEnable()
     {
+        // Remove button
+        removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         // Get Formulas
         listFormulas = new ReorderableList(serializedObject,
                 serializedObject.FindProperty("_formulas"),
@@ -52,15 +59,22 @@ public class ItemEditor : Editor
 
                 EditorGUI.LabelField(new Rect(rect.x + 55, rect.y, 10, EditorGUIUtility.singleLineHeight), "=", EditorStyles.boldLabel);
 
-                formula.formula = EditorGUI.TextField(new Rect(rect.x + 70, rect.y, rect.width - 70, EditorGUIUtility.singleLineHeight), formula.formula);
+                formula.formula = EditorGUI.TextField(new Rect(rect.x + 70, rect.y, rect.width - 98, EditorGUIUtility.singleLineHeight), formula.formula);
+
+                bool removed = false;
+                if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                {
+                    item.formulas.Remove(item.formulas[index]);
+                    removed = true;
+                }
 
                 var f = FormulaScript.Create(formula.formula);
-                if (!f.FormulaParser.IsValidExpression)
+                if (!removed && !f.FormulaParser.IsValidExpression)
                 {
                     EditorGUI.LabelField(new Rect(rect.x + 70, rect.y + EditorGUIUtility.singleLineHeight + 2.0f, rect.width, EditorGUIUtility.singleLineHeight), f.FormulaParser.Error);
                 }
 
-                if (EditorGUI.EndChangeCheck())
+                if (!removed && EditorGUI.EndChangeCheck())
                     formula.attributeID = Database.Instance.attributes[indexFormula].id;
             };
 
@@ -114,63 +128,73 @@ public class ItemEditor : Editor
         dropDownSearch();
         tag = dropDown.LayoutBegin();
 
+        // For formulas
+        listFormulas.DoLayoutList();
+
         // All possible equip combinations
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Number of combinations for this item:");
-        EditorGUILayout.IntField(item.SlotType.Count);
-        if(GUILayout.Button("Add combination"))
-        {
-            item.SlotType.Add(new Modifier.SlotsOcupped());
-        }
+        GUILayout.Label("Slots combinations for this item:");        
         GUILayout.EndHorizontal();
+
+        // Add button
+        var addTexture = (Texture2D)Resources.Load("Buttons/add", typeof(Texture2D));
 
         var centeredStyle = new GUIStyle();
         centeredStyle.alignment = TextAnchor.UpperCenter;
+        bool removed = false;
         for (int i = 0; i < item.SlotType.Count; i++)
         {
             GUILayout.BeginVertical("Box");
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Comination size:");
-            EditorGUILayout.IntField(item.SlotType[i].slotsOcupped.Count);
-            if (GUILayout.Button("Add slot type also needed"))
+            if (GUILayout.Button(new GUIContent("", removeTexture), removeStyle, GUILayout.MaxHeight(16), GUILayout.MaxWidth(16)))
+            {
+                item.SlotType.RemoveAt(i);
+                removed = true;
+            }
+            GUILayout.Label("Slots required:");
+            GUILayout.EndHorizontal();
+
+            if (!removed)
+            {
+                for (int j = 0; j < item.SlotType[i].slotsOcupped.Count; j++)
+                {
+                    SerializedProperty property = serializedObject.FindProperty("SlotType").GetArrayElementAtIndex(i).FindPropertyRelative("slotsOcupped").GetArrayElementAtIndex(j);
+
+                    EditorGUI.BeginChangeCheck();
+                    GUILayout.BeginHorizontal();
+                    int selectedIndex = Database.Instance.slotTypes.IndexOf(property.stringValue);
+                    Rect rectPopup = EditorGUILayout.GetControlRect();
+                    selectedIndex = EditorGUI.Popup(rectPopup, selectedIndex, Database.Instance.slotTypes.ToArray());
+
+                    if (GUILayout.Button(new GUIContent("", removeTexture), removeStyle, GUILayout.MaxHeight(16), GUILayout.MaxWidth(16)))
+                    {
+                        item.SlotType[i].slotsOcupped.RemoveAt(j);
+                    }
+                    GUILayout.EndHorizontal();
+                    if (EditorGUI.EndChangeCheck() && selectedIndex != -1)
+                    {
+                        property.stringValue = Database.Instance.slotTypes[selectedIndex];
+                    }
+                    if (j != item.SlotType[i].slotsOcupped.Count - 1)
+                        GUILayout.Label("AND", centeredStyle);
+                }
+            }
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button(new GUIContent("", addTexture), removeStyle, GUILayout.MaxHeight(16), GUILayout.MaxWidth(16)))
             {
                 item.SlotType[i].slotsOcupped.Add("");
                 serializedObject.Update();
-            }
+            }            
             GUILayout.EndHorizontal();
-
-            for (int j = 0; j < item.SlotType[i].slotsOcupped.Count; j++)
-            {
-                SerializedProperty property = serializedObject.FindProperty("SlotType").GetArrayElementAtIndex(i).FindPropertyRelative("slotsOcupped").GetArrayElementAtIndex(j);
-
-                EditorGUI.BeginChangeCheck();
-                GUILayout.BeginHorizontal();
-                int selectedIndex = Database.Instance.slotTypes.IndexOf(property.stringValue);
-                Rect rectPopup = EditorGUILayout.GetControlRect();
-                selectedIndex = EditorGUI.Popup(rectPopup, selectedIndex, Database.Instance.slotTypes.ToArray());
-                if (GUILayout.Button("Remove"))
-                {
-                    item.SlotType[i].slotsOcupped.RemoveAt(j);
-                }
-                GUILayout.EndHorizontal();
-                if (EditorGUI.EndChangeCheck())
-                {
-                    property.stringValue = Database.Instance.slotTypes[selectedIndex];
-                }
-                if (j != item.SlotType[i].slotsOcupped.Count - 1)
-                    GUILayout.Label("AND", centeredStyle);
-            }
-            if (GUILayout.Button("Remove this combination"))
-            {
-                item.SlotType.RemoveAt(i);
-            }
             GUILayout.EndVertical();
             if(i != item.SlotType.Count - 1)
                 GUILayout.Label("OR", centeredStyle);
         }
 
-        // For formulas
-        listFormulas.DoLayoutList();        
+        if (GUILayout.Button("Add new combination"))
+        {
+            item.SlotType.Add(new Modifier.SlotsOcupped());
+        }        
 
         // Detect if text changed
         if (EditorGUI.EndChangeCheck())

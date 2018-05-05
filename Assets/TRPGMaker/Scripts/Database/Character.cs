@@ -17,9 +17,9 @@ public class Character: ScriptableObject{
     [SerializeField]
     public List<Slot> Slots;
     [SerializeField]
-    public List<Attribute> attributes = null;
+    public List<AttributeValue> attributes;
     [SerializeField]
-    public List<Attribute> attributesWithFormulas = null;
+    public List<AttributeValue> attributesWithFormulas;
     [SerializeField]
     public List<SpecializedClass> specializedClasses;
     public int specializedClassesCount = 0;
@@ -40,30 +40,33 @@ public class Character: ScriptableObject{
 
         // Refrresh Attributes
         if (attributes == null)
-            attributes = Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => x.isCore).ToList()).ToList();
+            attributes = Extensions.Clone<AttributeValue>(Database.Instance.attributes.Where(x => x.isCore).ToList()).ToList();
         else
         {
-            attributes.AddRange(Extensions.Clone<Attribute>(Database.Instance.attributes.Where(x => !attributes.Any(y => y.id == x.id) && x.isCore).ToList()));
-            List<Attribute> aux = new List<Attribute>();
-            aux.AddRange(attributes.Where(x => Database.Instance.attributes.Any(y => y.id == x.id)));
+            // Remove Deleted
+            attributes.RemoveAll(x => !Database.Instance.attributes.Contains(x.attribute));
+
+            attributes.AddRange(Extensions.Clone<AttributeValue>(Database.Instance.attributes.Where(x => !attributes.Any(y => y.attribute.id == x.id) && x.isCore).ToList()));
+            List<AttributeValue> aux = new List<AttributeValue>();
+            aux.AddRange(attributes.Where(x => Database.Instance.attributes.Any(y => y.id == x.attribute.id)));
             attributes = aux;
             // Add attributes of specialized classes
-            attributes.AddRange(specializedClasses.SelectMany(z => z.attributes).Where(x => !attributes.Any(y => y.id == x.id)));
+            attributes.AddRange(specializedClasses.SelectMany(z => z.attributes).Where(x => !attributes.Any(y => y.attribute.id == x.attribute.id)));
         }
     }
 
     public void calculateFormulas()
     {
         var f = FormulaScript.Create("");
-        attributesWithFormulas = Extensions.Clone<Attribute>(attributes).ToList();
+        attributesWithFormulas = Extensions.Clone<AttributeValue>(attributes.Select(x => x.attribute).ToList()).ToList();
         // Formulas in slots
         foreach (Slot slot in Slots)
         {
            foreach(Formula formula in slot.modifier.formulas)
            {
                f.formula = formula.formula;
-               var r = f.FormulaParser.Evaluate();
-                attributesWithFormulas.Find(x => x.id == formula.attributeID).value += (int) r;                    
+               var r = f.FormulaParser.Evaluate(attributes);
+                attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int) r;                    
            }
         }
         // Formulas in slots of specialized classes
@@ -74,8 +77,8 @@ public class Character: ScriptableObject{
                 foreach (Formula formula in slot.modifier.formulas)
                 {
                     f.formula = formula.formula;
-                    var r = f.FormulaParser.Evaluate();
-                    attributesWithFormulas.Find(x => x.id == formula.attributeID).value += (int)r;
+                    var r = f.FormulaParser.Evaluate(attributes);
+                    attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int)r;
                 }
             }
         }

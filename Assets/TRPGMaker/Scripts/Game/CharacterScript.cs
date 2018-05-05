@@ -20,7 +20,7 @@ public class CharacterScript : MonoBehaviour {
     { 
         if (character != null)
         {
-            Attribute attribute = character.attributes.Find(x => x.id == Database.Instance.battleOptions.healthAttribute.id);
+            AttributeValue attribute = character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id);
             var renderer = gameObject.GetComponent<Renderer>();
             float height = renderer.bounds.size.y * 15;
             pos = Camera.main.WorldToScreenPoint(transform.position);
@@ -42,17 +42,20 @@ public class CharacterScript : MonoBehaviour {
 
     void Update()
     {
-        foreach(Slot s in character.Slots)
+        if (character != null)
         {
-            var calculate = false;
-            if (s.modifier != null && !s.calculatedFormula)
+            foreach (Slot s in character.Slots)
             {
-                Debug.Log(s.modifier.name);
-                calculate = true;
-                s.calculatedFormula = true;
+                var calculate = false;
+                if (s.modifier != null && !s.calculatedFormula)
+                {
+                    Debug.Log(s.modifier.name);
+                    calculate = true;
+                    s.calculatedFormula = true;
+                }
+                if (calculate)
+                    character.calculateFormulas();
             }
-            if (calculate)
-                character.calculateFormulas();
         }
     }
 }

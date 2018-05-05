@@ -3,6 +3,7 @@ using NCalc;
 using System.Reflection;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class FormulaParser {
@@ -12,8 +13,10 @@ public class FormulaParser {
 	private string paramError;
 	private string functionError;
 	private object expresionResult;
+    private List<AttributeValue> attributes;
 
-	public FormulaParser() : this(string.Empty) { }
+
+    public FormulaParser() : this(string.Empty) { }
 	public FormulaParser(string formula)
 	{
 	    this.Formula = formula;
@@ -93,7 +96,7 @@ public class FormulaParser {
 		if (Database.Instance.attributes.Any(x => x.id == param)) 
 		{
 			args.HasResult = true;
-            args.Result = Database.Instance.attributes.Find(x => x.id == param).value;
+            args.Result = attributes.Find(x => x.attribute.id == param).value;
 		} 
 	    else
 		{
@@ -109,8 +112,9 @@ public class FormulaParser {
 
 
 
-	public object Evaluate()
+	public object Evaluate(List<AttributeValue> attributes)
 	{
+        this.attributes = attributes;
 	    return expression.Evaluate();
 	}
 }

@@ -14,12 +14,14 @@ public class CharacterEditor : Editor {
     private ReorderableList listSlotsSpecializedClasses;
     private ReorderableList listAttributes;
     private ReorderableList listAttributesFormulas;
+    private Texture2D removeTexture;
+    private GUIStyle removeStyle;
 
     List<bool> foldout;
     private Vector2 scrollPosition;
 
     // Get attributes SpecialClass
-    List<Attribute> attributes;
+    List<AttributeValue> attributes;
     private string[] attributesStringArray;
     private int formulaAttributeSelected = -1;
     private int slotTypeSelected = -1;
@@ -34,13 +36,18 @@ public class CharacterEditor : Editor {
 
         // String array of class atributes
         attributesStringArray = new string[0];
-        attributesStringArray = attributes.Select(I => I.name).ToArray();
+        attributesStringArray = attributes.Select(I => I.attribute.name).ToArray();
 
         foldout = Enumerable.Repeat(false, attributes.Count).ToList();
     }
 
     private void OnEnable()
     {
+        // Remove button
+        removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         reloadAttributes();
 
         // Get Slots
@@ -61,7 +68,7 @@ public class CharacterEditor : Editor {
         // Get Attributes Formulas
         listAttributesFormulas = new ReorderableList(serializedObject,
                 serializedObject.FindProperty("attributesWithFormulas"),
-                false, true, true, true);
+                false, true, false, false);
 
         //Get List SpecializedClass 
         listSpecializedClass = new ReorderableList(serializedObject,
@@ -80,13 +87,18 @@ public class CharacterEditor : Editor {
                 EditorGUI.LabelField(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight), "Slot type:");
                 slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.ToArray());
                 EditorGUI.LabelField(new Rect(rect.x + 170, rect.y, 35, EditorGUIUtility.singleLineHeight), "Item:");
-                slotItemSelected = EditorGUI.Popup(new Rect(rect.x + 208, rect.y, rect.width - 208, EditorGUIUtility.singleLineHeight), slotItemSelected, Database.Instance.items.Select(s => (string)s.name).ToArray());
+                slotItemSelected = EditorGUI.Popup(new Rect(rect.x + 208, rect.y, rect.width - 238, EditorGUIUtility.singleLineHeight), slotItemSelected, Database.Instance.items.Select(s => (string)s.name).ToArray());
                 if (EditorGUI.EndChangeCheck())
                 {
                     if(slotTypeSelected != -1)
                         character.Slots[index].slotType = Database.Instance.slotTypes[slotTypeSelected];
                     if(slotItemSelected != -1)
                         character.Slots[index].modifier = Database.Instance.items[slotItemSelected];
+                }
+
+                if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                {
+                    character.Slots.RemoveAt(index);
                 }
             };
 
@@ -108,7 +120,6 @@ public class CharacterEditor : Editor {
                         i++;
                     }
                 }
-                
             };
 
         // Set height of Slots defined in specialized classes
@@ -136,16 +147,22 @@ public class CharacterEditor : Editor {
                     EditorGUI.LabelField(
                         new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
                         character.specializedClasses[index].name);
+
+
+                if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                {
+                    character.specializedClasses.RemoveAt(index);
+                }
             };
 
         // Draw attributes
         listAttributes.drawElementCallback =
              (Rect rectL, int index, bool isActive, bool isFocused) => {
                  var element = listAttributes.serializedProperty.GetArrayElementAtIndex(index);
-                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.displayName));
+                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(character.attributes[index].attribute.name));
                  rectL.y += 2;
 
-                 foldout[index] = EditorGUI.Foldout(new Rect(rectL.x, rectL.y, textDimensions.x + 5, rectL.height), foldout[index], element.displayName);
+                 foldout[index] = EditorGUI.Foldout(new Rect(rectL.x, rectL.y, textDimensions.x + 5, rectL.height), foldout[index], character.attributes[index].attribute.name);
                  if (foldout[index])
                  {
                      rectL.height = EditorGUIUtility.singleLineHeight;
@@ -163,6 +180,11 @@ public class CharacterEditor : Editor {
 
                      listAttributes.elementHeight = EditorGUIUtility.singleLineHeight + 4.0f;
                  }
+
+                 if (!character.attributes[index].attribute.isCore && !character.specializedClasses.Any(x => x.attributes.Find(y => y.attribute.id == character.attributes[index].attribute.id) != null) && GUI.Button(new Rect(rectL.width - 14, rectL.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                 {
+                     character.attributes.RemoveAt(index);
+                 }
              };
 
         listAttributes.elementHeightCallback += (idx) => {
@@ -174,10 +196,10 @@ public class CharacterEditor : Editor {
         listAttributesFormulas.drawElementCallback =
              (Rect rectL, int index, bool isActive, bool isFocused) => {
                  var element = character.attributesWithFormulas[index];
-                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.name));
+                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.attribute.name));
                  rectL.y += 2;
 
-                 EditorGUI.LabelField(new Rect(rectL.x, rectL.y, textDimensions.x, rectL.height), element.name);
+                 EditorGUI.LabelField(new Rect(rectL.x, rectL.y, textDimensions.x, rectL.height), element.attribute.name);
                  EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x - 5, rectL.y, 10, rectL.height), " = ");
                  EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x + 5, rectL.y, rectL.width - textDimensions.x - 5, rectL.height), element.value.ToString());
              };
@@ -217,7 +239,7 @@ public class CharacterEditor : Editor {
             var menu = new GenericMenu();
             foreach (Attribute attrib in Database.Instance.attributes)
             {
-                if (!attrib.isCore && !attributes.Contains(attrib)) {
+                if (!attrib.isCore && !attributes.Any( x => x.attribute == attrib) &&  !character.specializedClasses.Any(x => x.attributes.Find(y => y.attribute.id == attrib.id) != null)) {
                     menu.AddItem(new GUIContent(attrib.name),
 						false, clickHandlerAttributes,
                     attrib);
@@ -238,7 +260,7 @@ public class CharacterEditor : Editor {
 
         // Eliminar atributo
         listAttributes.onCanRemoveCallback = (ReorderableList l) => {
-            if (attributes[l.index].isCore)
+            if (attributes[l.index].attribute.isCore)
                 return false;
             else
                 return true;
@@ -305,7 +327,9 @@ public class CharacterEditor : Editor {
 	private void clickHandlerAttributes(object target)
     {
         var data = (Attribute) target;
-        attributes.Add(data);
+        AttributeValue attributeValue = new AttributeValue();
+        attributeValue.attribute = data;
+        attributes.Add(attributeValue);
         foldout.Add(false);
         serializedObject.ApplyModifiedProperties();
     }

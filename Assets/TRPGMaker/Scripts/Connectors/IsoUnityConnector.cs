@@ -6,7 +6,8 @@ using IsoUnity.Entities;
 using System.Linq;
 using System;
 
-public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
+public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
+{
 
     private GameEvent selectedCellEvent;
     private IsoUnity.IsoTexture colorMove;
@@ -56,7 +57,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
     {
         StartCoroutine(SetCharacterPositionAsync(character, cell, callback));
     }
-    
+
     // Async method for teleport
     private IEnumerator SetCharacterPositionAsync(CharacterScript character, Cell cell, SetCharacterPositionCallBack callback)
     {
@@ -91,7 +92,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
             {"mover", entity.mover },
             {"cell", destinyCell},
             {"synchronous", true }
-        });        
+        });
         // Launch event
         Game.main.enqueueEvent(moveCharacterTo);
         yield return new WaitForEventFinished(moveCharacterTo);
@@ -111,10 +112,11 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
         IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
         try
         {
-            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.id == moveHeight.id).value;
-        } catch (NullReferenceException e)
+            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value;
+        }
+        catch (NullReferenceException e)
         {
-            Debug.Log("Character '"+ character.character.name + "' doesn't have attribute '" + moveHeight.name +  "'");
+            Debug.Log("Character '" + character.character.name + "' doesn't have attribute '" + moveHeight.name + "'");
         }
 
         selectedCellEvent = new GameEvent("selected cell", new Dictionary<string, object>()
@@ -126,9 +128,9 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
         try
         {
             if (eventType == EventTypes.MOVE)
-            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.id == moveRange.id).value, character.character.attributes.Find(x => x.id == moveHeight.id).value);
-        else if (eventType == EventTypes.ATTACK)
-            CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
+                CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.attribute.id == moveRange.id).value, character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value);
+            else if (eventType == EventTypes.ATTACK)
+                CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.attribute.id == attackRange.id).value, character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -180,7 +182,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         try
         {
-            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.id == moveHeight.id).value;
+            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value;
         }
         catch (NullReferenceException e)
         {
@@ -189,7 +191,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         try
         {
-            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.ATTACK, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_ATTACK, character.character.attributes.Find(x => x.attribute.id == attackRange.id).value, character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -220,7 +222,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         try
         {
-            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.id == moveHeight.id).value;
+            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value;
         }
         catch (NullReferenceException e)
         {
@@ -229,7 +231,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
 
         try
         {
-            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.MOVE, character.character.attributes.Find(x => x.id == attackRange.id).value, character.character.attributes.Find(x => x.id == attackHeight.id).value);
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_MOVE, character.character.attributes.Find(x => x.attribute.id == attackRange.id).value, character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -277,7 +279,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
     {
         IsoUnity.Cell selectedCell = SearchCellInMap(cell);
         CharacterScript character = selectedCell.transform.GetComponentInChildren<CharacterScript>();
-        return character; 
+        return character;
     }
 
     // Get cell where character is right now
@@ -310,7 +312,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
             Destroy(selectableCell);
         }
     }
-    
+
     // Get characters in attack range of the character
     // Returns the list of all the characters in the attack range
     public List<CharacterScript> GetAttackRangeTargets(CharacterScript character)
@@ -320,8 +322,8 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
         IsoUnity.Cell currentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
         List<CellWithDistance> openList = new List<CellWithDistance>();
         List<CellWithDistance> closeList = new List<CellWithDistance>();
-        float attackRan = character.character.attributes.Find(x => x.id == attackRange.id).value;
-        float heighMax = character.character.attributes.Find(x => x.id == attackHeight.id).value;
+        float attackRan = character.character.attributes.Find(x => x.attribute.id == attackRange.id).value;
+        float heighMax = character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value;
 
         openList.Add(new CellWithDistance(currentCell, 0, null));
         while (openList.Count > 0)
@@ -361,8 +363,8 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
         IsoUnity.Cell targetCell = target.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
         List<CellWithDistance> openList = new List<CellWithDistance>();
         List<CellWithDistance> closeList = new List<CellWithDistance>();
-        float attackRan = character.character.attributes.Find(x => x.id == attackRange.id).value;
-        float heighMax = character.character.attributes.Find(x => x.id == attackHeight.id).value;
+        float attackRan = character.character.attributes.Find(x => x.attribute.id == attackRange.id).value;
+        float heighMax = character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value;
 
         openList.Add(new CellWithDistance(currentCell, 0, null));
         while (openList.Count > 0)
@@ -453,9 +455,11 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector {
         switch (eventType)
         {
             case EventTypes.ATTACK:
+            case EventTypes.IA_ATTACK:
                 texture = colorAttack;
                 break;
             case EventTypes.MOVE:
+            case EventTypes.IA_MOVE:
                 texture = colorMove;
                 break;
         }

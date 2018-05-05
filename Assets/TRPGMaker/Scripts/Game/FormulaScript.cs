@@ -41,8 +41,9 @@ public class FormulaScript : ScriptableObject {
 
 	public bool check()
 	{
-	    var r = FormulaParser.Evaluate();
-	    return r is bool ? (bool)r : false;
+        //var r = FormulaParser.Evaluate();
+        //return r is bool ? (bool)r : false;
+        return false;
 	}
 
 	public override string ToString()

@@ -6,8 +6,8 @@ using UnityEngine;
 
 static class Extensions
 {
-    public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+    public static IList<AttributeValue> Clone<AttributeValue>(this IList<Attribute> listToClone) 
     {
-        return listToClone.Select(item => (T)item.Clone()).ToList();
+        return listToClone.Select(item => (AttributeValue)item.Clone()).ToList();
     }
 }
