@@ -127,11 +127,17 @@ public class SkillsWindow : LayoutWindow
         listSkills.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
             Skills skill = (Skills)ScriptableObject.CreateInstance(typeof(Skills));
 
-            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Skills/NewSkill.asset", typeof(Skills));
+            var skillPath = "Assets/TRPGMaker/Database/Skills";
+            var _exists = AssetDatabase.LoadAssetAtPath(skillPath + "/NewSkill.asset", typeof(Skills));
             if (_exists == null)
             {
+                //Create the folder if doesn't exist
+                if (!System.IO.Directory.Exists(skillPath))
+                {
+                    System.IO.Directory.CreateDirectory(skillPath);
+                }
                 skill.name = "NewSkill";
-                AssetDatabase.CreateAsset(skill, "Assets/TRPGMaker/Database/Skills/NewSkill.asset");
+                AssetDatabase.CreateAsset(skill, skillPath + "/NewSkill.asset");
             }
             else
             {
@@ -140,11 +146,11 @@ public class SkillsWindow : LayoutWindow
                 int i = 0;
                 while (i <= existAssets.Length && !seted)
                 {
-                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Skills/NewSkill(" + (i + 1) + ").asset", typeof(Skills));
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath(skillPath + "/NewSkill(" + (i + 1) + ").asset", typeof(Skills));
                     if (_existsNumber == null)
                     {
                         skill.name = "NewSkill(" + (i + 1) + ")";
-                        AssetDatabase.CreateAsset(skill, "Assets/TRPGMaker/Database/Skills/NewSkill(" + (i + 1) + ").asset");
+                        AssetDatabase.CreateAsset(skill, skillPath + "/NewSkill(" + (i + 1) + ").asset");
                         seted = true;
                     }
                     i++;

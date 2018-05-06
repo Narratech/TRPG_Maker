@@ -113,7 +113,7 @@ public class TeamsWindow : LayoutWindow {
                 var element = listTeams.serializedProperty.GetArrayElementAtIndex(index);
                 var team = element.objectReferenceValue as Team;
                 rect.y += 2;
-                EditorGUI.LabelField(rect, team.id + ": " + team.name);
+                EditorGUI.LabelField(rect, team.name);
             };
 
         // On select team
@@ -126,11 +126,18 @@ public class TeamsWindow : LayoutWindow {
         listTeams.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
             Team team = (Team)ScriptableObject.CreateInstance(typeof(Team));
 
-            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Teams/NewTeam.asset", typeof(Team));
+            var teamPath = "Assets/TRPGMaker/Database/Teams";
+            var _exists = AssetDatabase.LoadAssetAtPath(teamPath + "/NewTeam.asset", typeof(Team));
+            team.id = Database.Instance.teams.Count;
             if (_exists == null)
             {
+                //Create the folder if doesn't exist
+                if (!System.IO.Directory.Exists(teamPath))
+                {
+                    System.IO.Directory.CreateDirectory(teamPath);
+                }
                 team.name = "NewTeam";
-                AssetDatabase.CreateAsset(team, "Assets/TRPGMaker/Database/Teams/NewTeam.asset");
+                AssetDatabase.CreateAsset(team, teamPath + "/NewTeam.asset");
             }
             else
             {
@@ -139,11 +146,11 @@ public class TeamsWindow : LayoutWindow {
                 int i = 0;
                 while (i <= existAssets.Length && !seted)
                 {
-                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Teams/NewTeam(" + (i + 1) + ").asset", typeof(Team));
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath(teamPath + "/NewTeam(" + (i + 1) + ").asset", typeof(Team));
                     if (_existsNumber == null)
                     {
                         team.name = "NewTeam(" + (i + 1) + ")";
-                        AssetDatabase.CreateAsset(team, "Assets/TRPGMaker/Database/Teams/NewTeam(" + (i + 1) + ").asset");
+                        AssetDatabase.CreateAsset(team, teamPath + "/NewTeam(" + (i + 1) + ").asset");
                         seted = true;
                     }
                     i++;

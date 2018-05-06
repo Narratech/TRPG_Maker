@@ -128,11 +128,17 @@ public class CharacterWindow : LayoutWindow
             Character character = (Character)ScriptableObject.CreateInstance(typeof(Character));            
             character.init();
 
-            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Characters/NewCharacter.asset", typeof(Character));
+            var characterPath = "Assets/TRPGMaker/Database/Characters";
+            var _exists = AssetDatabase.LoadAssetAtPath(characterPath + "/NewCharacter.asset", typeof(Character));
             if (_exists == null)
             {
+                //Create the folder if doesn't exist
+                if (!System.IO.Directory.Exists(characterPath))
+                {
+                    System.IO.Directory.CreateDirectory(characterPath);
+                }
                 character.name = "NewCharacter";
-                AssetDatabase.CreateAsset(character, "Assets/TRPGMaker/Database/Characters/NewCharacter.asset");
+                AssetDatabase.CreateAsset(character, characterPath + "/NewCharacter.asset");
             }
             else
             {
@@ -141,11 +147,11 @@ public class CharacterWindow : LayoutWindow
                 int i = 0;
                 while (i <= existAssets.Length && !seted)
                 {
-                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Characters/NewCharacter(" + (i + 1) + ").asset", typeof(Character));
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath(characterPath + "/NewCharacter(" + (i + 1) + ").asset", typeof(Character));
                     if (_existsNumber == null)
                     {
                         character.name = "NewCharacter(" + (i + 1) + ")";
-                        AssetDatabase.CreateAsset(character, "Assets/TRPGMaker/Database/Characters/NewCharacter(" + (i + 1) + ").asset");
+                        AssetDatabase.CreateAsset(character, characterPath + "/NewCharacter(" + (i + 1) + ").asset");
                         seted = true;
                     }
                     i++;

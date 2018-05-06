@@ -128,11 +128,17 @@ class SpecializedClassWindow : LayoutWindow
             SpecializedClass specializedClass = (SpecializedClass)ScriptableObject.CreateInstance(typeof(SpecializedClass));
             specializedClass.Init();
 
-            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass.asset", typeof(SpecializedClass));
+            var specializedClassesPath = "Assets/TRPGMaker/Database/SpecializedClasses";
+            var _exists = AssetDatabase.LoadAssetAtPath(specializedClassesPath + "/NewSpecializedClass.asset", typeof(SpecializedClass));
             if (_exists == null)
             {
+                //Create the folder if doesn't exist
+                if (!System.IO.Directory.Exists(specializedClassesPath))
+                {
+                    System.IO.Directory.CreateDirectory(specializedClassesPath);
+                }
                 specializedClass.name = "New Specialized Class";
-                AssetDatabase.CreateAsset(specializedClass, "Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass.asset");                
+                AssetDatabase.CreateAsset(specializedClass, specializedClassesPath + "/NewSpecializedClass.asset");                
             }
             else
             {
@@ -141,11 +147,11 @@ class SpecializedClassWindow : LayoutWindow
                 int i = 0;
                 while(i <= existAssets.Length && !seted)
                 {
-                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass(" + (i + 1) + ").asset", typeof(SpecializedClass));
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath(specializedClassesPath + "/NewSpecializedClass(" + (i + 1) + ").asset", typeof(SpecializedClass));
                     if(_existsNumber == null)
                     {
                         specializedClass.name = "New Specialized Class (" + (i+1) + ")";
-                        AssetDatabase.CreateAsset(specializedClass, "Assets/TRPGMaker/Database/SpecializedClasses/NewSpecializedClass(" + (i+1) + ").asset");
+                        AssetDatabase.CreateAsset(specializedClass, specializedClassesPath + "/NewSpecializedClass(" + (i+1) + ").asset");
                         seted = true;
                     }
                     i++;

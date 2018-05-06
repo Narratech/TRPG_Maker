@@ -126,11 +126,17 @@ class ItemWindow : LayoutWindow
         listItems.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
             Item item = (Item)ScriptableObject.CreateInstance(typeof(Item));
 
-            var _exists = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Items/New Item.asset", typeof(Item));
+            var itemPath = "Assets/TRPGMaker/Database/Items";
+            var _exists = AssetDatabase.LoadAssetAtPath(itemPath + "/New Item.asset", typeof(Item));
             if (_exists == null)
             {
+                //Create the folder if doesn't exist
+                if (!System.IO.Directory.Exists(itemPath))
+                {
+                    System.IO.Directory.CreateDirectory(itemPath);
+                }
                 item.name = "New Item";
-                AssetDatabase.CreateAsset(item, "Assets/TRPGMaker/Database/Items/New Item.asset");
+                AssetDatabase.CreateAsset(item, itemPath + "/New Item.asset");
             }
             else
             {
@@ -139,11 +145,11 @@ class ItemWindow : LayoutWindow
                 int i = 0;
                 while (i <= existAssets.Length && !seted)
                 {
-                    var _existsNumber = AssetDatabase.LoadAssetAtPath("Assets/TRPGMaker/Database/Items/New Item(" + (i + 1) + ").asset", typeof(Item));
+                    var _existsNumber = AssetDatabase.LoadAssetAtPath(itemPath + "/New Item(" + (i + 1) + ").asset", typeof(Item));
                     if (_existsNumber == null)
                     {
                         item.name = "New Item(" + (i + 1) + ")";
-                        AssetDatabase.CreateAsset(item, "Assets/TRPGMaker/Database/Items/New Item(" + (i + 1) + ").asset");
+                        AssetDatabase.CreateAsset(item, itemPath + "/New Item(" + (i + 1) + ").asset");
                         seted = true;
                     }
                     i++;
