@@ -16088,8 +16088,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: 2ce6ded48f42c8e46b99a9a665a8efda, type: 2}
-  team: {fileID: 11400000, guid: edbd6fc84edad7749b2192b14449f153, type: 2}
+  character: {fileID: 0}
+  team: {fileID: 0}
 --- !u!114 &494325675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20933,8 +20933,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: 75942776545ea02418c221a9273f406b, type: 2}
-  team: {fileID: 11400000, guid: edbd6fc84edad7749b2192b14449f153, type: 2}
+  character: {fileID: 0}
+  team: {fileID: 0}
 --- !u!114 &651502395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34782,8 +34782,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: 496024b31fb8d604ba8b12317f0d4762, type: 2}
-  team: {fileID: 11400000, guid: edbd6fc84edad7749b2192b14449f153, type: 2}
+  character: {fileID: 0}
+  team: {fileID: 0}
 --- !u!114 &909185162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38924,8 +38924,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: 36a63a88f336fee4fbee3ca4e3812861, type: 2}
-  team: {fileID: 11400000, guid: 15bb40f2e1f0dd04a8ec14b3c2bb0cc4, type: 2}
+  character: {fileID: 0}
+  team: {fileID: 0}
 --- !u!114 &1054756145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41551,8 +41551,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: bac31a58c9f786c4a9d5b67034ba5482, type: 2}
-  team: {fileID: 11400000, guid: edbd6fc84edad7749b2192b14449f153, type: 2}
+  character: {fileID: 0}
+  team: {fileID: 0}
 --- !u!114 &1140926019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56883,8 +56883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 11400000, guid: 47430d8af55fb254dbd2af8d116d196d, type: 2}
-  team: {fileID: 11400000, guid: 15bb40f2e1f0dd04a8ec14b3c2bb0cc4, type: 2}
+  character: {fileID: 0}
+  team: {fileID: 0}
 --- !u!114 &1573021072
 MonoBehaviour:
   m_ObjectHideFlags: 0

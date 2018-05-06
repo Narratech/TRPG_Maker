@@ -17,12 +17,13 @@ public class TagWindow : LayoutWindow
 
         // Remove button
         removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
-        removeStyle = new GUIStyle("Button");
-        removeStyle.padding = new RectOffset(2, 2, 2, 2);
     }
 
     public override void Draw(Rect rect)
-    {        
+    {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         editor.serializedObject.Update();
 
         GUILayout.BeginVertical();
@@ -34,7 +35,7 @@ public class TagWindow : LayoutWindow
 
         EditorGUILayout.BeginVertical();
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-
+       
         listTags.DoLayoutList();
 
         GUILayout.EndVertical();
@@ -47,7 +48,7 @@ public class TagWindow : LayoutWindow
 
    private void createReorderableList()
     {
-        editor = Editor.CreateEditor(Database.Instance);
+       editor = Editor.CreateEditor(Database.Instance);
 
         // Get tags
         listTags = new ReorderableList(editor.serializedObject,
@@ -57,10 +58,11 @@ public class TagWindow : LayoutWindow
         // Draw tags
         listTags.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
-                var element = listTags.serializedProperty.GetArrayElementAtIndex(index);
-                var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.stringValue));
-                if (isActive) EditorGUI.PropertyField(new Rect(rect.x, rect.y, textDimensions.x + 5, rect.height), element, GUIContent.none, true);
-                else EditorGUI.LabelField(rect, element.stringValue);
+                //var element = listTags.serializedProperty.GetArrayElementAtIndex(index);
+                Tag tag = Database.Instance.tags[index];
+                var textDimensions = GUI.skin.label.CalcSize(new GUIContent(tag.tagName));
+                if (isActive) Database.Instance.tags[index].tagName = EditorGUI.TextField(new Rect(rect.x, rect.y, textDimensions.x + 5, rect.height), tag.tagName);
+                else EditorGUI.LabelField(rect, tag.tagName);
 
                 if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
                 {
@@ -70,7 +72,7 @@ public class TagWindow : LayoutWindow
 
         // On new tag
         listTags.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            Database.Instance.tags.Add("New tag");
+            Database.Instance.tags.Add(new Tag("New tag"));
         };
 
         // listTags header

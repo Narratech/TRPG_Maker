@@ -4,7 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class SlotType : ScriptableObject {
+public class SlotType {
 
-    public string Name = "Enter slot type";
+    public string slotName = "Enter slot type";
+
+    public SlotType(string name)
+    {
+        this.slotName = name;
+    }
 }

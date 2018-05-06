@@ -18,4 +18,4 @@ MonoBehaviour:
   icon: {fileID: 0}
   SlotType:
   - slotsOcupped:
-    - Right hand
+    - slotName: 

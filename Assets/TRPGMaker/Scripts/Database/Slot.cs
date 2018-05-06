@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Slot{
 
-    public string slotType;
+    public SlotType slotType;
     public Modifier _modifier;
 
     public Modifier modifier
@@ -35,7 +35,7 @@ public class Slot{
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (string slotType)
+                        delegate (SlotType slotType)
                         {
                             return slotType == this.slotType;
                         });
@@ -106,7 +106,7 @@ public class Slot{
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (string slotType)
+                        delegate (SlotType slotType)
                         {
                             return slotType == this.slotType;
                         });

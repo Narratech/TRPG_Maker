@@ -10,7 +10,7 @@ using System.Linq;
 public class SpecializedClass : ScriptableObject
 {
     public new string name;
-    public List<String> tags;
+    public List<Tag> tags;
     public List<Slot> slots;
     public List<AttributeValue> attributes = null;
     public FormulaScript formula;
@@ -18,7 +18,7 @@ public class SpecializedClass : ScriptableObject
 
     public void Init()
     {
-        tags = new List<string>();
+        tags = new List<Tag>();
         slots = new List<Slot>();
         formula = ScriptableObject.CreateInstance<FormulaScript>();
     }

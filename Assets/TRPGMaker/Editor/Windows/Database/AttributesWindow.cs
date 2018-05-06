@@ -17,12 +17,13 @@ public class AttributesWindow : LayoutWindow
 
         // Remove button
         removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
-        removeStyle = new GUIStyle("Button");
-        removeStyle.padding = new RectOffset(2, 2, 2, 2);
     }
 
     public override void Draw(Rect rect)
-    {        
+    {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         editor.serializedObject.Update();
 
         GUILayout.BeginVertical();
@@ -86,7 +87,7 @@ public class AttributesWindow : LayoutWindow
 
         // Add attributes
         listAttributes.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            Database.Instance.attributes.Add(new Attribute("New Attribute " + Database.Instance.attributes.Count.ToString("D3"), Database.Instance.attributes.Count.ToString("D3"), "", false));
+            Database.Instance.attributes.Add(new Attribute("New Attribute " + Database.Instance.attributes.Count.ToString("D3"), "X" + Database.Instance.attributes.Count.ToString("D2"), "", false));
         };
     }
 

@@ -50,8 +50,14 @@ class ItemWindow : LayoutWindow
                 GUILayout.BeginHorizontal(gsLineOdd);
             Rect rect = EditorGUILayout.GetControlRect();
             GUI.Label(rect, item.name);
+            if (Event.current.type == EventType.MouseUp && rect.Contains(Event.current.mousePosition))
+            {
+                editor = Editor.CreateEditor(item);
+                listItems.index = Database.Instance.items.IndexOf(item);
+            }
             if (GUILayout.Button(new GUIContent("Edit"), GUILayout.Width(50))){
                 editor = Editor.CreateEditor(item);
+                listItems.index = Database.Instance.items.IndexOf(item);
             }
             else if (GUILayout.Button(new GUIContent("Remove"), GUILayout.Width(90))){
                 removeItem(item);

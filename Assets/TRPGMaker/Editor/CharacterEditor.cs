@@ -45,9 +45,6 @@ public class CharacterEditor : Editor {
     {
         // Remove button
         removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
-        removeStyle = new GUIStyle("Button");
-        removeStyle.padding = new RectOffset(2, 2, 2, 2);
-
         reloadAttributes();
 
         // Get Slots
@@ -80,17 +77,17 @@ public class CharacterEditor : Editor {
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 rect.y += 2;
 
-                slotTypeSelected = Database.Instance.slotTypes.IndexOf(character.Slots[index].slotType);
+                slotTypeSelected = character.Slots.IndexOf(character.Slots[index]);
                 slotItemSelected = Database.Instance.items.IndexOf(character.Slots[index].modifier);
 
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.LabelField(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight), "Slot type:");
-                slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.ToArray());
+                slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.Select(x => x.slotName).ToArray());
                 EditorGUI.LabelField(new Rect(rect.x + 170, rect.y, 35, EditorGUIUtility.singleLineHeight), "Item:");
                 slotItemSelected = EditorGUI.Popup(new Rect(rect.x + 208, rect.y, rect.width - 238, EditorGUIUtility.singleLineHeight), slotItemSelected, Database.Instance.items.Select(s => (string)s.name).ToArray());
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if(slotTypeSelected != -1)
+                    if(slotTypeSelected != 0)
                         character.Slots[index].slotType = Database.Instance.slotTypes[slotTypeSelected];
                     if(slotItemSelected != -1)
                         character.Slots[index].modifier = Database.Instance.items[slotItemSelected];
@@ -159,33 +156,54 @@ public class CharacterEditor : Editor {
         listAttributes.drawElementCallback =
              (Rect rectL, int index, bool isActive, bool isFocused) => {
                  var element = listAttributes.serializedProperty.GetArrayElementAtIndex(index);
-                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(character.attributes[index].attribute.name));
-                 rectL.y += 2;
-
-                 foldout[index] = EditorGUI.Foldout(new Rect(rectL.x, rectL.y, textDimensions.x + 5, rectL.height), foldout[index], character.attributes[index].attribute.name);
-                 if (foldout[index])
+                 // For update problem
+                 if (index < character.attributes.Count)
                  {
-                     rectL.height = EditorGUIUtility.singleLineHeight;
-                     rectL.x += 15;
-                     rectL.y += EditorGUIUtility.singleLineHeight;
-                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("value"));
-                     rectL.y += EditorGUIUtility.singleLineHeight;
-                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("minValue"));
-                     rectL.y += EditorGUIUtility.singleLineHeight;
-                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("maxValue"));
-                     listAttributes.elementHeight = EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
-                 }
-                 else
-                 {
+                     var textDimensions = GUI.skin.label.CalcSize(new GUIContent(character.attributes[index].attribute.name));
 
-                     listAttributes.elementHeight = EditorGUIUtility.singleLineHeight + 4.0f;
-                 }
+                     rectL.y += 2;
 
-                 if (!character.attributes[index].attribute.isCore && !character.specializedClasses.Any(x => x.attributes.Find(y => y.attribute.id == character.attributes[index].attribute.id) != null) && GUI.Button(new Rect(rectL.width - 14, rectL.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
-                 {
-                     character.attributes.RemoveAt(index);
+                     foldout[index] = EditorGUI.Foldout(new Rect(rectL.x, rectL.y, textDimensions.x + 5, rectL.height), foldout[index], character.attributes[index].attribute.name);
+                     if (!character.attributes[index].attribute.isCore && !character.specializedClasses.Any(x => x.attributes.Find(y => y.attribute.id == character.attributes[index].attribute.id) != null) && GUI.Button(new Rect(rectL.width - 14, rectL.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                     {
+                         character.attributes.RemoveAt(index);
+                     }
+                     if (foldout[index])
+                     {
+                         rectL.height = EditorGUIUtility.singleLineHeight;
+                         rectL.x += 15;
+                         rectL.y += EditorGUIUtility.singleLineHeight;
+                         GUI.SetNextControlName("Value");
+                         EditorGUI.PropertyField(rectL, element.FindPropertyRelative("value"));
+                         if (GUI.GetNameOfFocusedControl() != "Value" && character.attributes[index].value > character.attributes[index].maxValue)
+                         {
+                             if (EditorUtility.DisplayDialog("Value error!",
+                                 "The value introduced is greater than the max value", "Ok"))
+                             {
+                                 character.attributes[index].value = 0;
+                             }
+                         }
+                         rectL.y += EditorGUIUtility.singleLineHeight;
+                         GUI.SetNextControlName("MinValue");
+                         EditorGUI.PropertyField(rectL, element.FindPropertyRelative("minValue"));
+                         if (GUI.GetNameOfFocusedControl() != "MinValue" && character.attributes[index].minValue > character.attributes[index].maxValue)
+                         {
+                             if (EditorUtility.DisplayDialog("Value error!",
+                                 "The min value introduced is greater than the max value", "Ok"))
+                             {
+                                 character.attributes[index].minValue = 0;
+                             }
+                         }
+                         rectL.y += EditorGUIUtility.singleLineHeight;
+                         EditorGUI.PropertyField(rectL, element.FindPropertyRelative("maxValue"));
+                         listAttributes.elementHeight = EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
+                     }
+                     else
+                     {
+                         listAttributes.elementHeight = EditorGUIUtility.singleLineHeight + 4.0f;
+                     }
                  }
-             };
+        };
 
         listAttributes.elementHeightCallback += (idx) => {
             if (foldout[idx]) return EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
@@ -195,13 +213,16 @@ public class CharacterEditor : Editor {
         // Draw attributes with formulas
         listAttributesFormulas.drawElementCallback =
              (Rect rectL, int index, bool isActive, bool isFocused) => {
-                 var element = character.attributesWithFormulas[index];
-                 var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.attribute.name));
-                 rectL.y += 2;
+                 if (index < character.attributesWithFormulas.Count)
+                 {
+                     var element = character.attributesWithFormulas[index];
+                     var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.attribute.name));
+                     rectL.y += 2;
 
-                 EditorGUI.LabelField(new Rect(rectL.x, rectL.y, textDimensions.x, rectL.height), element.attribute.name);
-                 EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x - 5, rectL.y, 10, rectL.height), " = ");
-                 EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x + 5, rectL.y, rectL.width - textDimensions.x - 5, rectL.height), element.value.ToString());
+                     EditorGUI.LabelField(new Rect(rectL.x, rectL.y, textDimensions.x, rectL.height), element.attribute.name);
+                     EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x - 5, rectL.y, 10, rectL.height), " = ");
+                     EditorGUI.LabelField(new Rect(rectL.x + textDimensions.x + 5, rectL.y, rectL.width - textDimensions.x - 5, rectL.height), element.value.ToString());
+                 }
              };
 
         // Slots header
@@ -274,6 +295,9 @@ public class CharacterEditor : Editor {
 
     public override void OnInspectorGUI()
     {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         serializedObject.Update();
 
         // Check if slots changed
@@ -282,7 +306,6 @@ public class CharacterEditor : Editor {
             var calculate = false;
             if (s.modifier != null && !s.calculatedFormula)
             {
-                Debug.Log(s.modifier.name);
                 calculate = true;
                 s.calculatedFormula = true;
             }

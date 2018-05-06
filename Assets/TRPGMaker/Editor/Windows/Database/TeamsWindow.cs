@@ -49,9 +49,15 @@ public class TeamsWindow : LayoutWindow {
                 GUILayout.BeginHorizontal(gsLineOdd);
             Rect rect = EditorGUILayout.GetControlRect();
             GUI.Label(rect, team.id + ": " + team.name);
+            if (Event.current.type == EventType.MouseUp && rect.Contains(Event.current.mousePosition))
+            {
+                editor = Editor.CreateEditor(team);
+                listTeams.index = Database.Instance.teams.IndexOf(team);
+            }
             if (GUILayout.Button(new GUIContent("Edit"), GUILayout.Width(50)))
             {
                 editor = Editor.CreateEditor(team);
+                listTeams.index = Database.Instance.teams.IndexOf(team);
             }
             else if (GUILayout.Button(new GUIContent("Remove"), GUILayout.Width(90)))
             {

@@ -16,8 +16,6 @@ public class TeamEditor : Editor {
     {
         // Remove button
         removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
-        removeStyle = new GUIStyle("Button");
-        removeStyle.padding = new RectOffset(2, 2, 2, 2);
 
         // Get characters
         listCharacters = new ReorderableList(serializedObject,
@@ -68,6 +66,9 @@ public class TeamEditor : Editor {
 
     public override void OnInspectorGUI()
     {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         Team team = (Team)target;
         // Clean array if there are null objects
         for (int i = 0; i < team.characters.Count; i++)

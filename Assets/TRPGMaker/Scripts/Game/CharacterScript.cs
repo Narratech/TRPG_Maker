@@ -49,7 +49,6 @@ public class CharacterScript : MonoBehaviour {
                 var calculate = false;
                 if (s.modifier != null && !s.calculatedFormula)
                 {
-                    Debug.Log(s.modifier.name);
                     calculate = true;
                     s.calculatedFormula = true;
                 }
@@ -86,7 +85,11 @@ public class CharacterScriptEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Team");
-        if(characterScript.character != null) index = EditorGUILayout.Popup(index, Database.Instance.teams.Where(x => x.characters.Exists(y => y.name == characterScript.character.name)).Select(item => item.name).ToArray());
+        if (characterScript.character != null)
+        {
+            //index = characters.
+            index = EditorGUILayout.Popup(index, Database.Instance.teams.Where(x => x.characters.Exists(y => y.name == characterScript.character.name)).Select(item => item.name).ToArray());
+        }
         EditorGUILayout.EndHorizontal();
 
         if (EditorGUI.EndChangeCheck()) {

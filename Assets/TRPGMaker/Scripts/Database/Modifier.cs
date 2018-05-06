@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public class Modifier: ScriptableObject {
     public new string name = "Enter item name";
     public string description = "Enter item description";
-    public List<string> tags = new List<String>();
+    public List<Tag> tags = new List<Tag>();
     [SerializeField]
     private List<Formula> _formulas = new List<Formula>();
     public List<Formula> formulas
@@ -37,10 +37,10 @@ public class Modifier: ScriptableObject {
     {
         public SlotsOcupped()
         {
-            slotsOcupped = new List<String>();
+            slotsOcupped = new List<SlotType>();
         }
 
-        public List<string> slotsOcupped;
+        public List<SlotType> slotsOcupped;
     }
 
     public List<SlotsOcupped> SlotType = new List<SlotsOcupped>(1);

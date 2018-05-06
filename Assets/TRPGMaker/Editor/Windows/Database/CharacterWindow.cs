@@ -48,11 +48,17 @@ public class CharacterWindow : LayoutWindow
                 GUILayout.BeginHorizontal(gsLinePair);
             else
                 GUILayout.BeginHorizontal(gsLineOdd);
-            Rect rect = EditorGUILayout.GetControlRect();
+            Rect rect = EditorGUILayout.GetControlRect();            
             GUI.Label(rect, character.name);
+            if (Event.current.type == EventType.MouseUp && rect.Contains(Event.current.mousePosition))
+            {
+                editor = Editor.CreateEditor(character);
+                listCharacters.index = Database.Instance.characters.IndexOf(character);
+            }
             if (GUILayout.Button(new GUIContent("Edit"), GUILayout.Width(50)))
             {
                 editor = Editor.CreateEditor(character);
+                listCharacters.index = Database.Instance.characters.IndexOf(character);
             }
             else if (GUILayout.Button(new GUIContent("Remove"), GUILayout.Width(90)))
             {

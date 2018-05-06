@@ -44,9 +44,7 @@ public class SpecializedClassEditor : Editor {
     {
         // Remove button
         removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
-        removeStyle = new GUIStyle("Button");
-        removeStyle.padding = new RectOffset(2, 2, 2, 2);
-
+        
         // Get tags
         listTags = new ReorderableList(serializedObject,
 			serializedObject.FindProperty("tags"),
@@ -81,7 +79,7 @@ public class SpecializedClassEditor : Editor {
                 rect.y += 2;
                 EditorGUI.LabelField(
                     new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
-                    specializedClass.tags[index]);
+                    specializedClass.tags[index].tagName);
 
                 if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
                 {
@@ -94,17 +92,17 @@ public class SpecializedClassEditor : Editor {
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 rect.y += 2;
 
-                slotTypeSelected = Database.Instance.slotTypes.IndexOf(specializedClass.slots[index].slotType);
+                slotTypeSelected = specializedClass.slots.IndexOf(specializedClass.slots[index]);
                 slotItemSelected = Database.Instance.items.IndexOf(specializedClass.slots[index].modifier);
 
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.LabelField(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight), "Slot type:");
-                slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.ToArray());
+                slotTypeSelected =  EditorGUI.Popup(new Rect(rect.x + 63, rect.y, 100, EditorGUIUtility.singleLineHeight), slotTypeSelected, Database.Instance.slotTypes.Select(x => x.slotName).ToArray());
                 EditorGUI.LabelField(new Rect(rect.x + 170, rect.y, 35, EditorGUIUtility.singleLineHeight), "Item:");
                 slotItemSelected = EditorGUI.Popup(new Rect(rect.x + 208, rect.y, rect.width - 238, EditorGUIUtility.singleLineHeight), slotItemSelected, Database.Instance.items.Select(s => (string)s.name).ToArray());
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if(slotTypeSelected != -1)
+                    if(slotTypeSelected != 0)
                         specializedClass.slots[index].slotType = Database.Instance.slotTypes[slotTypeSelected];
                     if(slotItemSelected != -1)
                         specializedClass.slots[index].modifier = Database.Instance.items[slotItemSelected];
@@ -129,9 +127,27 @@ public class SpecializedClassEditor : Editor {
                      rectL.height = EditorGUIUtility.singleLineHeight;
                      rectL.x += 15;
                      rectL.y += EditorGUIUtility.singleLineHeight;
+                     GUI.SetNextControlName("Value");
                      EditorGUI.PropertyField(rectL, element.FindPropertyRelative("value"));
+                     if (GUI.GetNameOfFocusedControl() != "Value" && specializedClass.attributes[index].value > specializedClass.attributes[index].maxValue)
+                     {
+                         if (EditorUtility.DisplayDialog("Value error!",
+                             "The value introduced is greater than the max value", "Ok"))
+                         {
+                             specializedClass.attributes[index].value = 0;
+                         }
+                     }
                      rectL.y += EditorGUIUtility.singleLineHeight;
+                     GUI.SetNextControlName("MinValue");
                      EditorGUI.PropertyField(rectL, element.FindPropertyRelative("minValue"));
+                     if (GUI.GetNameOfFocusedControl() != "MinValue" && specializedClass.attributes[index].minValue > specializedClass.attributes[index].maxValue)
+                     {
+                         if (EditorUtility.DisplayDialog("Value error!",
+                             "The min value introduced is greater than the max value", "Ok"))
+                         {
+                             specializedClass.attributes[index].minValue = 0;
+                         }
+                     }
                      rectL.y += EditorGUIUtility.singleLineHeight;
                      EditorGUI.PropertyField(rectL, element.FindPropertyRelative("maxValue"));
                      listAttributes.elementHeight = EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
@@ -215,9 +231,9 @@ public class SpecializedClassEditor : Editor {
 		// Add tags
 		listTags.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
 			var menu = new GenericMenu();
-			foreach (string tag in Database.Instance.tags)
+			foreach (Tag tag in Database.Instance.tags)
 			{
-				menu.AddItem(new GUIContent(tag),
+				menu.AddItem(new GUIContent(tag.tagName),
 						false, clickHandlerTags,
 					tag);
 				
@@ -276,6 +292,9 @@ public class SpecializedClassEditor : Editor {
 
     public override void OnInspectorGUI()
     {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         serializedObject.Update();
 
         var customStyle = new GUIStyle();
@@ -330,7 +349,7 @@ public class SpecializedClassEditor : Editor {
 	private void clickHandlerTags(object target)
 	{
 		var data = (string) target;
-		specializedClass.tags.Add (data);
+		specializedClass.tags.Add (Database.Instance.tags.Find(x => x.tagName == data));
 		serializedObject.ApplyModifiedProperties();
 	}
 

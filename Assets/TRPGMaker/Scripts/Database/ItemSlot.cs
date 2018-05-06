@@ -22,7 +22,7 @@ public class ItemSlot : Slot {
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (string slotType)
+                        delegate (SlotType slotType)
                         {
                             return slotType == this.slotType;
                         });
@@ -93,7 +93,7 @@ public class ItemSlot : Slot {
         for (int i = 0; i < modifier.SlotType.Count; i++)
         {
             int pos = modifier.SlotType[i].slotsOcupped.FindIndex(
-                        delegate (string slotType)
+                        delegate (SlotType slotType)
                         {
                             return slotType == this.slotType;
                         });

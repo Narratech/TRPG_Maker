@@ -8,8 +8,8 @@ public class Database : ScriptableObject
 {
     private static Database _instance;
     public List<Attribute> attributes;
-    public List<string> tags;
-    public List<string> slotTypes;
+    public List<Tag> tags;
+    public List<SlotType> slotTypes;
     public List<Modifier> items;
     public List<SpecializedClass> specializedClasses;
     public List<Character> characters;
@@ -32,8 +32,8 @@ public class Database : ScriptableObject
     public Database()
     {
         attributes = new List<Attribute>();
-        tags = new List<string>();
-        slotTypes = new List<string>();
+        tags = new List<Tag>();
+        slotTypes = new List<SlotType>();
         items = new List<Modifier>();
         specializedClasses = new List<SpecializedClass>();
         characters = new List<Character>();

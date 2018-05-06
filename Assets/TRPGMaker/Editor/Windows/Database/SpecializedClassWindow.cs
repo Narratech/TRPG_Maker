@@ -50,9 +50,15 @@ class SpecializedClassWindow : LayoutWindow
                 GUILayout.BeginHorizontal(gsLineOdd);
             Rect rect = EditorGUILayout.GetControlRect();
             GUI.Label(rect, specializedClass.name);
+            if (Event.current.type == EventType.MouseUp && rect.Contains(Event.current.mousePosition))
+            {
+                editor = Editor.CreateEditor(specializedClass);
+                listSpecializedClass.index = Database.Instance.specializedClasses.IndexOf(specializedClass);
+            }
             if (GUILayout.Button(new GUIContent("Edit"), GUILayout.Width(50)))
             {
                 editor = Editor.CreateEditor(specializedClass);
+                listSpecializedClass.index = Database.Instance.specializedClasses.IndexOf(specializedClass);
             }
             else if (GUILayout.Button(new GUIContent("Remove"), GUILayout.Width(90)))
             {

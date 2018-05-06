@@ -96,7 +96,11 @@ public class FormulaParser {
 		if (Database.Instance.attributes.Any(x => x.id == param)) 
 		{
 			args.HasResult = true;
-            args.Result = attributes.Find(x => x.attribute.id == param).value;
+            AttributeValue attrValue = attributes.Find(x => x.attribute.id == param);
+            if (attrValue != null)
+                args.Result = attrValue.value;
+            else
+                args.Result = 0;
 		} 
 	    else
 		{

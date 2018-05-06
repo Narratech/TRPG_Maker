@@ -37,8 +37,6 @@ public class ItemEditor : Editor
     {
         // Remove button
         removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
-        removeStyle = new GUIStyle("Button");
-        removeStyle.padding = new RectOffset(2, 2, 2, 2);
 
         // Get Formulas
         listFormulas = new ReorderableList(serializedObject,
@@ -48,7 +46,7 @@ public class ItemEditor : Editor
         // Draw formulas
         listFormulas.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
-                var element = listFormulas.serializedProperty.GetArrayElementAtIndex(index);
+                //var element = listFormulas.serializedProperty.GetArrayElementAtIndex(index);
                 var formula = item.formulas[index];
                 rect.y += 2;
 
@@ -101,6 +99,9 @@ public class ItemEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         if (dropDown == null)
             Init();
 
@@ -158,13 +159,12 @@ public class ItemEditor : Editor
             {
                 for (int j = 0; j < item.SlotType[i].slotsOcupped.Count; j++)
                 {
-                    SerializedProperty property = serializedObject.FindProperty("SlotType").GetArrayElementAtIndex(i).FindPropertyRelative("slotsOcupped").GetArrayElementAtIndex(j);
-
+                    //SerializedProperty property = serializedObject.FindProperty("SlotType").GetArrayElementAtIndex(i).FindPropertyRelative("slotsOcupped").GetArrayElementAtIndex(j);
                     EditorGUI.BeginChangeCheck();
                     GUILayout.BeginHorizontal();
-                    int selectedIndex = Database.Instance.slotTypes.IndexOf(property.stringValue);
+                    int selectedIndex = Database.Instance.slotTypes.IndexOf(item.SlotType[i].slotsOcupped[j]);
                     Rect rectPopup = EditorGUILayout.GetControlRect();
-                    selectedIndex = EditorGUI.Popup(rectPopup, selectedIndex, Database.Instance.slotTypes.ToArray());
+                    selectedIndex = EditorGUI.Popup(rectPopup, selectedIndex, Database.Instance.slotTypes.Select(x => x.slotName).ToArray());
 
                     if (GUILayout.Button(new GUIContent("", removeTexture), removeStyle, GUILayout.MaxHeight(16), GUILayout.MaxWidth(16)))
                     {
@@ -173,7 +173,7 @@ public class ItemEditor : Editor
                     GUILayout.EndHorizontal();
                     if (EditorGUI.EndChangeCheck() && selectedIndex != -1)
                     {
-                        property.stringValue = Database.Instance.slotTypes[selectedIndex];
+                        item.SlotType[i].slotsOcupped[j] = Database.Instance.slotTypes[selectedIndex];
                     }
                     if (j != item.SlotType[i].slotsOcupped.Count - 1)
                         GUILayout.Label("AND", centeredStyle);
@@ -182,7 +182,7 @@ public class ItemEditor : Editor
             GUILayout.BeginHorizontal();
             if (GUILayout.Button(new GUIContent("", addTexture), removeStyle, GUILayout.MaxHeight(16), GUILayout.MaxWidth(16)))
             {
-                item.SlotType[i].slotsOcupped.Add("");
+                item.SlotType[i].slotsOcupped.Add(new SlotType(""));
                 serializedObject.Update();
             }            
             GUILayout.EndHorizontal();
@@ -249,8 +249,8 @@ public class ItemEditor : Editor
                 if (tag.LastIndexOf(',') != -1)
                     tag = tag.Substring(tag.LastIndexOf(',') + 1, tag.Length - tag.LastIndexOf(',') - 1);
                 // Search in Database
-                if (tag.Trim() != "" && r.ToLower().Contains(tag.ToLower()))
-                    dropDownList.Add(r);
+                if (tag.Trim() != "" && r.tagName.ToLower().Contains(tag.ToLower()))
+                    dropDownList.Add(r.tagName);
             }
         }
         dropDown.Elements = dropDownList;
@@ -261,11 +261,11 @@ public class ItemEditor : Editor
         dropDown.Value = "";
         for(int i = 0; i < item.tags.Count; i++)
         {
-            string s = item.tags[i];
+            Tag s = item.tags[i];
             // If tag removed from database:
             if (!Database.Instance.tags.Contains(s))
                 item.tags.Remove(s);
-            dropDown.Value += s + ",";
+            dropDown.Value += s.tagName + ",";
         }
         if (dropDown.Value.Length > 0)
             dropDown.Value = dropDown.Value.Substring(0, dropDown.Value.Length - 1); // Remove last ,
@@ -274,7 +274,7 @@ public class ItemEditor : Editor
     void saveTagsInDatabase()
     {
         string tagsTemp = dropDown.Value;
-        item.tags = new List<string>();
+        item.tags = new List<Tag>();
         if (tagsTemp.Trim() != "")
         {
             if (tagsTemp.IndexOf(',') != -1)
@@ -293,18 +293,20 @@ public class ItemEditor : Editor
 
     void checkTagExistsInDatabaseAndStore(string tagName)
     {
-        if (!Database.Instance.tags.Contains(tagName))
+        Tag tag = Database.Instance.tags.Find(x => x.tagName == tagName);
+        if (tag == null)
         {
             if (EditorUtility.DisplayDialog("Create new tag \'" + tagName + "\'?",
                     "The tag \'" + tagName + "\' doesn't exists in Databes, you want to create this tag or remove froms tags assigned?", "Create", "Remove"))
             {
-                Database.Instance.tags.Add(tagName);
-                item.tags.Add(tagName);
+                tag = new Tag(tagName);
+                Database.Instance.tags.Add(tag);
+                item.tags.Add(tag);
             }
         }
         else
         {
-            item.tags.Add(tagName);
+            item.tags.Add(tag);
         }
     }
 }

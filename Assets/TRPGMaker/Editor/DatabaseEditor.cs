@@ -43,7 +43,7 @@ public class CustomEditorBase : Editor{
         GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Tags:", titleStyle);
         for (int i = 0; i < Database.Instance.tags.Count; i++)
         {
-            string tag = Database.Instance.tags[i];
+            string tag = Database.Instance.tags[i].tagName;
             // Changing line color
             if (i % 2 == 0)
                 GUILayout.BeginHorizontal(gsLinePair);
@@ -60,14 +60,14 @@ public class CustomEditorBase : Editor{
         GUI.Label(new Rect(EditorGUILayout.GetControlRect().x, EditorGUILayout.GetControlRect().y, EditorGUILayout.GetControlRect().width, 30), "Slot types:", titleStyle);
         for (int i = 0; i < Database.Instance.slotTypes.Count; i++)
         {
-            string slotType = Database.Instance.slotTypes[i];
+            SlotType slotType = Database.Instance.slotTypes[i];
             // Changing line color
             if (i % 2 == 0)
                 GUILayout.BeginHorizontal(gsLinePair);
             else
                 GUILayout.BeginHorizontal(gsLineOdd);
             Rect rect = EditorGUILayout.GetControlRect();
-            GUI.Label(rect, slotType);
+            GUI.Label(rect, slotType.slotName);
             GUILayout.EndHorizontal();
         }
         GUILayout.EndVertical();

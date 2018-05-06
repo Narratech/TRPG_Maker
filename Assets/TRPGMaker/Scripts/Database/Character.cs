@@ -64,9 +64,14 @@ public class Character: ScriptableObject{
         {
            foreach(Formula formula in slot.modifier.formulas)
            {
-               f.formula = formula.formula;
-               var r = f.FormulaParser.Evaluate(attributes);
-                attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int) r;                    
+                f.formula = formula.formula;
+                if (f.FormulaParser.IsValidExpression)
+                {
+                    var r = f.FormulaParser.Evaluate(attributes);
+                    AttributeValue attrbValue = attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID);
+                    if(attrbValue != null)
+                        attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int)r;
+                }
            }
         }
         // Formulas in slots of specialized classes
@@ -76,9 +81,12 @@ public class Character: ScriptableObject{
             {
                 foreach (Formula formula in slot.modifier.formulas)
                 {
-                    f.formula = formula.formula;
-                    var r = f.FormulaParser.Evaluate(attributes);
-                    attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int)r;
+                    if (f.FormulaParser.IsValidExpression)
+                    {
+                        f.formula = formula.formula;
+                        var r = f.FormulaParser.Evaluate(attributes);
+                        attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int)r;
+                    }
                 }
             }
         }

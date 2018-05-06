@@ -50,9 +50,15 @@ public class SkillsWindow : LayoutWindow
                 GUILayout.BeginHorizontal(gsLineOdd);
             Rect rect = EditorGUILayout.GetControlRect();
             GUI.Label(rect, skill.name);
+            if (Event.current.type == EventType.MouseUp && rect.Contains(Event.current.mousePosition))
+            {
+                editor = Editor.CreateEditor(skill);
+                listSkills.index = Database.Instance.skills.IndexOf(skill);
+            }
             if (GUILayout.Button(new GUIContent("Edit"), GUILayout.Width(50)))
             {
                 editor = Editor.CreateEditor(skill);
+                listSkills.index = Database.Instance.skills.IndexOf(skill);
             }
             else if (GUILayout.Button(new GUIContent("Remove"), GUILayout.Width(90)))
             {

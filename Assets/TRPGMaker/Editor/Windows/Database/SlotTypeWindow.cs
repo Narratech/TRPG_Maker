@@ -17,12 +17,13 @@ public class SlotTypeWindow : LayoutWindow
 
         // Remove button
         removeTexture = (Texture2D)Resources.Load("Buttons/remove", typeof(Texture2D));
-        removeStyle = new GUIStyle("Button");
-        removeStyle.padding = new RectOffset(2, 2, 2, 2);
     }
 
     public override void Draw(Rect rect)
-    {        
+    {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         editor.serializedObject.Update();
 
         GUILayout.BeginVertical();
@@ -43,6 +44,7 @@ public class SlotTypeWindow : LayoutWindow
         EditorGUILayout.EndVertical();
 
         editor.serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(Database.Instance);
     }
 
    private void createReorderableList()
@@ -57,10 +59,11 @@ public class SlotTypeWindow : LayoutWindow
         // Draw slot types
         listSlotTypes.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
-                var element = listSlotTypes.serializedProperty.GetArrayElementAtIndex(index);
-                var textDimensions = GUI.skin.label.CalcSize(new GUIContent(element.stringValue));
-                if (isActive) EditorGUI.PropertyField(new Rect(rect.x, rect.y, textDimensions.x + 5, rect.height), element, GUIContent.none, true);
-                else EditorGUI.LabelField(rect, element.stringValue);
+                //var element = listSlotTypes.serializedProperty.GetArrayElementAtIndex(index);
+                SlotType slotType = Database.Instance.slotTypes[index];
+                var textDimensions = GUI.skin.label.CalcSize(new GUIContent(slotType.slotName));
+                if (isActive) Database.Instance.slotTypes[index].slotName = EditorGUI.TextField(new Rect(rect.x, rect.y, textDimensions.x + 5, rect.height), slotType.slotName);
+                else EditorGUI.LabelField(rect, slotType.slotName);
 
                 if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
                 {
@@ -70,7 +73,7 @@ public class SlotTypeWindow : LayoutWindow
 
         // On new slot type
         listSlotTypes.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) => {
-            Database.Instance.slotTypes.Add("New slot type");
+            Database.Instance.slotTypes.Add(new SlotType("New slot type"));
         };
 
         // listSlotType header
