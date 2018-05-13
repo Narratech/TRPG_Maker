@@ -26,16 +26,11 @@ public class SpecializedClass : ScriptableObject
     public void refreshAttributes()
     {
         if (attributes == null)
-            attributes = Extensions.Clone<AttributeValue>(Database.Instance.attributes.Where(x => x.isCore).ToList()).ToList();
+            attributes = new List<AttributeValue>();
         else
         {
             // Remove Deleted
             attributes.RemoveAll(x => !Database.Instance.attributes.Contains(x.attribute));
-
-            attributes.AddRange(Extensions.Clone<AttributeValue>(Database.Instance.attributes.Where(x => !attributes.Any(y => y.attribute.id == x.id) && x.isCore).ToList()));
-            List<AttributeValue> aux = new List<AttributeValue>();
-            aux.AddRange(attributes.Where(x => Database.Instance.attributes.Any(y => y.id == x.attribute.id)));
-            attributes = aux;
         }
     }
 
