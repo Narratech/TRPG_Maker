@@ -13,7 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attributes: []
   tags: []
-  slotTypes: []
+  slotTypes:
+  - slotName: Hand
   items:
   - {fileID: 11400000, guid: 242d1289cf2bba54c88d032eafa8eec4, type: 2}
   - {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
@@ -25,33 +26,9 @@ MonoBehaviour:
   _TRPGOptions:
     _gameType: 0
     _turnType: 0
-    _healthAttribute:
-      name: 
-      id: 
-      description: 
-      isCore: 0
-    _damageAttribute:
-      name: 
-      id: 
-      description: 
-      isCore: 0
-    _moveRange:
-      name: 
-      id: 
-      description: 
-      isCore: 0
-    _moveHeight:
-      name: 
-      id: 
-      description: 
-      isCore: 0
-    _attackRange:
-      name: 
-      id: 
-      description: 
-      isCore: 0
-    _attackHeight:
-      name: 
-      id: 
-      description: 
-      isCore: 0
+    _healthAttribute: {fileID: 0}
+    _damageAttribute: {fileID: 0}
+    _moveRange: {fileID: 0}
+    _moveHeight: {fileID: 0}
+    _attackRange: {fileID: 0}
+    _attackHeight: {fileID: 0}

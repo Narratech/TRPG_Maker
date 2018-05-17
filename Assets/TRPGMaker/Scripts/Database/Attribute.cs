@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Attribute : ICloneable
+public class Attribute : ScriptableObject
 {
     [SerializeField]
     public string name;

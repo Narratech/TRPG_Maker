@@ -174,7 +174,7 @@ public class CharacterEditor : Editor {
                          rectL.x += 15;
                          rectL.y += EditorGUIUtility.singleLineHeight;
                          GUI.SetNextControlName("Value");
-                         EditorGUI.PropertyField(rectL, element.FindPropertyRelative("value"));
+                         EditorGUI.PropertyField(new Rect(rectL.x, rectL.y, rectL.width - 15, rectL.height), element.FindPropertyRelative("value"));
                          if (GUI.GetNameOfFocusedControl() != "Value" && character.attributes[index].value > character.attributes[index].maxValue)
                          {
                              if (EditorUtility.DisplayDialog("Value error!",
@@ -185,7 +185,7 @@ public class CharacterEditor : Editor {
                          }
                          rectL.y += EditorGUIUtility.singleLineHeight;
                          GUI.SetNextControlName("MinValue");
-                         EditorGUI.PropertyField(rectL, element.FindPropertyRelative("minValue"));
+                         EditorGUI.PropertyField(new Rect(rectL.x, rectL.y, rectL.width - 15, rectL.height), element.FindPropertyRelative("minValue"));
                          if (GUI.GetNameOfFocusedControl() != "MinValue" && character.attributes[index].minValue > character.attributes[index].maxValue)
                          {
                              if (EditorUtility.DisplayDialog("Value error!",
@@ -195,7 +195,7 @@ public class CharacterEditor : Editor {
                              }
                          }
                          rectL.y += EditorGUIUtility.singleLineHeight;
-                         EditorGUI.PropertyField(rectL, element.FindPropertyRelative("maxValue"));
+                         EditorGUI.PropertyField(new Rect(rectL.x, rectL.y, rectL.width - 15, rectL.height), element.FindPropertyRelative("maxValue"));
                          listAttributes.elementHeight = EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
                      }
                      else
@@ -350,8 +350,7 @@ public class CharacterEditor : Editor {
 	private void clickHandlerAttributes(object target)
     {
         var data = (Attribute) target;
-        AttributeValue attributeValue = new AttributeValue();
-        attributeValue.attribute = data;
+        AttributeValue attributeValue = (AttributeValue)data.Clone();
         attributes.Add(attributeValue);
         foldout.Add(false);
         serializedObject.ApplyModifiedProperties();

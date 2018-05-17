@@ -4,9 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class AttributeValue {
+public class AttributeValue{
 
-    public Attribute attribute;
+    [SerializeField]
+    private Attribute _attribute;
+    [SerializeField]
+    public Attribute attribute
+    {
+        get
+        {
+            return _attribute;
+        }
+        set {
+            _attribute = value;
+        }
+    }
     [SerializeField]
     public int maxValue = 0;
     [SerializeField]

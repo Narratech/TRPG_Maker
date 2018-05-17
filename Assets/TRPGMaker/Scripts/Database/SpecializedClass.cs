@@ -12,7 +12,8 @@ public class SpecializedClass : ScriptableObject
     public new string name;
     public List<Tag> tags;
     public List<Slot> slots;
-    public List<AttributeValue> attributes = null;
+    [SerializeField]
+    public List<AttributeValue> attributes;
     public FormulaScript formula;
     public List<Skills> skills;
 
@@ -21,6 +22,7 @@ public class SpecializedClass : ScriptableObject
         tags = new List<Tag>();
         slots = new List<Slot>();
         formula = ScriptableObject.CreateInstance<FormulaScript>();
+        attributes = new List<AttributeValue>();
     }
 
     public void refreshAttributes()

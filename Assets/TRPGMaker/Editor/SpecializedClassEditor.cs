@@ -122,13 +122,17 @@ public class SpecializedClassEditor : Editor {
                  rectL.y += 2;
 
                  foldout[index] = EditorGUI.Foldout(new Rect(rectL.x, rectL.y, textDimensions.x + 5, rectL.height), foldout[index], specializedClass.attributes[index].attribute.name);
+                 if (!specializedClass.attributes[index].attribute.isCore && GUI.Button(new Rect(rectL.width - 14, rectL.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                 {
+                     specializedClass.attributes.RemoveAt(index);
+                 }
                  if (foldout[index])
                  {
                      rectL.height = EditorGUIUtility.singleLineHeight;
                      rectL.x += 15;
                      rectL.y += EditorGUIUtility.singleLineHeight;
                      GUI.SetNextControlName("Value");
-                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("value"));
+                     EditorGUI.PropertyField(new Rect(rectL.x, rectL.y, rectL.width - 15, rectL.height), element.FindPropertyRelative("value"));
                      if (GUI.GetNameOfFocusedControl() != "Value" && specializedClass.attributes[index].value > specializedClass.attributes[index].maxValue)
                      {
                          if (EditorUtility.DisplayDialog("Value error!",
@@ -139,7 +143,7 @@ public class SpecializedClassEditor : Editor {
                      }
                      rectL.y += EditorGUIUtility.singleLineHeight;
                      GUI.SetNextControlName("MinValue");
-                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("minValue"));
+                     EditorGUI.PropertyField(new Rect(rectL.x, rectL.y, rectL.width - 15, rectL.height), element.FindPropertyRelative("minValue"));
                      if (GUI.GetNameOfFocusedControl() != "MinValue" && specializedClass.attributes[index].minValue > specializedClass.attributes[index].maxValue)
                      {
                          if (EditorUtility.DisplayDialog("Value error!",
@@ -149,18 +153,13 @@ public class SpecializedClassEditor : Editor {
                          }
                      }
                      rectL.y += EditorGUIUtility.singleLineHeight;
-                     EditorGUI.PropertyField(rectL, element.FindPropertyRelative("maxValue"));
+                     EditorGUI.PropertyField(new Rect(rectL.x, rectL.y, rectL.width - 15, rectL.height), element.FindPropertyRelative("maxValue"));
                      listAttributes.elementHeight = EditorGUIUtility.singleLineHeight * 4.0f + 4.0f;
                  } 
                  else
                  {
 
                      listAttributes.elementHeight = EditorGUIUtility.singleLineHeight + 4.0f;
-                 }
-
-                 if (!specializedClass.attributes[index].attribute.isCore && GUI.Button(new Rect(rectL.width - 14, rectL.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
-                 {
-                     specializedClass.attributes.RemoveAt(index);
                  }
              };
 
@@ -338,10 +337,9 @@ public class SpecializedClassEditor : Editor {
 
 	private void clickHandlerAttributes(object target)
     {
-        var data = (Attribute) target;
-        AttributeValue attributeValue = new AttributeValue();
-        attributeValue.attribute = data;
-        attributes.Add(attributeValue);
+        Attribute data = (Attribute) target;
+        AttributeValue attributeValue = (AttributeValue) data.Clone();
+        specializedClass.attributes.Add(attributeValue);
         foldout.Add(false);
         serializedObject.ApplyModifiedProperties();
     }
