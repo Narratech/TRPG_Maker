@@ -20,6 +20,7 @@ obj/
 *.unityproj
 *.booproj
 .vs/TRPGMaker/xs/UserPrefs.xml
+.vs/*
 
 # ============ #
 # OS generated #

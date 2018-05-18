@@ -11,7 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ac61a1063e08024ab3d5b8eb07b7b40, type: 3}
   m_Name: Database
   m_EditorClassIdentifier: 
-  attributes: []
+  attributes:
+  - {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+  - {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
+  - {fileID: 11400000, guid: 7a51ab61027fe2842b7277a93add2237, type: 2}
   tags: []
   slotTypes:
   - slotName: Hand
@@ -19,16 +22,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 242d1289cf2bba54c88d032eafa8eec4, type: 2}
   - {fileID: 11400000, guid: 4c69bdc0758205346836ff1ddb49b90d, type: 2}
   - {fileID: 11400000, guid: 7182cd41f7eb67743a3612a0fd7c9ac5, type: 2}
-  specializedClasses: []
-  characters: []
-  teams: []
+  specializedClasses:
+  - {fileID: 11400000, guid: de99074a2c9f3e44fb0871e3f484f8a4, type: 2}
+  characters:
+  - {fileID: 11400000, guid: e7f127d3314f50841893ffe7a2ef77e7, type: 2}
+  teams:
+  - {fileID: 11400000, guid: ff36771f8c32cc64b9f083fbe542428e, type: 2}
   skills: []
   _TRPGOptions:
     _gameType: 0
     _turnType: 0
-    _healthAttribute: {fileID: 0}
-    _damageAttribute: {fileID: 0}
-    _moveRange: {fileID: 0}
-    _moveHeight: {fileID: 0}
-    _attackRange: {fileID: 0}
-    _attackHeight: {fileID: 0}
+    _healthAttribute: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+    _damageAttribute: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+    _moveRange: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+    _moveHeight: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+    _attackRange: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+    _attackHeight: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}

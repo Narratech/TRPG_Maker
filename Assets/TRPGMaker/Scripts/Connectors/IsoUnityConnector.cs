@@ -112,7 +112,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
         try
         {
-            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value;
+            entity.mover.maxJumpSize = character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value;
         }
         catch (NullReferenceException e)
         {
@@ -128,9 +128,9 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         try
         {
             if (eventType == EventTypes.MOVE)
-                CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.attribute.id == moveRange.id).value, character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value);
+                CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value);
             else if (eventType == EventTypes.ATTACK)
-                CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributes.Find(x => x.attribute.id == attackRange.id).value, character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value);
+                CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -182,7 +182,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
 
         try
         {
-            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value;
+            entity.mover.maxJumpSize = character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value;
         }
         catch (NullReferenceException e)
         {
@@ -191,7 +191,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
 
         try
         {
-            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_ATTACK, character.character.attributes.Find(x => x.attribute.id == attackRange.id).value, character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value);
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_ATTACK, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -222,7 +222,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
 
         try
         {
-            entity.mover.maxJumpSize = character.character.attributes.Find(x => x.attribute.id == moveHeight.id).value;
+            entity.mover.maxJumpSize = character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value;
         }
         catch (NullReferenceException e)
         {
@@ -231,7 +231,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
 
         try
         {
-            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_MOVE, character.character.attributes.Find(x => x.attribute.id == attackRange.id).value, character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value);
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_MOVE, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -322,8 +322,8 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         IsoUnity.Cell currentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
         List<CellWithDistance> openList = new List<CellWithDistance>();
         List<CellWithDistance> closeList = new List<CellWithDistance>();
-        float attackRan = character.character.attributes.Find(x => x.attribute.id == attackRange.id).value;
-        float heighMax = character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value;
+        float attackRan = character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value;
+        float heighMax = character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value;
 
         openList.Add(new CellWithDistance(currentCell, 0, null));
         while (openList.Count > 0)
@@ -363,8 +363,8 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         IsoUnity.Cell targetCell = target.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
         List<CellWithDistance> openList = new List<CellWithDistance>();
         List<CellWithDistance> closeList = new List<CellWithDistance>();
-        float attackRan = character.character.attributes.Find(x => x.attribute.id == attackRange.id).value;
-        float heighMax = character.character.attributes.Find(x => x.attribute.id == attackHeight.id).value;
+        float attackRan = character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value;
+        float heighMax = character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value;
 
         openList.Add(new CellWithDistance(currentCell, 0, null));
         while (openList.Count > 0)

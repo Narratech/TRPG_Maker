@@ -58,7 +58,16 @@ public class Character: ScriptableObject{
     public void calculateFormulas()
     {
         var f = FormulaScript.Create("");
+
+        // Copy attributes
         attributesWithFormulas = Extensions.Clone<AttributeValue>(attributes.Select(x => x.attribute).ToList()).ToList();
+        foreach(AttributeValue attrb in attributesWithFormulas)
+        {
+            attrb.value = attributes.Find(x => x.attribute == attrb.attribute).value;
+            attrb.minValue = attributes.Find(x => x.attribute == attrb.attribute).minValue;
+            attrb.maxValue = attributes.Find(x => x.attribute == attrb.attribute).maxValue;
+        }
+
         // Formulas in slots
         foreach (Slot slot in Slots)
         {
@@ -69,8 +78,12 @@ public class Character: ScriptableObject{
                 {
                     var r = f.FormulaParser.Evaluate(attributes);
                     AttributeValue attrbValue = attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID);
-                    if(attrbValue != null)
-                        attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int)r;
+                    if (attrbValue != null)
+                    {
+                        attrbValue.value += (int)r;
+                        if (attrbValue.value > attrbValue.maxValue)
+                            attrbValue.value = attrbValue.maxValue;
+                    }
                 }
            }
         }
@@ -85,7 +98,10 @@ public class Character: ScriptableObject{
                     {
                         f.formula = formula.formula;
                         var r = f.FormulaParser.Evaluate(attributes);
-                        attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID).value += (int)r;
+                        AttributeValue attrbValue = attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID);
+                        attrbValue.value += (int)r;
+                        if (attrbValue.value > attrbValue.maxValue)
+                            attrbValue.value = attrbValue.maxValue;
                     }
                 }
             }

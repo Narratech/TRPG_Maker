@@ -17,6 +17,7 @@ public class GamePlayManager : MonoBehaviour
     private Boolean move;
     private Boolean attack;
     private int round = 0;
+    private GameObject skillsObjectScrollRect;
 
     // Use this for initialization
     void Start()
@@ -34,7 +35,10 @@ public class GamePlayManager : MonoBehaviour
 
     public void StartCombat()
     {
-        Turn();
+        if (checkAttributes())
+        {
+            Turn();
+        }
     }
 
     private void Turn()
@@ -104,7 +108,7 @@ public class GamePlayManager : MonoBehaviour
     {
         //Get info about character "health attribute" (battle connection)
 
-        int healthValue = characters[index].character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value;
+        int healthValue = characters[index].character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value;
 
         character = characters[index];
         //Actual round here
@@ -212,11 +216,11 @@ public class GamePlayManager : MonoBehaviour
         {
             CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
 
-            characterDestAttack.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value; 
+            characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value; 
 
-            if (characterDestAttack.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
+            if (characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
             {
-                characterDestAttack.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
+                characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
                 // Dead Animation
                 // add to teams list like dead?
             }
@@ -230,7 +234,7 @@ public class GamePlayManager : MonoBehaviour
     {
         connector.IAAttack(character, target, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
         {
-            target.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value;
+            target.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value;
             Turn();
         }));
     }
@@ -258,7 +262,7 @@ public class GamePlayManager : MonoBehaviour
         {
             // Move to nearest cell
             int destinyCell = 0;
-            int moveRange = character.character.attributes.Find(x => x.attribute.id == Database.Instance.battleOptions.moveRange.id).value;
+            int moveRange = character.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.moveRange.id).value;
             // Can't be 0, because is the enemy target position
             if (nearestPath.Count == 0)
                 Turn();
@@ -274,7 +278,7 @@ public class GamePlayManager : MonoBehaviour
                     List<CharacterScript> targets = connector.GetAttackRangeTargets(character);
 
                     // Filter only other teams characters ordered by max health
-                    targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
+                    targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributesWithFormulas.Find(y => y.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
 
                     // Check if now is any attackable character
                     if (targets.Count > 0)
@@ -294,7 +298,7 @@ public class GamePlayManager : MonoBehaviour
         List<CharacterScript> targets = connector.GetAttackRangeTargets(character);
 
         // Filter only other teams characters ordered by max health
-        targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributes.Find(y => y.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
+        targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributesWithFormulas.Find(y => y.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
 
         // If any character is attackable, attack
         if(targets.Count > 0)
@@ -312,6 +316,32 @@ public class GamePlayManager : MonoBehaviour
         connector.cleanCells();
         objectCanvas.SetActive(false);
         Turn();
+    }
+
+    private bool checkAttributes()
+    {
+        // Set all battle attributes required in a List
+        List<Attribute> requiredAttributes = new List<Attribute>();
+        requiredAttributes.Add(Database.Instance.battleOptions.healthAttribute);
+        requiredAttributes.Add(Database.Instance.battleOptions.damageAttribute);
+        requiredAttributes.Add(Database.Instance.battleOptions.moveRange);
+        requiredAttributes.Add(Database.Instance.battleOptions.moveHeight);
+        requiredAttributes.Add(Database.Instance.battleOptions.attackRange);
+        requiredAttributes.Add(Database.Instance.battleOptions.attackHeight);
+
+        // Check if all characters contains this attributes
+        foreach (CharacterScript character in FindObjectsOfType<CharacterScript>()) {
+            character.character.calculateFormulas();
+            foreach (Attribute attribute in requiredAttributes) {
+                if (!character.character.attributesWithFormulas.Any(x => x.attribute == attribute))
+                {
+                    Debug.Log("Character '" + character.character.name + "' doesn't have attribute '" + attribute.name + "'");
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private void DrawCanvas()
@@ -337,7 +367,7 @@ public class GamePlayManager : MonoBehaviour
         objectButtonMove.transform.parent = objectCanvas.transform;
 
         Button buttonMove = objectButtonMove.AddComponent<Button>();
-        Image imagebutton = objectButtonMove.AddComponent<Image>();
+        Image imageButtonMove = objectButtonMove.AddComponent<Image>();
 
         RectTransform rtButtonMove = objectButtonMove.transform.GetComponent(typeof(RectTransform)) as RectTransform;
         rtButtonMove.sizeDelta = new Vector2(100, 20);
@@ -434,43 +464,96 @@ public class GamePlayManager : MonoBehaviour
         //Buttons listeners
         buttonMove.onClick.AddListener(() =>
         {
-            imagebutton.color = UnityEngine.Color.grey;
+            if (skillsObjectScrollRect != null)
+                Destroy(skillsObjectScrollRect);
+            imagebuttonSkill.color = UnityEngine.Color.white;
+            imagebuttonAttack.color = UnityEngine.Color.white;
+            imageButtonMove.color = UnityEngine.Color.grey;
             MoveEvent(buttonMove);
-            if (!attack)
-            {
-                imagebuttonAttack.color = UnityEngine.Color.white;
-            }
         });
 
         buttonAttack.onClick.AddListener(() =>
         {
+            if (skillsObjectScrollRect != null)
+                Destroy(skillsObjectScrollRect);
+            imagebuttonSkill.color = UnityEngine.Color.white;
+            imageButtonMove.color = UnityEngine.Color.white;
             imagebuttonAttack.color = UnityEngine.Color.grey;
             AttackEvent();
-            if (!move)
-            {
-                imagebutton.color = UnityEngine.Color.white;
-            }
         });
 
         buttonSkill.onClick.AddListener(() =>
         {
-            
+            imageButtonMove.color = UnityEngine.Color.white;
+            imagebuttonAttack.color = UnityEngine.Color.white;
+            imagebuttonSkill.color = UnityEngine.Color.grey;
+            skillButtonListener(rtCanvas);
         });
 
         buttonFinishTurn.onClick.AddListener(() =>
         {
-            if (!move)
-            {
-                imagebutton.color = UnityEngine.Color.white;
-            }
-            if (!attack)
-            {
-                imagebuttonAttack.color = UnityEngine.Color.white;
-            }
             FinishTurnEvent();
         });
     }
 
+    private void skillButtonListener(RectTransform rtCanvas)
+    {
+        skillsObjectScrollRect = new GameObject("RectTransform");
+        skillsObjectScrollRect.transform.position = rtCanvas.transform.position;
+        skillsObjectScrollRect.transform.parent = objectCanvas.transform;
+        ScrollRect skillScrollRect = skillsObjectScrollRect.AddComponent<ScrollRect>();
+        skillsObjectScrollRect.AddComponent<Mask>();
+        //skillScrollRect.horizontalNormalizedPosition = 0;
+        skillScrollRect.movementType = ScrollRect.MovementType.Unrestricted;
+        skillScrollRect.horizontal = false;
+        skillScrollRect.inertia = false;
+        skillScrollRect.scrollSensitivity = 4;
+        Image skillsImage = skillsObjectScrollRect.AddComponent<Image>();
+        skillsImage.color = UnityEngine.Color.grey;
+        RectTransform rt = skillsObjectScrollRect.GetComponent(typeof(RectTransform)) as RectTransform;
+        rt.sizeDelta = new Vector2(125, 100);
+        rt.position = new Vector2(rt.position.x - rtCanvas.position.x + (rt.sizeDelta.x / 2) + 150, rt.position.y - rtCanvas.position.y + (rt.sizeDelta.x) - 50);
+
+        GameObject skillsObjectRectTransform = new GameObject("Content");
+        skillsObjectRectTransform.transform.position = rtCanvas.transform.position;
+        skillsObjectRectTransform.transform.parent = skillsObjectScrollRect.transform;
+        RectTransform skillsRectTransform = skillsObjectRectTransform.AddComponent<RectTransform>();
+        skillScrollRect.content = skillsRectTransform;
+
+        for (int i = 0; i < 20; i++)
+        {
+
+            GameObject objectButtonSkill = new GameObject("Button");
+            objectButtonSkill.transform.position = skillsObjectScrollRect.transform.position;
+            objectButtonSkill.transform.parent = skillsObjectRectTransform.transform;
+
+            Button buttonSkill = objectButtonSkill.AddComponent<Button>();
+            Image imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
+
+            RectTransform rtButtonSkill = objectButtonSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+            rtButtonSkill.sizeDelta = new Vector2(100, 20);
+
+            GameObject objectTextSkill = new GameObject("Text");
+            objectTextSkill.transform.position = objectButtonSkill.transform.position;
+            objectTextSkill.transform.parent = objectButtonSkill.transform;
+            Text textSkill = objectTextSkill.AddComponent<Text>();
+            textSkill.text = "Skill " + i;
+            textSkill.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+            textSkill.color = Color.black;
+            textSkill.alignment = TextAnchor.MiddleCenter;
+            RectTransform rtTexttext = objectTextSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+            rtTexttext.sizeDelta = rtButtonSkill.sizeDelta;
+
+            // Button position        
+            rtButtonSkill.position = new Vector2(rt.position.x, rt.position.y - (30*i) + 25);
+
+            //Buttons listeners
+            buttonSkill.onClick.AddListener(() =>
+            {
+                
+            });
+        }
+    }
 
     // Callbacks
     public MoveCharacterToCallBack MoveCharacterToParametrizedCallback(CharacterScript character, System.Action<CharacterScript, bool> callback)
