@@ -5,5 +5,6 @@ public enum EventTypes{
     ATTACK,
     MOVE, 
     IA_ATTACK,
-    IA_MOVE
+    IA_MOVE,
+    SKILL
 };

@@ -6,5 +6,6 @@ public class IsoUnityOptions : MonoBehaviour {
 
     public IsoUnity.IsoTexture moveCell;
     public IsoUnity.IsoTexture attackCell;
+    public IsoUnity.IsoTexture skillCell;
     public IsoUnity.IsoDecoration arrowDecoration;
 }

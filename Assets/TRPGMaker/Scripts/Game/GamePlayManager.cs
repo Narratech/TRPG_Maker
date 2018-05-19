@@ -18,6 +18,7 @@ public class GamePlayManager : MonoBehaviour
     private Boolean attack;
     private int round = 0;
     private GameObject skillsObjectScrollRect;
+    private Image imagebuttonSkill;
 
     // Use this for initialization
     void Start()
@@ -230,6 +231,15 @@ public class GamePlayManager : MonoBehaviour
         }));
     }
 
+    public void SkillEvent(Skills skill)
+    {
+        connector.cleanCells();
+        connector.ShowArea(character, EventTypes.SKILL, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+        {
+            
+        }), skill);
+    }
+
     public void attackEventIA(CharacterScript target)
     {
         connector.IAAttack(character, target, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
@@ -417,7 +427,7 @@ public class GamePlayManager : MonoBehaviour
         objectButtonSkill.transform.parent = objectCanvas.transform;
 
         Button buttonSkill = objectButtonSkill.AddComponent<Button>();
-        Image imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
+        imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
 
         RectTransform rtButtonSkill = objectButtonSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
         rtButtonSkill.sizeDelta = new Vector2(100, 20);
@@ -487,6 +497,7 @@ public class GamePlayManager : MonoBehaviour
             imageButtonMove.color = UnityEngine.Color.white;
             imagebuttonAttack.color = UnityEngine.Color.white;
             imagebuttonSkill.color = UnityEngine.Color.grey;
+            connector.cleanCells();
             skillButtonListener(rtCanvas);
         });
 
@@ -520,38 +531,48 @@ public class GamePlayManager : MonoBehaviour
         RectTransform skillsRectTransform = skillsObjectRectTransform.AddComponent<RectTransform>();
         skillScrollRect.content = skillsRectTransform;
 
-        for (int i = 0; i < 20; i++)
+        // Get all the skills inside the specialized classes
+        List<List<Skills>> skills = character.character.specializedClasses.Select(x => x.skills).ToList();
+
+        foreach (List<Skills> skillList in skills)
         {
-
-            GameObject objectButtonSkill = new GameObject("Button");
-            objectButtonSkill.transform.position = skillsObjectScrollRect.transform.position;
-            objectButtonSkill.transform.parent = skillsObjectRectTransform.transform;
-
-            Button buttonSkill = objectButtonSkill.AddComponent<Button>();
-            Image imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
-
-            RectTransform rtButtonSkill = objectButtonSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
-            rtButtonSkill.sizeDelta = new Vector2(100, 20);
-
-            GameObject objectTextSkill = new GameObject("Text");
-            objectTextSkill.transform.position = objectButtonSkill.transform.position;
-            objectTextSkill.transform.parent = objectButtonSkill.transform;
-            Text textSkill = objectTextSkill.AddComponent<Text>();
-            textSkill.text = "Skill " + i;
-            textSkill.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-            textSkill.color = Color.black;
-            textSkill.alignment = TextAnchor.MiddleCenter;
-            RectTransform rtTexttext = objectTextSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
-            rtTexttext.sizeDelta = rtButtonSkill.sizeDelta;
-
-            // Button position        
-            rtButtonSkill.position = new Vector2(rt.position.x, rt.position.y - (30*i) + 25);
-
-            //Buttons listeners
-            buttonSkill.onClick.AddListener(() =>
+            for(int i = 0; i < skillList.Count; i++)
             {
-                
-            });
+                Skills skill = skillList[i];
+
+                GameObject objectButtonSkill = new GameObject("Button");
+                objectButtonSkill.transform.position = skillsObjectScrollRect.transform.position;
+                objectButtonSkill.transform.parent = skillsObjectRectTransform.transform;
+
+                Button buttonSkill = objectButtonSkill.AddComponent<Button>();
+                Image imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
+
+                RectTransform rtButtonSkill = objectButtonSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+                rtButtonSkill.sizeDelta = new Vector2(100, 20);
+
+                GameObject objectTextSkill = new GameObject("Text");
+                objectTextSkill.transform.position = objectButtonSkill.transform.position;
+                objectTextSkill.transform.parent = objectButtonSkill.transform;
+                Text textSkill = objectTextSkill.AddComponent<Text>();
+                textSkill.text = skill.name;
+                textSkill.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+                textSkill.color = Color.black;
+                textSkill.alignment = TextAnchor.MiddleCenter;
+                RectTransform rtTexttext = objectTextSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+                rtTexttext.sizeDelta = rtButtonSkill.sizeDelta;
+
+                // Button position        
+                rtButtonSkill.position = new Vector2(rt.position.x, rt.position.y - (30 * i) + 25);
+
+                //Buttons listeners
+                buttonSkill.onClick.AddListener(() =>
+                {
+                    if (skillsObjectScrollRect != null)
+                        Destroy(skillsObjectScrollRect);
+                    this.imagebuttonSkill.color = UnityEngine.Color.white;
+                    SkillEvent(skill);
+                });
+            }
         }
     }
 

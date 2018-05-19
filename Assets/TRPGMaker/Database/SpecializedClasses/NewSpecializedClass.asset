@@ -20,4 +20,7 @@ MonoBehaviour:
     minValue: 0
     value: 0
   formula: {fileID: 0}
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: 347122fdaa7394b4baf27c18b79176bb, type: 2}
+  - {fileID: 11400000, guid: 58c4a5f649a699b4282451a006428fc1, type: 2}
+  - {fileID: 11400000, guid: 6140f844d2699c34183175b8e0937e5e, type: 2}

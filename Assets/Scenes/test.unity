@@ -31475,6 +31475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveCell: {fileID: 11400000, guid: 1285aa62ffa004945b03dfbda9cf0afd, type: 2}
   attackCell: {fileID: 11400000, guid: e7bd64f3e7f95d54289deccf42920283, type: 2}
+  skillCell: {fileID: 11400000, guid: 121fd29bd24ece6439bdf3010f2e1b41, type: 2}
   arrowDecoration: {fileID: 11400000, guid: 0db37da799e54d5458c420331560f165, type: 2}
 --- !u!43 &771847860
 Mesh:

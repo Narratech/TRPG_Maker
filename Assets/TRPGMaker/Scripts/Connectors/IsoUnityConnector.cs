@@ -12,6 +12,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
     private GameEvent selectedCellEvent;
     private IsoUnity.IsoTexture colorMove;
     private IsoUnity.IsoTexture colorAttack;
+    private IsoUnity.IsoTexture colorSkill;
     private IsoUnity.IsoDecoration arrow;
 
     private Attribute health;
@@ -28,6 +29,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
             IsoUnityOptions isoUnityOptions = GameObject.Find("Game").GetComponent(typeof(IsoUnityOptions)) as IsoUnityOptions;
             colorMove = isoUnityOptions.moveCell;
             colorAttack = isoUnityOptions.attackCell;
+            colorSkill = isoUnityOptions.skillCell;
             arrow = isoUnityOptions.arrowDecoration;
         }
         catch (NullReferenceException e)
@@ -100,13 +102,13 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
     }
 
     // Show calculated area with the character distance requirement
-    public void ShowArea(CharacterScript character, EventTypes eventType, ShowAreaCallBack callback)
+    public void ShowArea(CharacterScript character, EventTypes eventType, ShowAreaCallBack callback, Skills skill = null)
     {
-        StartCoroutine(ShowAreaAsync(character, eventType, callback));
+        StartCoroutine(ShowAreaAsync(character, eventType, skill, callback));
     }
 
     // Async method for show area
-    private IEnumerator ShowAreaAsync(CharacterScript character, EventTypes eventType, ShowAreaCallBack callback)
+    private IEnumerator ShowAreaAsync(CharacterScript character, EventTypes eventType, Skills skill, ShowAreaCallBack callback)
     {
         Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
         IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
@@ -131,10 +133,12 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
                 CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value);
             else if (eventType == EventTypes.ATTACK)
                 CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value);
+            else if(eventType == EventTypes.SKILL)
+                SkillsParser(entity, characterCurrentCell, eventType, character, skill);
         }
         catch (NullReferenceException e)
         {
-            Debug.Log("Character '" + character.character.name + "' doesn't have some or any of this attributes: '" + moveHeight.name + "', '" + moveRange.name + "', '" + attackHeight.name + "', '" + attackRange.name + "'");
+            Debug.Log(e);
         }
 
         Dictionary<string, object> outParams;
@@ -438,7 +442,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
                     {
                         if (!openList.Any(x => x.cell == neighbour))
                         {
-                            PaintCell(neighbour, eventType);
+                            PaintCell(neighbour, eventType);                            
                             openList.Add(new CellWithDistance(neighbour, distanceManhattanFromCharacterToNeigh, null));
                         }
                     }
@@ -462,14 +466,19 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
             case EventTypes.IA_MOVE:
                 texture = colorMove;
                 break;
+            case EventTypes.SKILL:
+                texture = colorSkill;
+                break;
         }
         cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = texture;
         cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = texture.getTexture();
         cell.forceRefresh();
     }
 
+    public delegate void CallbackSelector(IsoUnity.Cell cell);
+
     // Show an arrow in selectables cells 
-    private void showSelector(IsoUnity.Cell cell, EventTypes eventType)
+    private void showSelector(IsoUnity.Cell cell, EventTypes eventType, CallbackSelector callback = null)
     {
         SelectableCell selectableCell = cell.transform.gameObject.AddComponent<SelectableCell>();
         selectableCell.arrow = arrow;
@@ -477,6 +486,61 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         selectableCell.previousTexture = cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping;
         selectableCell.cell = cell;
         selectableCell.eventType = eventType;
+        selectableCell.callback = callback;
+    }
+
+    // Calculate the skill events
+    private void SkillsParser(Entity entity, IsoUnity.Cell currentCell, EventTypes eventType, CharacterScript character, Skills skill)
+    {
+        // Get all characters
+        List<CharacterScript> characters = FindObjectsOfType<CharacterScript>().ToList();
+
+        // Switch
+        if (skill.skillType == SkillTypes.SINGLE_TARGET)
+        {
+            foreach (CharacterScript target in characters)
+            {
+                IsoUnity.Cell targetCell = target.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+                PaintCell(targetCell, eventType);
+            }
+        }
+        else if (skill.skillType == SkillTypes.AREA)
+        {
+            IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+            CalculateDistanceArea(entity, characterCurrentCell, eventType, skill.areaRange, int.MaxValue);            
+            PaintCell(characterCurrentCell, eventType);
+        }
+        else if(skill.skillType == SkillTypes.AREA_IN_OBJETIVE)
+        {
+            foreach (IsoUnity.Cell cell in currentCell.Map.Cells)
+            {
+                showSelector(cell, eventType, ((result) => {
+                    cleanSkillCells();
+                    CalculateDistanceArea(null, result, eventType, skill.areaRange, int.MaxValue);
+                    PaintCell(cell, eventType);
+                }));
+            }
+        }
+    }
+
+    private void cleanSkillCells()
+    {
+        SelectableCell[] selectableCells = FindObjectsOfType<SelectableCell>();
+        foreach (SelectableCell selectableCell in selectableCells)
+        {
+            IsoUnity.Cell cell = selectableCell.cell;
+            if (selectableCell.previousTexture != null)
+            {
+                cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = selectableCell.previousTexture;
+                cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = selectableCell.previousTexture.getTexture();
+            }
+            else
+            {
+                cell.Properties.faces[cell.Properties.faces.Length - 1].TextureMapping = null;
+                cell.Properties.faces[cell.Properties.faces.Length - 1].Texture = null;
+            }
+            cell.forceRefresh();
+        }
     }
 
     private IsoUnity.Cell SearchCellInMap(Cell cell)
@@ -518,6 +582,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
     // Specific class make a cell selectable and draw an arrow
     class SelectableCell : MonoBehaviour
     {
+        public CallbackSelector callback;
         public GameEvent selectedCellEvent;
         public IsoDecoration arrow;
         public IsoUnity.Cell cell = null;
@@ -545,13 +610,17 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
                 {
                     arrowObject = cell.addDecoration(cell.transform.position + new Vector3(0, cell.WalkingHeight, 0), 0, false, true, arrow);
                 }
+                else if (eventType == EventTypes.SKILL)
+                {
+                    arrowObject = cell.addDecoration(cell.transform.position + new Vector3(0, cell.WalkingHeight, 0), 0, false, true, arrow);
+                    if(callback != null) callback(cell);
+                }
             }
         }
 
         void OnMouseExit()
         {
             if (arrowObject != null)
-
                 GameObject.Destroy(arrowObject);
         }
 

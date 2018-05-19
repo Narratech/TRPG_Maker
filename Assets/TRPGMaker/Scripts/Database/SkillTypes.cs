@@ -4,7 +4,6 @@ using UnityEngine;
 
 public enum SkillTypes{
     SINGLE_TARGET,
-    PROYECTILE,
     AREA,
     AREA_IN_OBJETIVE
 }

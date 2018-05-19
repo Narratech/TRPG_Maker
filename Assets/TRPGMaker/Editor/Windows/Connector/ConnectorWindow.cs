@@ -73,7 +73,7 @@ public class ConnectorWindow : EditorWindow{
             }
             else {
                 Editor editor = Editor.CreateEditor(objects[0]);
-                editor.DrawDefaultInspector();
+                editor.OnInspectorGUI();
             }
         }
         

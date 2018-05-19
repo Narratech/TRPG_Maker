@@ -33,11 +33,11 @@ MonoBehaviour:
     value: 0
   attributesWithFormulas:
   - _attribute: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
-    maxValue: 0
+    maxValue: 20
     minValue: 0
-    value: 0
+    value: 20
   - _attribute: {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
-    maxValue: 0
+    maxValue: 23
     minValue: 0
     value: 21
   - _attribute: {fileID: 11400000, guid: 7a51ab61027fe2842b7277a93add2237, type: 2}
