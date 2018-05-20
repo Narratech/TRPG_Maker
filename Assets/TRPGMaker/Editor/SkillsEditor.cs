@@ -43,7 +43,7 @@ public class SkillsEditor : Editor {
                 formula.formula = EditorGUI.TextField(new Rect(rect.x + 70, rect.y, rect.width - 98, EditorGUIUtility.singleLineHeight), formula.formula);
 
                 bool removed = false;
-                if (GUI.Button(new Rect(rect.width, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                if (GUI.Button(new Rect(rect.width + 261, rect.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
                 {
                     skill.formulas.Remove(skill.formulas[index]);
                     removed = true;
@@ -82,6 +82,9 @@ public class SkillsEditor : Editor {
 
     public override void OnInspectorGUI()
     {
+        removeStyle = new GUIStyle("Button");
+        removeStyle.padding = new RectOffset(2, 2, 2, 2);
+
         serializedObject.Update();
 
         var customStyle = new GUIStyle();

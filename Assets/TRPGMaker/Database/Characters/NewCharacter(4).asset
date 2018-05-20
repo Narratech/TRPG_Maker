@@ -9,24 +9,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d9fb3b8c5fa23c4e8313ab14ed5bdb8, type: 3}
-  m_Name: NewCharacter
+  m_Name: NewCharacter(4)
   m_EditorClassIdentifier: 
-  name: NewCharacter
+  name: NewCharacter(4)
   inventory: {fileID: 0}
-  Slots:
-  - slotType:
-      slotName: 
-    _modifier: {fileID: 11400000, guid: 242d1289cf2bba54c88d032eafa8eec4, type: 2}
-    calculatedFormula: 1
+  Slots: []
   attributes:
   - _attribute: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
     maxValue: 500
     minValue: 0
-    value: 120
+    value: 111
   - _attribute: {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
-    maxValue: 23
+    maxValue: 0
     minValue: 0
-    value: 21
+    value: 0
   - _attribute: {fileID: 11400000, guid: 7a51ab61027fe2842b7277a93add2237, type: 2}
     maxValue: 0
     minValue: 0
@@ -35,11 +31,11 @@ MonoBehaviour:
   - _attribute: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
     maxValue: 500
     minValue: 0
-    value: 120
+    value: 111
   - _attribute: {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
-    maxValue: 23
+    maxValue: 0
     minValue: 0
-    value: 21
+    value: 0
   - _attribute: {fileID: 11400000, guid: 7a51ab61027fe2842b7277a93add2237, type: 2}
     maxValue: 0
     minValue: 0

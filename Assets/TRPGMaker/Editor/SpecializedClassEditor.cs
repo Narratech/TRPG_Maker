@@ -196,10 +196,12 @@ public class SpecializedClassEditor : Editor {
         listSkills.drawElementCallback =
             (Rect rect, int index, bool isActive, bool isFocused) => {
                 rect.y += 2;
-                if(specializedClass.skills[index] != null)
+                if (specializedClass.skills[index] != null)
                     EditorGUI.LabelField(
                         new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight),
                         specializedClass.skills[index].name);
+                else
+                    specializedClass.skills.RemoveAt(index);
             };
 
         // Tags header

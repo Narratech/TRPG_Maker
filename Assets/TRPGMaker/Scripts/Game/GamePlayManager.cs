@@ -234,9 +234,27 @@ public class GamePlayManager : MonoBehaviour
     public void SkillEvent(Skills skill)
     {
         connector.cleanCells();
-        connector.ShowArea(character, EventTypes.SKILL, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
+        connector.Skills(character, EventTypes.SKILL, SkillsCallBackParametrizedCallback(character, (character, selectedCell, result, targets) =>
         {
-            
+            foreach(CharacterScript target in targets)
+            {
+                var f = FormulaScript.Create("");
+                foreach (Formula formula in skill.formulas)
+                {
+                    f.formula = formula.formula;
+                    if (f.FormulaParser.IsValidExpression && target != null)
+                    {
+                        var r = f.FormulaParser.Evaluate(target.character.attributes);
+                        AttributeValue attrbValue = target.character.attributesWithFormulas.Find(x => x.attribute.id == formula.attributeID);
+                        if (attrbValue != null)
+                        {
+                            attrbValue.value += (int)r;
+                            if (attrbValue.value > attrbValue.maxValue)
+                                attrbValue.value = attrbValue.maxValue;
+                        }
+                    }
+                }
+            }
         }), skill);
     }
 
@@ -540,38 +558,41 @@ public class GamePlayManager : MonoBehaviour
             {
                 Skills skill = skillList[i];
 
-                GameObject objectButtonSkill = new GameObject("Button");
-                objectButtonSkill.transform.position = skillsObjectScrollRect.transform.position;
-                objectButtonSkill.transform.parent = skillsObjectRectTransform.transform;
-
-                Button buttonSkill = objectButtonSkill.AddComponent<Button>();
-                Image imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
-
-                RectTransform rtButtonSkill = objectButtonSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
-                rtButtonSkill.sizeDelta = new Vector2(100, 20);
-
-                GameObject objectTextSkill = new GameObject("Text");
-                objectTextSkill.transform.position = objectButtonSkill.transform.position;
-                objectTextSkill.transform.parent = objectButtonSkill.transform;
-                Text textSkill = objectTextSkill.AddComponent<Text>();
-                textSkill.text = skill.name;
-                textSkill.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
-                textSkill.color = Color.black;
-                textSkill.alignment = TextAnchor.MiddleCenter;
-                RectTransform rtTexttext = objectTextSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
-                rtTexttext.sizeDelta = rtButtonSkill.sizeDelta;
-
-                // Button position        
-                rtButtonSkill.position = new Vector2(rt.position.x, rt.position.y - (30 * i) + 25);
-
-                //Buttons listeners
-                buttonSkill.onClick.AddListener(() =>
+                if (skill != null)
                 {
-                    if (skillsObjectScrollRect != null)
-                        Destroy(skillsObjectScrollRect);
-                    this.imagebuttonSkill.color = UnityEngine.Color.white;
-                    SkillEvent(skill);
-                });
+                    GameObject objectButtonSkill = new GameObject("Button");
+                    objectButtonSkill.transform.position = skillsObjectScrollRect.transform.position;
+                    objectButtonSkill.transform.parent = skillsObjectRectTransform.transform;
+
+                    Button buttonSkill = objectButtonSkill.AddComponent<Button>();
+                    Image imagebuttonSkill = objectButtonSkill.AddComponent<Image>();
+
+                    RectTransform rtButtonSkill = objectButtonSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+                    rtButtonSkill.sizeDelta = new Vector2(100, 20);
+
+                    GameObject objectTextSkill = new GameObject("Text");
+                    objectTextSkill.transform.position = objectButtonSkill.transform.position;
+                    objectTextSkill.transform.parent = objectButtonSkill.transform;
+                    Text textSkill = objectTextSkill.AddComponent<Text>();
+                    textSkill.text = skill.name;
+                    textSkill.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+                    textSkill.color = Color.black;
+                    textSkill.alignment = TextAnchor.MiddleCenter;
+                    RectTransform rtTexttext = objectTextSkill.transform.GetComponent(typeof(RectTransform)) as RectTransform;
+                    rtTexttext.sizeDelta = rtButtonSkill.sizeDelta;
+
+                    // Button position        
+                    rtButtonSkill.position = new Vector2(rt.position.x, rt.position.y - (30 * i) + 25);
+
+                    //Buttons listeners
+                    buttonSkill.onClick.AddListener(() =>
+                    {
+                        if (skillsObjectScrollRect != null)
+                            Destroy(skillsObjectScrollRect);
+                        this.imagebuttonSkill.color = UnityEngine.Color.white;
+                        SkillEvent(skill);
+                    });
+                }
             }
         }
     }
@@ -590,5 +611,10 @@ public class GamePlayManager : MonoBehaviour
     public ShowAreaCallBack ShowAreaCallBackParametrizedCallback(CharacterScript character, System.Action<CharacterScript, Cell, bool> callback)
     {
         return (selectedCell, result) => callback(character, selectedCell, result);
+    }
+
+    public SkillsCallBack SkillsCallBackParametrizedCallback(CharacterScript character, System.Action<CharacterScript, Cell, bool, List<CharacterScript>> callback)
+    {
+        return (selectedCell, result, targets) => callback(character, selectedCell, result, targets);
     }
 }

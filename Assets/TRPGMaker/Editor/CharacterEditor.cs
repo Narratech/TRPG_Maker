@@ -173,6 +173,7 @@ public class CharacterEditor : Editor {
                          rectL.height = EditorGUIUtility.singleLineHeight;
                          rectL.x += 15;
                          rectL.y += EditorGUIUtility.singleLineHeight;
+                         EditorGUI.BeginChangeCheck();
                          GUI.SetNextControlName("Value");
                          EditorGUI.PropertyField(new Rect(rectL.x, rectL.y, rectL.width - 15, rectL.height), element.FindPropertyRelative("value"));
                          if (GUI.GetNameOfFocusedControl() != "Value" && character.attributes[index].value > character.attributes[index].maxValue)

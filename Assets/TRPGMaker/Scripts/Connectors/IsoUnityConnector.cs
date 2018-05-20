@@ -133,8 +133,6 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
                 CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value);
             else if (eventType == EventTypes.ATTACK)
                 CalculateDistanceArea(entity, characterCurrentCell, eventType, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value);
-            else if(eventType == EventTypes.SKILL)
-                SkillsParser(entity, characterCurrentCell, eventType, character, skill);
         }
         catch (NullReferenceException e)
         {
@@ -147,6 +145,77 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         IsoUnity.Cell selectedCell = outParams["cell"] as IsoUnity.Cell;
         Cell returnCell = new Cell((int)selectedCell.Map.getCoords(selectedCell.gameObject).x, (int)selectedCell.Map.getCoords(selectedCell.gameObject).y);
         callback(returnCell, true);
+    }
+    
+    // Skills
+    public void Skills(CharacterScript character, EventTypes eventType, SkillsCallBack callback, Skills skill = null)
+    {
+        StartCoroutine(SkillsAsync(character, eventType, skill, callback));
+    }
+
+    // Async method for skills
+    private IEnumerator SkillsAsync(CharacterScript character, EventTypes eventType, Skills skill, SkillsCallBack callback)
+    {
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
+        IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+        try
+        {
+            entity.mover.maxJumpSize = character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value;
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log("Character '" + character.character.name + "' doesn't have attribute '" + moveHeight.name + "'");
+        }
+
+        selectedCellEvent = new GameEvent("selected cell", new Dictionary<string, object>()
+        {
+            {"synchronous", true }
+        });
+
+        Game.main.enqueueEvent(selectedCellEvent);
+        // Get all characters
+        List<CharacterScript> characters = FindObjectsOfType<CharacterScript>().ToList();
+        List<CharacterScript> targets = null;
+
+        // Switch
+        if (skill.skillType == SkillTypes.SINGLE_TARGET)
+        {
+            foreach (CharacterScript target in characters)
+            {
+                IsoUnity.Cell targetCell = target.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
+                PaintCell(targetCell, eventType);
+            }
+        }
+        else if (skill.skillType == SkillTypes.AREA)
+        {
+            targets = CalculateDistanceArea(entity, characterCurrentCell, eventType, skill.areaRange, int.MaxValue);
+            PaintCell(characterCurrentCell, eventType);
+        }
+        else if (skill.skillType == SkillTypes.AREA_IN_OBJETIVE)
+        {
+            foreach (IsoUnity.Cell cell in characterCurrentCell.Map.Cells)
+            {
+                showSelector(cell, eventType, ((result) => {
+                    cleanSkillCells();
+                    targets = CalculateDistanceArea(null, result, eventType, skill.areaRange, int.MaxValue);
+                    PaintCell(cell, eventType);
+                }));
+            }
+        }
+
+        Dictionary<string, object> outParams;
+        yield return new WaitForEventFinished(selectedCellEvent, out outParams);
+        cleanCells();
+        IsoUnity.Cell selectedCell = outParams["cell"] as IsoUnity.Cell;
+        Cell returnCell = new Cell((int)selectedCell.Map.getCoords(selectedCell.gameObject).x, (int)selectedCell.Map.getCoords(selectedCell.gameObject).y);
+
+        if (skill.skillType == SkillTypes.SINGLE_TARGET)
+        {
+            targets = new List<CharacterScript>();
+            targets.Add(selectedCell.transform.GetComponentInChildren<CharacterScript>());
+        }
+
+        callback(returnCell, true, targets);
     }
 
     // Camera look to Character
@@ -420,10 +489,12 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
     /******************* PRIVATE AUX METHODS *******************/
 
     // Calculate the area of the event type
-    private void CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, EventTypes eventType, int distanceMax, int heighMax)
+    private List<CharacterScript> CalculateDistanceArea(Entity entity, IsoUnity.Cell currentCell, EventTypes eventType, int distanceMax, int heighMax)
     {
         List<CellWithDistance> openList = new List<CellWithDistance>();
         List<CellWithDistance> closeList = new List<CellWithDistance>();
+        List<CharacterScript> charactersInArea = new List<CharacterScript>();
+        charactersInArea.Add(currentCell.transform.GetComponentInChildren<CharacterScript>());
 
         openList.Add(new CellWithDistance(currentCell, 0, null));
         while (openList.Count > 0)
@@ -444,11 +515,15 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
                         {
                             PaintCell(neighbour, eventType);                            
                             openList.Add(new CellWithDistance(neighbour, distanceManhattanFromCharacterToNeigh, null));
+                            CharacterScript character = neighbour.transform.GetComponentInChildren<CharacterScript>();
+                            if (character != null) charactersInArea.Add(character);
                         }
                     }
                 }
             }
         }
+
+        return charactersInArea;
     }
 
     // Paint the cell in function of the event type
@@ -487,40 +562,6 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         selectableCell.cell = cell;
         selectableCell.eventType = eventType;
         selectableCell.callback = callback;
-    }
-
-    // Calculate the skill events
-    private void SkillsParser(Entity entity, IsoUnity.Cell currentCell, EventTypes eventType, CharacterScript character, Skills skill)
-    {
-        // Get all characters
-        List<CharacterScript> characters = FindObjectsOfType<CharacterScript>().ToList();
-
-        // Switch
-        if (skill.skillType == SkillTypes.SINGLE_TARGET)
-        {
-            foreach (CharacterScript target in characters)
-            {
-                IsoUnity.Cell targetCell = target.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
-                PaintCell(targetCell, eventType);
-            }
-        }
-        else if (skill.skillType == SkillTypes.AREA)
-        {
-            IsoUnity.Cell characterCurrentCell = character.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
-            CalculateDistanceArea(entity, characterCurrentCell, eventType, skill.areaRange, int.MaxValue);            
-            PaintCell(characterCurrentCell, eventType);
-        }
-        else if(skill.skillType == SkillTypes.AREA_IN_OBJETIVE)
-        {
-            foreach (IsoUnity.Cell cell in currentCell.Map.Cells)
-            {
-                showSelector(cell, eventType, ((result) => {
-                    cleanSkillCells();
-                    CalculateDistanceArea(null, result, eventType, skill.areaRange, int.MaxValue);
-                    PaintCell(cell, eventType);
-                }));
-            }
-        }
     }
 
     private void cleanSkillCells()

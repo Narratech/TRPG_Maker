@@ -15,4 +15,9 @@ MonoBehaviour:
   id: 0
   characters:
   - {fileID: 11400000, guid: e7f127d3314f50841893ffe7a2ef77e7, type: 2}
+  - {fileID: 11400000, guid: dea631a34e1bf1b4a88109d369f08b72, type: 2}
+  - {fileID: 11400000, guid: d4ebd4afa6cc6394db5f44be6f178cbb, type: 2}
+  - {fileID: 11400000, guid: 1d0e0e29e24af58469a861571a64f906, type: 2}
+  - {fileID: 11400000, guid: e3c4baa27b73ff740ae708c819b74b32, type: 2}
+  - {fileID: 11400000, guid: 80ca2c8d0a392ad45a4b90144760f9c9, type: 2}
   playable: 1
