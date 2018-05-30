@@ -10,8 +10,7 @@ using IsoUnity.Entities;
 
 namespace IsoUnity.Sequences {
 
-    public class SequencedItem : IsoUnity.Entities.Item
-    {
+    public class SequencedItem : IsoUnity.Entities.Item {
 
         [SerializeField]
         SequenceAsset s;

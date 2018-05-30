@@ -11,7 +11,7 @@ public class WaitForEventFinished : IEnumerator, IEventManager
     private bool finished = false;
     public WaitForEventFinished(IGameEvent gameEvent)
     {
-        if(Game.main)
+        if (Game.main)
             Game.main.RegisterEventManager(this);
 
         waiting = gameEvent;
@@ -50,5 +50,5 @@ public class WaitForEventFinished : IEnumerator, IEventManager
         throw new NotImplementedException();
     }
 
-    public void Tick(){}
+    public void Tick() { }
 }

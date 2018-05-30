@@ -187,7 +187,7 @@ namespace IsoUnity
         public void tick()
         {
             FlushRegistrations();
-
+            
             if (previousMap != map)
                 MapManager.getInstance().setActiveMap(previousMap = map);
 
@@ -206,7 +206,7 @@ namespace IsoUnity
             foreach (Map eachMap in MapManager.getInstance().getMapList())
             {
                 eachMap.tick();
-            }            
+            }
         }
 
         /**

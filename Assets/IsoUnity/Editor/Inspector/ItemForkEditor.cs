@@ -12,7 +12,7 @@ namespace IsoUnity.Sequences {
 	    {
 	        var isf = target as ItemFork;
 			isf.contains = EditorGUILayout.Toggle("Contains", isf.contains);
-			isf.item =  EditorGUILayout.ObjectField("Item", (Object)isf.item, typeof(IsoUnity.Entities.Item), true) as IsoUnity.Entities.Item;
+			isf.item =  EditorGUILayout.ObjectField("Item", (Object)isf.item, typeof(Item), true) as IsoUnity.Entities.Item;
 			isf.inventory = EditorGUILayout.ObjectField("Inventory", (Object)isf.inventory, typeof(IsoUnity.Entities.Inventory), true) as IsoUnity.Entities.Inventory;
 		}
 	}

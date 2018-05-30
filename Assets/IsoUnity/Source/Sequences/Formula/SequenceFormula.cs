@@ -3,7 +3,7 @@ using NCalc;
 using System.Reflection;
 
 namespace IsoUnity.Sequences {
-	public class FormulaParser {
+	public class SequenceFormula {
 
 	    private Expression expression;
 	    private string formula;
@@ -11,8 +11,8 @@ namespace IsoUnity.Sequences {
 	    private string functionError;
 	    private object expresionResult;
 
-	    public FormulaParser() : this(string.Empty) { }
-	    public FormulaParser(string formula)
+	    public SequenceFormula() : this(string.Empty) { }
+	    public SequenceFormula(string formula)
 	    {
 	        this.Formula = formula;
 	    }

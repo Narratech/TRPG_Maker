@@ -5,6 +5,7 @@ using IsoUnity;
 using IsoUnity.Entities;
 using System.Linq;
 using System;
+using UnityEngine.EventSystems;
 
 public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
 {
@@ -667,7 +668,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
 
         private void OnMouseDown()
         {
-            if (selectedCellEvent != null && arrowObject != null)
+            if (selectedCellEvent != null && arrowObject != null && !EventSystem.current.IsPointerOverGameObject())
             {
                 Game.main.eventFinished(selectedCellEvent, new Dictionary<string, object>
                 {

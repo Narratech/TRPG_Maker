@@ -9,7 +9,8 @@ namespace IsoUnity.Entities
 {
     public abstract class EventedEntityScript : EntityScript
     {
-        private bool inited = false;
+        public delegate IEnumerator CoroutineControllerDelegate(IGameEvent ge, IEnumerator toRun, MonoBehaviour holder);
+
         private Dictionary<GameEventConfig, MethodInfo> calls;
         private Dictionary<MethodInfo, GameEventAttribute> attrInfo;
 
@@ -17,16 +18,26 @@ namespace IsoUnity.Entities
         {
             Current = ge;
 
-            EventHappened(this, calls, attrInfo, ge);
+            EventHappened(this, calls, attrInfo, ge, CoroutineController);
 
             Current = null;
         }
 
-        private static IEnumerator CoroutineController(IGameEvent ge, IEnumerator toRun)
+        private static IEnumerator CoroutineController(IGameEvent ge, IEnumerator toRun, MonoBehaviour holder)
         {
+            var eventedES = holder as EventedEntityScript;
+
             // We wrap the coroutine
             while (toRun.MoveNext())
+            {
+                // Free the current value
+                eventedES.Current = null;
                 yield return toRun.Current;
+                // Set the current event value
+                eventedES.Current = ge;
+            }
+            // Free the current value
+            eventedES.Current = null;
 
             // And when it finishes, we finish the event
             Game.main.eventFinished(ge);
@@ -39,14 +50,12 @@ namespace IsoUnity.Entities
 
         protected IGameEvent Current { get; private set; }
 
-        public override void tick()
+        protected virtual void Start()
         {
-            if (!inited)
-            {
-                Init(this.GetType(), ref calls, ref attrInfo);
-                inited = true;
-            }
+            Init(this.GetType(), ref calls, ref attrInfo);
         }
+
+        public override void tick() { }
 
         internal static void Init(Type type, ref Dictionary<GameEventConfig, MethodInfo> calls, ref Dictionary<MethodInfo, GameEventAttribute> attrInfo)
         {
@@ -63,7 +72,7 @@ namespace IsoUnity.Entities
             }
         }
 
-        internal static void EventHappened(MonoBehaviour reference, Dictionary<GameEventConfig, MethodInfo> calls, Dictionary<MethodInfo, GameEventAttribute> attrInfo, IGameEvent ge)
+        internal static void EventHappened(MonoBehaviour reference, Dictionary<GameEventConfig, MethodInfo> calls, Dictionary<MethodInfo, GameEventAttribute> attrInfo, IGameEvent ge, CoroutineControllerDelegate coroutineController)
         {
             if (calls != null && calls.Count > 0)
             {
@@ -84,7 +93,7 @@ namespace IsoUnity.Entities
 
                         if (output is IEnumerator)
                             // If we want to autofinish it we use the controller, else just launch it
-                            reference.StartCoroutine(attrInfo[call].AutoFinish ? CoroutineController(ge, output as IEnumerator) : output as IEnumerator);
+                            reference.StartCoroutine(attrInfo[call].AutoFinish ? coroutineController(ge, output as IEnumerator, reference) : output as IEnumerator);
                         else if (attrInfo[call].AutoFinish)
                             // If is not a coroutine and we have to auto finish it, we just do it
                             Game.main.eventFinished(ge);
