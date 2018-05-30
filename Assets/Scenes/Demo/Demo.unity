@@ -639,7 +639,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 9b30d6f97a0696b4e8e605b97d99b1dc, type: 3}
+        m_Texture: {fileID: 2800000, guid: ee4451bb4db0fd74293a8ee68c7021f6, type: 3}
         m_Scale: {x: 0.11111111, y: 0.25}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -4552,6 +4552,23 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!114 &141291347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.3
+  sheet: jump
+  overrideSheet: {fileID: 0}
 --- !u!43 &142842440
 Mesh:
   m_ObjectHideFlags: 0
@@ -7668,6 +7685,27 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 948999806}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
+--- !u!114 &223810094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 1
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!21 &224592150
 Material:
   serializedVersion: 6
@@ -9245,6 +9283,44 @@ Material:
     - _Cutoff: 0.5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &283802861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 2
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
+--- !u!114 &284069492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.3
+  sheet: jump
+  overrideSheet: {fileID: 0}
 --- !u!114 &284908410 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -12751,6 +12827,27 @@ Material:
     - _Cutoff: 0.5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &396746597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 1
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!114 &397375918 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -15344,6 +15441,23 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!114 &471117201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 1
+  frames:
+  - column: 0
+    duration: 0
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!1001 &472532287
 Prefab:
   m_ObjectHideFlags: 0
@@ -15770,6 +15884,27 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &488725632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 2
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!1001 &491814419
 Prefab:
   m_ObjectHideFlags: 0
@@ -15994,10 +16129,11 @@ GameObject:
   - component: {fileID: 494325673}
   - component: {fileID: 494325672}
   - component: {fileID: 494325671}
-  - component: {fileID: 494325676}
-  - component: {fileID: 494325675}
   - component: {fileID: 494325674}
   - component: {fileID: 494325677}
+  - component: {fileID: 494325678}
+  - component: {fileID: 494325676}
+  - component: {fileID: 494325675}
   m_Layer: 0
   m_Name: Decoration (clone)
   m_TagString: Untagged
@@ -16111,16 +16247,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 494325669}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97b9ff118ebb7904296932620b6c7076, type: 3}
+  m_Script: {fileID: 11500000, guid: c36aa785ccb234442aaea560bf16d4ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAnimator: 0
-  canBlockMe: 1
-  blocks: 1
-  maxJumpSize: 1.5
-  normalSprite: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
-  jumpingSprite: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
-  direction: 0
+  sheets:
+  - name: normal
+    isoDecoration: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  - name: jump
+    isoDecoration: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  isoAnimations:
+  - name: idle
+    isoAnimation: {fileID: 947201273}
+  - name: left step
+    isoAnimation: {fileID: 1232810929}
+  - name: right step
+    isoAnimation: {fileID: 1015615036}
+  - name: jump
+    isoAnimation: {fileID: 1101137277}
+  currentFrame: 0
+  currentAnimation: {fileID: 947201273}
+  timeInCurrentFrame: 0
+  currentSheet: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  animationLocked: 1
 --- !u!114 &494325677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16133,6 +16281,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sequence: {fileID: 504131946}
+--- !u!114 &494325678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 494325669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b9ff118ebb7904296932620b6c7076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useAnimator: 0
+  canBlockMe: 1
+  blocks: 1
+  maxJumpSize: 1.5
+  normalSprite: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  jumpingSprite: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  direction: 0
 --- !u!114 &494628238 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -19628,6 +19794,23 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &617520216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 1
+  frames:
+  - column: 0
+    duration: 0
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!21 &617905949
 Material:
   serializedVersion: 6
@@ -20840,9 +21023,10 @@ GameObject:
   - component: {fileID: 651502393}
   - component: {fileID: 651502392}
   - component: {fileID: 651502391}
+  - component: {fileID: 651502394}
+  - component: {fileID: 651502397}
   - component: {fileID: 651502396}
   - component: {fileID: 651502395}
-  - component: {fileID: 651502394}
   m_Layer: 0
   m_Name: Decoration (clone)
   m_TagString: Untagged
@@ -20949,6 +21133,36 @@ MonoBehaviour:
   face: {fileID: 0}
   position: {fileID: 1215927681}
 --- !u!114 &651502396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 651502389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36aa785ccb234442aaea560bf16d4ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: normal
+    isoDecoration: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  - name: jump
+    isoDecoration: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  isoAnimations:
+  - name: idle
+    isoAnimation: {fileID: 617520216}
+  - name: left step
+    isoAnimation: {fileID: 1662538730}
+  - name: right step
+    isoAnimation: {fileID: 1518330167}
+  - name: jump
+    isoAnimation: {fileID: 1048818079}
+  currentFrame: 0
+  currentAnimation: {fileID: 617520216}
+  timeInCurrentFrame: 0
+  currentSheet: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  animationLocked: 1
+--- !u!114 &651502397
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -29922,6 +30136,27 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &716847008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 1
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!21 &718379175
 Material:
   serializedVersion: 6
@@ -34690,9 +34925,10 @@ GameObject:
   - component: {fileID: 909185160}
   - component: {fileID: 909185159}
   - component: {fileID: 909185158}
+  - component: {fileID: 909185161}
+  - component: {fileID: 909185164}
   - component: {fileID: 909185163}
   - component: {fileID: 909185162}
-  - component: {fileID: 909185161}
   m_Layer: 0
   m_Name: Decoration (clone)
   m_TagString: Untagged
@@ -34799,6 +35035,36 @@ MonoBehaviour:
   face: {fileID: 0}
   position: {fileID: 443358618}
 --- !u!114 &909185163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 909185156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36aa785ccb234442aaea560bf16d4ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: normal
+    isoDecoration: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  - name: jump
+    isoDecoration: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  isoAnimations:
+  - name: idle
+    isoAnimation: {fileID: 1766185619}
+  - name: left step
+    isoAnimation: {fileID: 396746597}
+  - name: right step
+    isoAnimation: {fileID: 1269163943}
+  - name: jump
+    isoAnimation: {fileID: 141291347}
+  currentFrame: 0
+  currentAnimation: {fileID: 1766185619}
+  timeInCurrentFrame: 0
+  currentSheet: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  animationLocked: 1
+--- !u!114 &909185164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -35601,6 +35867,23 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &933875908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.3
+  sheet: jump
+  overrideSheet: {fileID: 0}
 --- !u!4 &936381811 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
@@ -35788,6 +36071,23 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!114 &947201273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 1
+  frames:
+  - column: 0
+    duration: 0
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!1001 &948999806
 Prefab:
   m_ObjectHideFlags: 0
@@ -37061,6 +37361,27 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &987498719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a413602f9429a24e943fe8c6b8b2508, type: 3}
+  m_Name: animate entity
+  m_EditorClassIdentifier: 
+  keys:
+  - synchronous
+  - animation
+  - then
+  - decorationanimator
+  values:
+  - {fileID: 1201584208}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &989835603 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -37702,6 +38023,27 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &1015615036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 2
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!21 &1019151541
 Material:
   serializedVersion: 6
@@ -38721,6 +39063,23 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!114 &1048818079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.3
+  sheet: jump
+  overrideSheet: {fileID: 0}
 --- !u!21 &1052591915
 Material:
   serializedVersion: 6
@@ -38832,11 +39191,13 @@ GameObject:
   - component: {fileID: 1054756143}
   - component: {fileID: 1054756142}
   - component: {fileID: 1054756141}
+  - component: {fileID: 1054756144}
+  - component: {fileID: 1054756147}
   - component: {fileID: 1054756146}
   - component: {fileID: 1054756145}
-  - component: {fileID: 1054756144}
+  - component: {fileID: 1054756148}
   m_Layer: 0
-  m_Name: Decoration (clone)
+  m_Name: Monk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38907,7 +39268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e00223589bdce4693914cd49b4b0d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isoDec: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  isoDec: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
   father: {fileID: 443721594}
   center: {x: -1.4860516, y: 0.011942863, z: 0.8430476}
   angle: 0
@@ -38955,9 +39316,55 @@ MonoBehaviour:
   canBlockMe: 1
   blocks: 1
   maxJumpSize: 1.5
-  normalSprite: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
-  jumpingSprite: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  normalSprite: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+  jumpingSprite: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
   direction: 0
+--- !u!114 &1054756147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1054756139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36aa785ccb234442aaea560bf16d4ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: normal
+    isoDecoration: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+  - name: jump
+    isoDecoration: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+  - name: die
+    isoDecoration: {fileID: 11400000, guid: 5a811fb8d0e568946990151ff9f7286b, type: 2}
+  isoAnimations:
+  - name: idle
+    isoAnimation: {fileID: 1272165525}
+  - name: left step
+    isoAnimation: {fileID: 716847008}
+  - name: right step
+    isoAnimation: {fileID: 1240596009}
+  - name: jump
+    isoAnimation: {fileID: 933875908}
+  - name: die
+    isoAnimation: {fileID: 11400000, guid: 62e29b700216afd488469f201221928d, type: 2}
+  currentFrame: 0
+  currentAnimation: {fileID: 1272165525}
+  timeInCurrentFrame: 0
+  currentSheet: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+  animationLocked: 1
+--- !u!114 &1054756148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1054756139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa0e7214bd7b75b42b431db2b4524132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sequence: {fileID: 1454664399}
 --- !u!43 &1059062617
 Mesh:
   m_ObjectHideFlags: 0
@@ -40394,6 +40801,23 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &1101137277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.3
+  sheet: jump
+  overrideSheet: {fileID: 0}
 --- !u!43 &1101367710
 Mesh:
   m_ObjectHideFlags: 0
@@ -41459,9 +41883,10 @@ GameObject:
   - component: {fileID: 1140926017}
   - component: {fileID: 1140926016}
   - component: {fileID: 1140926015}
+  - component: {fileID: 1140926018}
+  - component: {fileID: 1140926021}
   - component: {fileID: 1140926020}
   - component: {fileID: 1140926019}
-  - component: {fileID: 1140926018}
   m_Layer: 0
   m_Name: Decoration (clone)
   m_TagString: Untagged
@@ -41568,6 +41993,36 @@ MonoBehaviour:
   face: {fileID: 0}
   position: {fileID: 1437772850}
 --- !u!114 &1140926020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1140926013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36aa785ccb234442aaea560bf16d4ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: normal
+    isoDecoration: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  - name: jump
+    isoDecoration: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  isoAnimations:
+  - name: idle
+    isoAnimation: {fileID: 1821524379}
+  - name: left step
+    isoAnimation: {fileID: 1240643035}
+  - name: right step
+    isoAnimation: {fileID: 283802861}
+  - name: jump
+    isoAnimation: {fileID: 284069492}
+  currentFrame: 0
+  currentAnimation: {fileID: 1821524379}
+  timeInCurrentFrame: 0
+  currentSheet: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  animationLocked: 1
+--- !u!114 &1140926021
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -43990,6 +44445,28 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &1201584208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
+  f: 0
+  d: 0
+  s: 
+  v2: {x: 0, y: 0}
+  v3: {x: 0, y: 0, z: 0}
+  v4: {x: 0, y: 0, z: 0, w: 0}
+  q: {x: 0, y: 0, z: 0, w: 0}
+  b: 0
+  c: 0
+  whatIs: System.Boolean
 --- !u!21 &1202786937
 Material:
   serializedVersion: 6
@@ -44793,6 +45270,27 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &1232810929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 1
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!114 &1232859083 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -44862,6 +45360,48 @@ Material:
     - _Cutoff: 0.5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1240596009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 2
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
+--- !u!114 &1240643035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 1
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!21 &1241528983
 Material:
   serializedVersion: 6
@@ -45957,6 +46497,44 @@ Material:
     - _Cutoff: 0.5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1269163943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 2
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
+--- !u!114 &1272165525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 1
+  frames:
+  - column: 0
+    duration: 0
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!43 &1272933160
 Mesh:
   m_ObjectHideFlags: 0
@@ -52740,6 +53318,23 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 178030902}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
+--- !u!114 &1454664399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2610de954cb4f247a9d6e9f34762f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 1871074703}
+  localVariables: {fileID: 1785921793}
+  nodes:
+  - {fileID: 1871074703}
+  ids:
+  - -802262
 --- !u!114 &1455430379 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -54908,6 +55503,27 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &1518330167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 2
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!114 &1519756882 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -56778,10 +57394,11 @@ GameObject:
   - component: {fileID: 1573021069}
   - component: {fileID: 1573021068}
   - component: {fileID: 1573021067}
-  - component: {fileID: 1573021073}
-  - component: {fileID: 1573021072}
   - component: {fileID: 1573021071}
   - component: {fileID: 1573021070}
+  - component: {fileID: 1573021074}
+  - component: {fileID: 1573021073}
+  - component: {fileID: 1573021072}
   m_Layer: 0
   m_Name: Decoration (clone)
   m_TagString: Untagged
@@ -56900,6 +57517,36 @@ MonoBehaviour:
   face: {fileID: 0}
   position: {fileID: 798287843}
 --- !u!114 &1573021073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1573021065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36aa785ccb234442aaea560bf16d4ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: normal
+    isoDecoration: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  - name: jump
+    isoDecoration: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  isoAnimations:
+  - name: idle
+    isoAnimation: {fileID: 471117201}
+  - name: left step
+    isoAnimation: {fileID: 223810094}
+  - name: right step
+    isoAnimation: {fileID: 488725632}
+  - name: jump
+    isoAnimation: {fileID: 1772967783}
+  currentFrame: 0
+  currentAnimation: {fileID: 471117201}
+  timeInCurrentFrame: 0
+  currentSheet: {fileID: 11400000, guid: 47c54fa27e26d844bab8d99973bba9b1, type: 2}
+  animationLocked: 1
+--- !u!114 &1573021074
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -59036,6 +59683,27 @@ MonoBehaviour:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 4972cff46a1a13b41a02459d32de1ca3, type: 2}
   m_PrefabInternal: {fileID: 657039581}
+--- !u!114 &1662538730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.075
+  - column: 1
+    duration: 0.15
+  - column: 0
+    duration: 0.075
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!28 &1663394643
 Texture2D:
   m_ObjectHideFlags: 0
@@ -62439,6 +63107,23 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!114 &1766185619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 1
+  frames:
+  - column: 0
+    duration: 0
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!21 &1768041253
 Material:
   serializedVersion: 6
@@ -62704,6 +63389,23 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a1da15bc40e9ac4897e6f088f39ae14, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1772967783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.3
+  sheet: jump
+  overrideSheet: {fileID: 0}
 --- !u!114 &1773564128 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -63111,6 +63813,18 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 133230860}
   m_Script: {fileID: 11500000, guid: 80728dc979fcf5046adbbf7fdd0111de, type: 3}
+--- !u!114 &1785921793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f903b5c05730594280dcba273e69bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switches: []
 --- !u!114 &1786927755 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -64377,6 +65091,23 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &1821524379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loop: 1
+  frames:
+  - column: 0
+    duration: 0
+  sheet: normal
+  overrideSheet: {fileID: 0}
 --- !u!28 &1821751040
 Texture2D:
   m_ObjectHideFlags: 0
@@ -65972,6 +66703,29 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!114 &1871074703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06a4f01aa6e07542a2f9cdadd91cc10, type: 3}
+  m_Name: GameEvent
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 0}
+  isUnityObject: 1
+  objectContent: {fileID: 987498719}
+  secuence: {fileID: 1454664399}
+  position:
+    serializedVersion: 2
+    x: 505
+    y: 193
+    width: 380
+    height: 125
+  collapsed: 0
 --- !u!1001 &1871347022
 Prefab:
   m_ObjectHideFlags: 0

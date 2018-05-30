@@ -223,11 +223,19 @@ public class GamePlayManager : MonoBehaviour
             {
                 characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
                 // Dead Animation
-                // add to teams list like dead?
+                connector.TriggerAnimation(characterDestAttack, "die", MoveCameraToParametrizedCallback(characterDestAttack, (character5, resul5t) =>
+                {
+                    attack = true;
+                    objectCanvas.SetActive(false);
+                    Turn();
+                }));
             }
-            attack = true;
-            objectCanvas.SetActive(false);
-            Turn();
+            else
+            {
+                attack = true;
+                objectCanvas.SetActive(false);
+                Turn();
+            }
         }));
     }
 

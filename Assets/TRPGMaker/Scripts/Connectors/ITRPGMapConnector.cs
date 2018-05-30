@@ -18,7 +18,7 @@ public interface ITRPGMapConnector {
     void SetCharacterPosition(CharacterScript character, Cell cell, SetCharacterPositionCallBack callback);
     void ShowArea(CharacterScript character, EventTypes eventType, ShowAreaCallBack callback, Skills skill = null);
     void Skills(CharacterScript character, EventTypes eventType, SkillsCallBack callback, Skills skill = null);
-    void triggerAnimation(Character character, Cell cell);
+    void TriggerAnimation(CharacterScript character, string animationName, MoveCameraToCallback callback);
     CharacterScript GetCharacterAtCell(Cell cell);
     Cell GetCellAtCharacter(CharacterScript character);
 

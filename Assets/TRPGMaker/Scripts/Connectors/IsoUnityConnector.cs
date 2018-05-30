@@ -236,6 +236,30 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         });
         Game.main.enqueueEvent(lookToEvent);
         yield return new WaitForEventFinished(lookToEvent);
+
+        callback(true);
+    }
+
+    // Trigger animation
+    public void TriggerAnimation(CharacterScript character, string animationName, MoveCameraToCallback callback)
+    {
+        StartCoroutine(triggerAnimationAsync(character, animationName, callback));
+    }
+
+    // Async method for trigger animation
+    private IEnumerator triggerAnimationAsync(CharacterScript character, string animationName, MoveCameraToCallback callback)
+    {
+        Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
+
+        var animationEvent = new GameEvent("animate entity", new Dictionary<string, object>()
+        {
+            {"decorationanimator", entity.decorationAnimator},
+            {"animation", animationName},
+            {"synchronous", true }
+        });
+
+        Game.main.enqueueEvent(animationEvent);
+        yield return new WaitForEventFinished(animationEvent);
         callback(true);
     }
 
@@ -343,10 +367,10 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
     }
 
     // Ralizamos la animacion de ataque, defensa...
-    public void triggerAnimation(Character character, Cell cell)
+    /*public void triggerAnimation(Character character, Cell cell)
     {
-
-    }
+        
+    }*/
 
     // Get character at selected cell
     public CharacterScript GetCharacterAtCell(Cell cell)

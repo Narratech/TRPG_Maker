@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
+  m_Name: Monk_Hurt
+  m_EditorClassIdentifier: 
+  loop: 0
+  frames:
+  - column: 0
+    duration: 0.1
+  - column: 1
+    duration: 0.1
+  - column: 2
+    duration: 0.1
+  - column: 3
+    duration: 0.1
+  - column: 4
+    duration: 0.1
+  - column: 5
+    duration: 0.1
+  sheet: 
+  overrideSheet: {fileID: 11400000, guid: 5a811fb8d0e568946990151ff9f7286b, type: 2}
