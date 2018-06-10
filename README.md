@@ -23,5 +23,5 @@ Supervisors of the two projects: [Federico Peinado](https://github.com/federicop
  
  - #### Sprites for demo
 
-   - Crusader sprites made by [Bleed](remusprites.carbonmade.com) from https://remusprites.carbonmade.com/
+   - Crusader, Tuscan and Archer sprites made by [Bleed](https://opengameart.org/users/bleed) - https://remusprites.carbonmade.com/
    - Monk sprites made by [Wulax](https://opengameart.org/users/wulax) from https://opengameart.org/
