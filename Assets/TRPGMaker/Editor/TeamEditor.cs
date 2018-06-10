@@ -66,6 +66,8 @@ public class TeamEditor : Editor {
 
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
+
         removeStyle = new GUIStyle("Button");
         removeStyle.padding = new RectOffset(2, 2, 2, 2);
 
@@ -75,9 +77,7 @@ public class TeamEditor : Editor {
         {
             if (team.characters[i] == null)
                 team.characters.RemoveAt(i);
-        }
-
-        serializedObject.Update();
+        }       
 
         var customStyle = new GUIStyle();
         customStyle.alignment = TextAnchor.UpperCenter;

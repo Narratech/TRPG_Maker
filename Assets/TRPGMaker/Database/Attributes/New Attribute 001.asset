@@ -14,4 +14,4 @@ MonoBehaviour:
   name: New Attribute 001
   id: X01
   description: 
-  isCore: 1
+  isCore: 0

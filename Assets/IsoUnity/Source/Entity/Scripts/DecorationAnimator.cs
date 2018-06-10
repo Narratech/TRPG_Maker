@@ -56,8 +56,8 @@ namespace IsoUnity.Entities
 			
 			// Find the animation
 			var isoAnimation = isoAnimations.Find(n => n.name.Equals(animation, StringComparison.InvariantCultureIgnoreCase));
-			if(isoAnimation == null)
-				yield return null;
+            if (isoAnimation == null || isoAnimation.isoAnimation == null)
+                yield return null;
 			
 			// Find a sheet
 			IsoDecoration sheet = isoAnimation.isoAnimation.overrideSheet;

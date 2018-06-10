@@ -263,6 +263,7 @@ public class GamePlayManager : MonoBehaviour
                     }
                 }
             }
+            Turn();
         }), skill);
     }
 
@@ -365,8 +366,13 @@ public class GamePlayManager : MonoBehaviour
         requiredAttributes.Add(Database.Instance.battleOptions.attackRange);
         requiredAttributes.Add(Database.Instance.battleOptions.attackHeight);
 
-        // Check if all characters contains this attributes
+        // Check if all characters scripts contains this attributes and a character
         foreach (CharacterScript character in FindObjectsOfType<CharacterScript>()) {
+            if(character.character == null)
+            {
+                Debug.Log("Missing 'character' in some or many 'character script' components");
+                return false;
+            }
             character.character.calculateFormulas();
             foreach (Attribute attribute in requiredAttributes) {
                 if (!character.character.attributesWithFormulas.Any(x => x.attribute == attribute))

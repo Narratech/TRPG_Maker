@@ -8,10 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7f1e8c1c34b233449ea2318f93532d9, type: 3}
-  m_Name: New Attribute 000
+  m_Script: {fileID: 11500000, guid: fe252187c579bc5458136333ca4f0a07, type: 3}
+  m_Name: Crusader_run
   m_EditorClassIdentifier: 
-  name: New Attribute 000
-  id: X00
-  description: 
-  isCore: 0
+  realTexture: {fileID: 2800000, guid: f8110001e7132c64cbaad9d3d87a3d53, type: 3}
+  nrows: 4
+  ncols: 17

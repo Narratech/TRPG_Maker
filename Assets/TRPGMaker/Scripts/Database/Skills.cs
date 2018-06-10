@@ -10,6 +10,7 @@ public class Skills : ScriptableObject, ICloneable  {
     public SkillTypes skillType;
     public int areaRange;
     public List<Formula> formulas;
+    public string animationName;
 
     public object Clone()
     {

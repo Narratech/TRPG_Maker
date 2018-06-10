@@ -32,6 +32,9 @@ namespace IsoUnity.Entities
             // We wrap the coroutine
             while (toRun.MoveNext())
             {
+                // If current is null, finish the iteration
+                if (toRun.Current == null)
+                    break;
                 // Free the current value
                 eventedEM.Current = null;
                 yield return toRun.Current;

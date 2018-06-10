@@ -106,6 +106,8 @@ public class SkillsEditor : Editor {
 
         listFormulas.DoLayoutList();
 
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("animationName"));
+
         serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(target);
     }

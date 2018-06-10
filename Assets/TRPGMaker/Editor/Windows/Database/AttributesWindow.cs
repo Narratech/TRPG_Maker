@@ -71,11 +71,16 @@ public class AttributesWindow : LayoutWindow
                     rectL.y += 2;
 
                     foldout[index] = EditorGUI.Foldout(new Rect(rectL.x, rectL.y, textDimensions.x + 5, rectL.height), foldout[index], attribute.name);
+                    if (GUI.Button(new Rect(rectL.width, rectL.y, 16, 16), new GUIContent("", removeTexture), removeStyle))
+                    {
+                        Database.Instance.attributes.RemoveAt(index);
+                    }
                     if (foldout[index])
                     {
                         SerializedObject attr = new SerializedObject(attribute);
                         rectL.height = EditorGUIUtility.singleLineHeight;
                         rectL.x += 15;
+                        rectL.width -= 15;
                         rectL.y += EditorGUIUtility.singleLineHeight;
                         GUI.SetNextControlName("Name");
                         EditorGUI.PropertyField(rectL, attr.FindProperty("name"));
@@ -97,7 +102,7 @@ public class AttributesWindow : LayoutWindow
                     {
 
                         listAttributes.elementHeight = EditorGUIUtility.singleLineHeight + 4.0f;
-                    }
+                    }                    
                 }
             };
 
