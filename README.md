@@ -1,4 +1,5 @@
-# TRPGMaker
+![](https://github.com/Narratech/TRPGMaker/blob/master/trpgmaker.png)
+
 Tactic Role-Playing Games Maker for Unity
 
 ### Information
@@ -25,3 +26,6 @@ Supervisors of the two projects: [Federico Peinado](https://github.com/federicop
 
    - Crusader, Tuscan and Archer sprites made by [Bleed](https://opengameart.org/users/bleed) - https://remusprites.carbonmade.com/
    - Monk sprites made by [Wulax](https://opengameart.org/users/wulax) from https://opengameart.org/
+
+ - #### Readme tittle
+   -  [Flaming Text](https://www.flamingtext.com/)
