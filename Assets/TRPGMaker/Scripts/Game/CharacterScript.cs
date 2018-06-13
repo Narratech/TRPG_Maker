@@ -69,7 +69,11 @@ public class CharacterScriptEditor : Editor
 	{
         characterScript = (CharacterScript)target;
         if (characterScript.team != null) {
-            index = Database.Instance.teams.IndexOf(characterScript.team);
+            index = Database.Instance.teams.Where(x => x.characters.Exists(y => y.name == characterScript.character.name)).ToList().IndexOf(characterScript.team);
+        }
+        else
+        {
+            Debug.Log("No team assigned in some characters!");
         }
 	}
 
@@ -84,7 +88,7 @@ public class CharacterScriptEditor : Editor
         EditorGUI.BeginChangeCheck();
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Team");
+        EditorGUILayout.LabelField("Team");        
         if (characterScript.character != null)
         {
             //index = characters.

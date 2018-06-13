@@ -639,9 +639,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ee4451bb4db0fd74293a8ee68c7021f6, type: 3}
-        m_Scale: {x: 0.11111111, y: 0.25}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: 05d8753502f69a44fb23e25771465cef, type: 3}
+        m_Scale: {x: 0.07692308, y: 0.25}
+        m_Offset: {x: 0, y: 0.25}
     m_Floats:
     - _Cutoff: 0.5
     m_Colors:
@@ -9548,7 +9548,7 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 05d8753502f69a44fb23e25771465cef, type: 3}
         m_Scale: {x: 0.07692308, y: 0.25}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: 0, y: 0.25}
     m_Floats:
     - _Cutoff: 0.5
     m_Colors:
@@ -16089,7 +16089,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 494325669}
   m_LocalRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
-  m_LocalPosition: {x: -0.5, y: 2.21, z: -0.5}
+  m_LocalPosition: {x: -0.5, y: 2.24, z: -0.5}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 936381811}
@@ -16165,8 +16165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  team: {fileID: 0}
+  character: {fileID: 11400000, guid: 8b3985d89bff9e84c8269b6577b9fb3e, type: 2}
+  team: {fileID: 11400000, guid: 75b4e445de9c04745b3a22e8492f058d, type: 2}
 --- !u!114 &494325675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21029,7 +21029,7 @@ MonoBehaviour:
   angle: 0
   parallel: 0
   centered: 1
-  tile: 45
+  tile: 54
 --- !u!114 &651502394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21041,8 +21041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  team: {fileID: 0}
+  character: {fileID: 11400000, guid: 66fd8f4b0ecbceb48a868393a4e0d17f, type: 2}
+  team: {fileID: 11400000, guid: 49d53ed427b550447a697a83cd70e34a, type: 2}
 --- !u!114 &651502395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21085,9 +21085,9 @@ MonoBehaviour:
     isoAnimation: {fileID: 11400000, guid: 65c3797bc46351c478477b2aa2e29023, type: 2}
   - name: die
     isoAnimation: {fileID: 11400000, guid: 1b0147351d112534cac9378fb32dd927, type: 2}
-  currentFrame: 14
+  currentFrame: 25
   currentAnimation: {fileID: 11400000, guid: 3dc49f986da35e54ca2bce7120921458, type: 2}
-  timeInCurrentFrame: 0.02850547
+  timeInCurrentFrame: 0.018820059
   currentSheet: {fileID: 11400000, guid: 380ff992df170b842b2956c0227855fa, type: 2}
   animationLocked: 0
 --- !u!114 &651502397
@@ -21107,7 +21107,7 @@ MonoBehaviour:
   maxJumpSize: 1.5
   normalSprite: {fileID: 11400000, guid: 380ff992df170b842b2956c0227855fa, type: 2}
   jumpingSprite: {fileID: 11400000, guid: 380ff992df170b842b2956c0227855fa, type: 2}
-  direction: 2
+  direction: 3
 --- !u!21 &653581953
 Material:
   serializedVersion: 6
@@ -34935,7 +34935,7 @@ MonoBehaviour:
   angle: 0
   parallel: 0
   centered: 1
-  tile: 17
+  tile: 51
 --- !u!114 &909185161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34947,8 +34947,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  team: {fileID: 0}
+  character: {fileID: 11400000, guid: d10b6ff2c4211464e8491819614ebaaa, type: 2}
+  team: {fileID: 11400000, guid: 49d53ed427b550447a697a83cd70e34a, type: 2}
 --- !u!114 &909185162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35007,9 +35007,9 @@ MonoBehaviour:
   canBlockMe: 1
   blocks: 1
   maxJumpSize: 1.5
-  normalSprite: {fileID: 11400000, guid: 380ff992df170b842b2956c0227855fa, type: 2}
-  jumpingSprite: {fileID: 11400000, guid: 380ff992df170b842b2956c0227855fa, type: 2}
-  direction: 1
+  normalSprite: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  jumpingSprite: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  direction: 3
 --- !u!114 &910986340 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1da15bc40e9ac4897e6f088f39ae14,
@@ -39179,13 +39179,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e00223589bdce4693914cd49b4b0d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isoDec: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+  isoDec: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
   father: {fileID: 443721594}
   center: {x: -1.4860516, y: 0.011942863, z: 0.8430476}
   angle: 0
   parallel: 0
   centered: 1
-  tile: 0
+  tile: 13
 --- !u!114 &1054756144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39197,8 +39197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  team: {fileID: 0}
+  character: {fileID: 11400000, guid: c099832cf744e4a40855e6468d1d3105, type: 2}
+  team: {fileID: 11400000, guid: 75b4e445de9c04745b3a22e8492f058d, type: 2}
 --- !u!114 &1054756145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39227,9 +39227,9 @@ MonoBehaviour:
   canBlockMe: 1
   blocks: 1
   maxJumpSize: 1.5
-  normalSprite: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
-  jumpingSprite: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
-  direction: 0
+  normalSprite: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
+  jumpingSprite: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
+  direction: 1
 --- !u!114 &1054756147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39243,9 +39243,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sheets:
   - name: normal
-    isoDecoration: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+    isoDecoration: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
   - name: jump
-    isoDecoration: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+    isoDecoration: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
   isoAnimations:
   - name: idle
     isoAnimation: {fileID: 1272165525}
@@ -39258,7 +39258,7 @@ MonoBehaviour:
   currentFrame: 0
   currentAnimation: {fileID: 1272165525}
   timeInCurrentFrame: 0
-  currentSheet: {fileID: 11400000, guid: 47ca97d6b6398c0489b2f889070818b0, type: 2}
+  currentSheet: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
   animationLocked: 1
 --- !u!114 &1054756148
 MonoBehaviour:
@@ -41872,7 +41872,7 @@ MonoBehaviour:
   angle: 0
   parallel: 0
   centered: 1
-  tile: 0
+  tile: 51
 --- !u!114 &1140926018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41884,8 +41884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  team: {fileID: 0}
+  character: {fileID: 11400000, guid: 112bec7ec7965d247817c4e4055f64d8, type: 2}
+  team: {fileID: 11400000, guid: 49d53ed427b550447a697a83cd70e34a, type: 2}
 --- !u!114 &1140926019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41944,9 +41944,9 @@ MonoBehaviour:
   canBlockMe: 1
   blocks: 1
   maxJumpSize: 1.5
-  normalSprite: {fileID: 11400000, guid: 380ff992df170b842b2956c0227855fa, type: 2}
-  jumpingSprite: {fileID: 11400000, guid: 380ff992df170b842b2956c0227855fa, type: 2}
-  direction: 0
+  normalSprite: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  jumpingSprite: {fileID: 11400000, guid: b41baff0b9fc803419d50a1b17402857, type: 2}
+  direction: 3
 --- !u!21 &1142156841
 Material:
   serializedVersion: 6
@@ -57363,7 +57363,7 @@ MonoBehaviour:
   angle: 0
   parallel: 0
   centered: 1
-  tile: 0
+  tile: 13
 --- !u!114 &1573021070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57387,8 +57387,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53999f937d6643b42949d28bcda1a943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  team: {fileID: 0}
+  character: {fileID: 11400000, guid: d388687b4332b46469ef10c7ccabaff7, type: 2}
+  team: {fileID: 11400000, guid: 75b4e445de9c04745b3a22e8492f058d, type: 2}
 --- !u!114 &1573021072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57431,9 +57431,9 @@ MonoBehaviour:
     isoAnimation: {fileID: 1772967783}
   - name: die
     isoAnimation: {fileID: 11400000, guid: 0ec499439614b4147bf22ef457990d03, type: 2}
-  currentFrame: 0
+  currentFrame: 1
   currentAnimation: {fileID: 11400000, guid: 4e1b5e14704585e4cbdd0e6b79ea60ce, type: 2}
-  timeInCurrentFrame: 0.02850547
+  timeInCurrentFrame: 0.018820059
   currentSheet: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
   animationLocked: 0
 --- !u!114 &1573021074
@@ -57453,7 +57453,7 @@ MonoBehaviour:
   maxJumpSize: 1.5
   normalSprite: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
   jumpingSprite: {fileID: 11400000, guid: 59c484766bef31d4cab5b8cf73ba55c7, type: 2}
-  direction: 0
+  direction: 1
 --- !u!43 &1575207899
 Mesh:
   m_ObjectHideFlags: 0
@@ -62851,7 +62851,7 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 4ea7a452502fb1b44907d3804caa6e61, type: 3}
         m_Scale: {x: 0.0625, y: 0.25}
-        m_Offset: {x: 0.8125, y: 0.5}
+        m_Offset: {x: 0.375, y: 0.75}
     m_Floats:
     - _Cutoff: 0.5
     m_Colors:
@@ -66699,7 +66699,7 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: f8110001e7132c64cbaad9d3d87a3d53, type: 3}
         m_Scale: {x: 0.05882353, y: 0.25}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: 0, y: 0.75}
     m_Floats:
     - _Cutoff: 0.5
     m_Colors:
@@ -71620,7 +71620,7 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: f8110001e7132c64cbaad9d3d87a3d53, type: 3}
         m_Scale: {x: 0.05882353, y: 0.25}
-        m_Offset: {x: 0, y: 0.25}
+        m_Offset: {x: 0, y: 0.75}
     m_Floats:
     - _Cutoff: 0.5
     m_Colors:

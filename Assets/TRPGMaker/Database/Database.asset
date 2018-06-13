@@ -22,9 +22,9 @@ MonoBehaviour:
   _TRPGOptions:
     _gameType: 0
     _turnType: 0
-    _healthAttribute: {fileID: 0}
-    _damageAttribute: {fileID: 0}
-    _moveRange: {fileID: 0}
-    _moveHeight: {fileID: 0}
-    _attackRange: {fileID: 0}
-    _attackHeight: {fileID: 0}
+    _healthAttribute: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+    _damageAttribute: {fileID: 11400000, guid: 570466ba20bcf074aa9cb2a7bc75d9aa, type: 2}
+    _moveRange: {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
+    _moveHeight: {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
+    _attackRange: {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
+    _attackHeight: {fileID: 11400000, guid: 2bacf50ce194d1b46b929529f5723ad4, type: 2}
