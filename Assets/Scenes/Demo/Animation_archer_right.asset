@@ -9,31 +9,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
-  m_Name: Animation_archer_run
+  m_Name: Animation_archer_right
   m_EditorClassIdentifier: 
   loop: 0
   frames:
   - column: 0
     duration: 0.05
   - column: 1
-    duration: 0.03
+    duration: 0.05
   - column: 2
-    duration: 0.03
+    duration: 0.05
   - column: 3
-    duration: 0.03
+    duration: 0.05
   - column: 4
-    duration: 0.03
+    duration: 0.05
   - column: 5
-    duration: 0.03
-  - column: 6
-    duration: 0.03
-  - column: 7
-    duration: 0.03
-  - column: 8
-    duration: 0.03
-  - column: 9
-    duration: 0.03
-  - column: 10
-    duration: 0.03
-  sheet: 
-  overrideSheet: {fileID: 11400000, guid: 862f95a5b3e081b48abefe6ed5f30358, type: 2}
+    duration: 0.05
+  - column: 4
+    duration: 0.05
+  - column: 3
+    duration: 0.05
+  - column: 2
+    duration: 0.05
+  - column: 1
+    duration: 0.05
+  - column: 0
+    duration: 0.05
+  sheet: run
+  overrideSheet: {fileID: 0}

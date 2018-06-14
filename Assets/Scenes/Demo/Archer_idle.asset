@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe252187c579bc5458136333ca4f0a07, type: 3}
   m_Name: Archer_idle
   m_EditorClassIdentifier: 
-  realTexture: {fileID: 2800000, guid: 05d8753502f69a44fb23e25771465cef, type: 3}
+  realTexture: {fileID: 2800000, guid: 95333656a1c17d146b07a53ca23e1fb4, type: 3}
   nrows: 4
   ncols: 13

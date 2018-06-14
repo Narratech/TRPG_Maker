@@ -9,12 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
-  m_Name: Animation_crusader_run
+  m_Name: Animation_crusader_hit
   m_EditorClassIdentifier: 
   loop: 0
   frames:
   - column: 0
-    duration: 0.1
+    duration: 0.03
   - column: 1
     duration: 0.03
   - column: 2
@@ -41,11 +41,5 @@ MonoBehaviour:
     duration: 0.03
   - column: 13
     duration: 0.03
-  - column: 14
-    duration: 0.03
-  - column: 15
-    duration: 0.03
-  - column: 16
-    duration: 0.03
-  sheet: run
-  overrideSheet: {fileID: 0}
+  sheet: 
+  overrideSheet: {fileID: 11400000, guid: 72f2ab05b7a26ba49bef1986a4f4e9ca, type: 2}

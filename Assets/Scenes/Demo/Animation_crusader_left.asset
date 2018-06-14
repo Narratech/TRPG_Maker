@@ -9,43 +9,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
-  m_Name: Animation_crusader_run
+  m_Name: Animation_crusader_left
   m_EditorClassIdentifier: 
   loop: 0
   frames:
-  - column: 0
-    duration: 0.1
-  - column: 1
-    duration: 0.03
-  - column: 2
-    duration: 0.03
-  - column: 3
-    duration: 0.03
-  - column: 4
-    duration: 0.03
-  - column: 5
-    duration: 0.03
-  - column: 6
-    duration: 0.03
-  - column: 7
-    duration: 0.03
-  - column: 8
-    duration: 0.03
   - column: 9
-    duration: 0.03
+    duration: 0.038
   - column: 10
-    duration: 0.03
+    duration: 0.038
   - column: 11
-    duration: 0.03
+    duration: 0.038
   - column: 12
-    duration: 0.03
+    duration: 0.038
   - column: 13
-    duration: 0.03
+    duration: 0.038
   - column: 14
-    duration: 0.03
+    duration: 0.038
   - column: 15
-    duration: 0.03
+    duration: 0.038
   - column: 16
-    duration: 0.03
+    duration: 0.038
+  - column: 17
+    duration: 0.038
+  - column: 16
+    duration: 0.038
+  - column: 15
+    duration: 0.038
+  - column: 14
+    duration: 0.038
+  - column: 13
+    duration: 0.038
+  - column: 12
+    duration: 0.038
+  - column: 11
+    duration: 0.038
+  - column: 10
+    duration: 0.038
+  - column: 9
+    duration: 0.038
   sheet: run
   overrideSheet: {fileID: 0}

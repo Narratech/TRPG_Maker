@@ -9,43 +9,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3a9a02dbd6a69445a57c833e33785c1, type: 3}
-  m_Name: Animation_crusader_run
+  m_Name: Animation_archer_attack
   m_EditorClassIdentifier: 
   loop: 0
   frames:
   - column: 0
-    duration: 0.1
+    duration: 0.05
   - column: 1
-    duration: 0.03
+    duration: 0.05
   - column: 2
-    duration: 0.03
+    duration: 0.05
   - column: 3
-    duration: 0.03
+    duration: 0.05
   - column: 4
-    duration: 0.03
+    duration: 0.05
   - column: 5
-    duration: 0.03
+    duration: 0.05
   - column: 6
-    duration: 0.03
+    duration: 0.05
   - column: 7
-    duration: 0.03
+    duration: 0.05
   - column: 8
-    duration: 0.03
+    duration: 0.05
   - column: 9
-    duration: 0.03
+    duration: 0.05
   - column: 10
-    duration: 0.03
+    duration: 0.05
   - column: 11
-    duration: 0.03
+    duration: 0.05
   - column: 12
-    duration: 0.03
+    duration: 0.05
   - column: 13
-    duration: 0.03
+    duration: 0.05
   - column: 14
-    duration: 0.03
+    duration: 0.05
   - column: 15
-    duration: 0.03
-  - column: 16
-    duration: 0.03
-  sheet: run
-  overrideSheet: {fileID: 0}
+    duration: 0.05
+  sheet: 
+  overrideSheet: {fileID: 11400000, guid: c162fd6e288a5fd46961a7aa03528468, type: 2}

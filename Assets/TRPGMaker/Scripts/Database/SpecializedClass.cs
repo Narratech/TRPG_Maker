@@ -23,6 +23,7 @@ public class SpecializedClass : ScriptableObject
         slots = new List<Slot>();
         formula = ScriptableObject.CreateInstance<FormulaScript>();
         attributes = new List<AttributeValue>();
+        skills = new List<Skills>();
     }
 
     public void refreshAttributes()

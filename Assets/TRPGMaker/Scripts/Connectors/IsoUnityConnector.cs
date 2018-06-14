@@ -216,6 +216,17 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
             targets.Add(selectedCell.transform.GetComponentInChildren<CharacterScript>());
         }
 
+        var showDecoration = new GameEvent("show decoration animation", new Dictionary<string, object>()
+            {
+                { "objective", targets[0].gameObject },
+                { "animation", skill.animationName },
+                { "synchronous", true }
+            });
+
+        Game.main.enqueueEvent(showDecoration);
+
+        yield return new WaitForEventFinished(showDecoration);
+
         callback(returnCell, true, targets);
     }
 

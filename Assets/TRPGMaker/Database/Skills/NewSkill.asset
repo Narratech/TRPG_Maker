@@ -8,9 +8,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe252187c579bc5458136333ca4f0a07, type: 3}
-  m_Name: Crusader_idle
+  m_Script: {fileID: 11500000, guid: 2fcfda68e797b224485786ca9e52d4b9, type: 3}
+  m_Name: NewSkill
   m_EditorClassIdentifier: 
-  realTexture: {fileID: 2800000, guid: b49e444cb4d20aa42bc8b8ed2a224db6, type: 3}
-  nrows: 4
-  ncols: 16
+  name: NewSkill
+  description: 
+  skillType: 0
+  areaRange: 0
+  formulas: []
+  animationName: {fileID: 11400000, guid: fd93e3770e82ad14790220e225fb2de3, type: 2}
