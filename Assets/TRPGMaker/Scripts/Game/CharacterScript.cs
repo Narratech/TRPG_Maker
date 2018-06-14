@@ -4,7 +4,8 @@ using UnityEngine;
 using System.Linq;
 using UnityEditor;
 
-public class CharacterScript : MonoBehaviour {
+public class CharacterScript : MonoBehaviour
+{
 
     private Vector2 pos;
     [SerializeField]
@@ -13,11 +14,11 @@ public class CharacterScript : MonoBehaviour {
 
     private void Start()
     {
-        
+
     }
 
     private void OnGUI()
-    { 
+    {
         if (character != null)
         {
             AttributeValue attribute = character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id);
@@ -25,18 +26,18 @@ public class CharacterScript : MonoBehaviour {
             float height = renderer.bounds.size.y * 15;
             pos = Camera.main.WorldToScreenPoint(transform.position);
             pos.y = Screen.height - pos.y - height;
-            Rect boxRect = new Rect(pos.x - 50, pos.y - 40, 100, 20);          
+            Rect boxRect = new Rect(pos.x - 50, pos.y - 40, 100, 20);
 
             if (!boxRect.Contains(Event.current.mousePosition))
             {
                 GUI.Box(boxRect, attribute.value + "/" + attribute.maxValue);
-            }               
-        }  
+            }
+        }
     }
 
     void OnMouseEnter()
     {
-       
+
     }
 
 
@@ -65,19 +66,20 @@ public class CharacterScriptEditor : Editor
     private int index = -1;
     private CharacterScript characterScript;
 
-	private void OnEnable()
-	{
+    private void OnEnable()
+    {
         characterScript = (CharacterScript)target;
-        if (characterScript.team != null) {
+        if (characterScript.team != null)
+        {
             index = Database.Instance.teams.Where(x => x.characters.Exists(y => y.name == characterScript.character.name)).ToList().IndexOf(characterScript.team);
         }
         else
         {
             Debug.Log("No team assigned in some characters!");
         }
-	}
+    }
 
-	public override void OnInspectorGUI()
+    public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
@@ -88,7 +90,7 @@ public class CharacterScriptEditor : Editor
         EditorGUI.BeginChangeCheck();
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Team");        
+        EditorGUILayout.LabelField("Team");
         if (characterScript.character != null)
         {
             //index = characters.
@@ -96,7 +98,8 @@ public class CharacterScriptEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
 
-        if (EditorGUI.EndChangeCheck()) {
+        if (EditorGUI.EndChangeCheck())
+        {
             characterScript.team = Database.Instance.teams.Where(x => x.characters.Exists(y => y.name == characterScript.character.name)).ToArray()[index];
         }
         serializedObject.ApplyModifiedProperties();

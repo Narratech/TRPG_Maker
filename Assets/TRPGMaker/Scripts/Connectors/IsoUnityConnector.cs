@@ -241,22 +241,36 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
     }
 
     // Trigger animation
-    public void TriggerAnimation(CharacterScript character, string animationName, MoveCameraToCallback callback)
+    public void TriggerAnimation(CharacterScript character, string animationName, string then, MoveCameraToCallback callback)
     {
-        StartCoroutine(triggerAnimationAsync(character, animationName, callback));
+        StartCoroutine(triggerAnimationAsync(character, animationName, then, callback));
     }
 
     // Async method for trigger animation
-    private IEnumerator triggerAnimationAsync(CharacterScript character, string animationName, MoveCameraToCallback callback)
+    private IEnumerator triggerAnimationAsync(CharacterScript character, string animationName, string then, MoveCameraToCallback callback)
     {
         Entity entity = character.transform.GetComponent(typeof(Entity)) as Entity;
 
-        var animationEvent = new GameEvent("animate entity", new Dictionary<string, object>()
+        GameEvent animationEvent = null;
+
+        if (then == "")
         {
-            {"decorationanimator", entity.decorationAnimator},
-            {"animation", animationName},
-            {"synchronous", true }
-        });
+            animationEvent = new GameEvent("animate entity", new Dictionary<string, object>()
+            {
+                {"decorationanimator", entity.decorationAnimator},
+                {"animation", animationName},
+                {"synchronous", true }
+            });
+        } else
+        {
+            animationEvent = new GameEvent("animate entity", new Dictionary<string, object>()
+            {
+                {"decorationanimator", entity.decorationAnimator},
+                {"animation", animationName},
+                {"then", then },
+                {"synchronous", true }
+            });
+        }
 
         Game.main.enqueueEvent(animationEvent);
         yield return new WaitForEventFinished(animationEvent);
@@ -329,7 +343,7 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
 
         try
         {
-            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_MOVE, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value);
+            CalculateDistanceArea(entity, characterCurrentCell, EventTypes.IA_MOVE, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveRange.id).value, character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value);
         }
         catch (NullReferenceException e)
         {
@@ -461,8 +475,8 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
         IsoUnity.Cell targetCell = target.transform.parent.transform.GetComponent(typeof(IsoUnity.Cell)) as IsoUnity.Cell;
         List<CellWithDistance> openList = new List<CellWithDistance>();
         List<CellWithDistance> closeList = new List<CellWithDistance>();
-        float attackRan = character.character.attributesWithFormulas.Find(x => x.attribute.id == attackRange.id).value;
-        float heighMax = character.character.attributesWithFormulas.Find(x => x.attribute.id == attackHeight.id).value;
+        float attackRan = character.character.attributesWithFormulas.Find(x => x.attribute.id == moveRange.id).value;
+        float heighMax = character.character.attributesWithFormulas.Find(x => x.attribute.id == moveHeight.id).value;
 
         openList.Add(new CellWithDistance(currentCell, 0, null));
         while (openList.Count > 0)
@@ -485,7 +499,8 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
             float distanceManhattan = Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).x - targetCell.Map.getCoords(targetCell.gameObject).x) + Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).y - targetCell.Map.getCoords(targetCell.gameObject).y);
             foreach (IsoUnity.Cell neighbour in current.cell.Map.getNeightbours(current.cell))
             {
-                if (neighbour != null && !closeList.Any(x => x.cell == neighbour) && neighbour.Walkable)
+                if (neighbour != null && !closeList.Any(x => x.cell == neighbour) && neighbour.Walkable &&
+                    ((neighbour != currentCell && neighbour != targetCell && neighbour.transform.GetComponentInChildren<CharacterScript>() == null) || (neighbour == currentCell || neighbour == targetCell)))
                 {
                     float distanceManhattanFromCurrentToNeigh = Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).x - neighbour.Map.getCoords(neighbour.gameObject).x) + Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).y - neighbour.Map.getCoords(neighbour.gameObject).y);
                     if (distanceManhattanFromCurrentToNeigh <= 1 && Mathf.Abs(neighbour.Height - current.cell.Height) <= heighMax)
@@ -534,7 +549,8 @@ public class IsoUnityConnector : EventedEventManager, ITRPGMapConnector
                     float distanceManhattanFromCurrentToNeigh = Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).x - neighbour.Map.getCoords(neighbour.gameObject).x) + Mathf.Abs(current.cell.Map.getCoords(current.cell.gameObject).y - neighbour.Map.getCoords(neighbour.gameObject).y);
                     float distanceManhattanFromCharacterToNeigh = current.distanceFromCharacter + distanceManhattanFromCurrentToNeigh;
                     if (distanceManhattanFromCurrentToNeigh <= 1 && distanceManhattanFromCharacterToNeigh <= distanceMax &&
-                        Mathf.Abs(neighbour.Height - current.cell.Height) <= heighMax)
+                        Mathf.Abs(neighbour.Height - current.cell.Height) <= heighMax && (((eventType == EventTypes.IA_MOVE || eventType == EventTypes.MOVE) &&
+                        neighbour.transform.GetComponentInChildren<CharacterScript>() == null) || (eventType != EventTypes.MOVE && eventType != EventTypes.IA_MOVE)))
                     {
                         if (!openList.Any(x => x.cell == neighbour))
                         {

@@ -94,7 +94,7 @@ public class GamePlayManager : MonoBehaviour
                          */
                         AttributeTurn();
                         break;
-                    default:                        
+                    default:
                         break;
                 }
             }
@@ -215,27 +215,37 @@ public class GamePlayManager : MonoBehaviour
         connector.cleanCells();
         connector.ShowArea(character, EventTypes.ATTACK, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
         {
+
             CharacterScript characterDestAttack = connector.GetCharacterAtCell(selectedCell);
 
-            characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value; 
+            characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value;
 
-            if (characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
+            connector.TriggerAnimation(character, "attack", "idle", MoveCameraToParametrizedCallback(character, (character6, resul6t) =>
             {
-                characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
-                // Dead Animation
-                connector.TriggerAnimation(characterDestAttack, "die", MoveCameraToParametrizedCallback(characterDestAttack, (character5, resul5t) =>
+
+                if (characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0)
                 {
-                    attack = true;
-                    objectCanvas.SetActive(false);
-                    Turn();
-                }));
-            }
-            else
-            {
-                attack = true;
-                objectCanvas.SetActive(false);
-                Turn();
-            }
+                    characterDestAttack.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value = 0;
+                    // Dead Animation
+                    connector.TriggerAnimation(characterDestAttack, "die", "", MoveCameraToParametrizedCallback(characterDestAttack, (character5, resul5t) =>
+                    {
+                        attack = true;
+                        objectCanvas.SetActive(false);
+                        Turn();
+                    }));
+                }
+                else
+                {
+                    connector.TriggerAnimation(characterDestAttack, "gothit", "idle", MoveCameraToParametrizedCallback(characterDestAttack, (character5, resul5t) =>
+                    {
+                        attack = true;
+                        objectCanvas.SetActive(false);
+                        Turn();
+                    }));
+                }
+
+            }));
+
         }));
     }
 
@@ -244,7 +254,7 @@ public class GamePlayManager : MonoBehaviour
         connector.cleanCells();
         connector.Skills(character, EventTypes.SKILL, SkillsCallBackParametrizedCallback(character, (character, selectedCell, result, targets) =>
         {
-            foreach(CharacterScript target in targets)
+            foreach (CharacterScript target in targets)
             {
                 var f = FormulaScript.Create("");
                 foreach (Formula formula in skill.formulas)
@@ -263,6 +273,7 @@ public class GamePlayManager : MonoBehaviour
                     }
                 }
             }
+            objectCanvas.SetActive(false);
             Turn();
         }), skill);
     }
@@ -271,8 +282,30 @@ public class GamePlayManager : MonoBehaviour
     {
         connector.IAAttack(character, target, ShowAreaCallBackParametrizedCallback(character, (character1, selectedCell, result1) =>
         {
-            target.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value;
-            Turn();
+
+            connector.TriggerAnimation(character, "attack", "idle", MoveCameraToParametrizedCallback(character, (character6, resul6t) =>
+            {
+
+                target.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value -= character.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.damageAttribute.id).value;
+
+                if (target.character.attributesWithFormulas.Find(x => x.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value <= 0) {
+                    connector.TriggerAnimation(target, "die", "", MoveCameraToParametrizedCallback(target, (character7, result7) =>
+                    {
+                        //DEAD
+                        Turn();
+                    }));
+
+                } else {
+                    connector.TriggerAnimation(target, "gothit", "idle", MoveCameraToParametrizedCallback(target, (character7, result7) =>
+                    {
+                        //hit
+                        Turn();
+                    }));
+                }
+
+            }));
+
+
         }));
     }
 
@@ -284,10 +317,10 @@ public class GamePlayManager : MonoBehaviour
         int nearestDistance = int.MaxValue;
         List<Cell> nearestPath = null;
 
-        foreach(CharacterScript charact in characters.Where(x => x.team != character.team))
+        foreach (CharacterScript charact in characters.Where(x => x.team != character.team))
         {
             List<Cell> cellsToCharacter = connector.GetPathFromCharToChar(character, charact);
-            if(cellsToCharacter != null && cellsToCharacter.Count < nearestDistance)
+            if (cellsToCharacter != null && cellsToCharacter.Count < nearestDistance)
             {
                 nearestPath = cellsToCharacter;
                 nearestDistance = cellsToCharacter.Count;
@@ -303,7 +336,8 @@ public class GamePlayManager : MonoBehaviour
             // Can't be 0, because is the enemy target position
             if (nearestPath.Count == 0)
                 Turn();
-            else { 
+            else
+            {
                 if (nearestPath.Count - 1 < moveRange)
                     destinyCell = nearestPath.Count - 2; // -2 because -1 is the enemy target position
                 else
@@ -338,7 +372,7 @@ public class GamePlayManager : MonoBehaviour
         targets = targets.Where(x => x.team != character.team).OrderByDescending(x => x.character.attributesWithFormulas.Find(y => y.attribute.id == Database.Instance.battleOptions.healthAttribute.id).value).ToList();
 
         // If any character is attackable, attack
-        if(targets.Count > 0)
+        if (targets.Count > 0)
         {
             attackEventIA(targets.First());
         }
@@ -367,14 +401,16 @@ public class GamePlayManager : MonoBehaviour
         requiredAttributes.Add(Database.Instance.battleOptions.attackHeight);
 
         // Check if all characters scripts contains this attributes and a character
-        foreach (CharacterScript character in FindObjectsOfType<CharacterScript>()) {
-            if(character.character == null)
+        foreach (CharacterScript character in FindObjectsOfType<CharacterScript>())
+        {
+            if (character.character == null)
             {
                 Debug.Log("Missing 'character' in some or many 'character script' components");
                 return false;
             }
             character.character.calculateFormulas();
-            foreach (Attribute attribute in requiredAttributes) {
+            foreach (Attribute attribute in requiredAttributes)
+            {
                 if (!character.character.attributesWithFormulas.Any(x => x.attribute == attribute))
                 {
                     Debug.Log("Character '" + character.character.name + "' doesn't have attribute '" + attribute.name + "'");
@@ -568,7 +604,7 @@ public class GamePlayManager : MonoBehaviour
 
         foreach (List<Skills> skillList in skills)
         {
-            for(int i = 0; i < skillList.Count; i++)
+            for (int i = 0; i < skillList.Count; i++)
             {
                 Skills skill = skillList[i];
 
