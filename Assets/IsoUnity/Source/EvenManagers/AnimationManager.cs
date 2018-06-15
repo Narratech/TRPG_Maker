@@ -36,7 +36,9 @@ namespace IsoUnity.Entities
 
                 decoration.GetComponent<Renderer>().sharedMaterial = new Material(Shader.Find("Transparent/Cutout/Diffuse"));
                 decoration.Father = dec;
+                decoration.Centered = true;
                 decoration.adaptate();
+                decoration.SendMessage("Update");
 
                 AutoAnimator anim = go.AddComponent<AutoAnimator>();
                 anim.FrameSecuence = new int[8] { 0, 1, 2, 3, 4, 5, 6, 7 };
@@ -44,8 +46,6 @@ namespace IsoUnity.Entities
                 anim.AutoDestroy = true;
                 anim.Repeat = 1;
                 anim.registerEvent(ev);
-
-                go.transform.Translate(new Vector3(0, 0, -2.8f));
             }
         }
 

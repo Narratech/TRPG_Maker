@@ -202,7 +202,7 @@ namespace IsoUnity
             this.GetComponent<Renderer>().sharedMaterial = myMat;
 
             int x = tile % (isoDec.nCols);
-            int y = Mathf.FloorToInt(tile / isoDec.nCols);
+            int y = Mathf.FloorToInt(tile / (float) isoDec.nCols);
 
             this.GetComponent<Renderer>().sharedMaterial.mainTextureOffset = new Vector2((x / ((float)isoDec.nCols)), (y / ((float)isoDec.nRows)));
         }
@@ -288,13 +288,12 @@ namespace IsoUnity
             else if (this.father is Decoration)
             {
                 Decoration decorationpadre = this.father as Decoration;
-                this.transform.parent = decorationpadre.transform;
+                this.transform.parent = decorationpadre.transform.parent;
 
-                Vector3 position = new Vector3();
+                Vector3 position = new Vector3(0f, this.transform.localScale.y, 0f);
 
-                position = new Vector3(0f, this.transform.localScale.y, 0f);
-
-                this.transform.localPosition = position;
+                this.transform.position = decorationpadre.transform.position;
+                this.transform.localPosition -= this.transform.worldToLocalMatrix.MultiplyVector(Vector3.forward * 0.01f);
             }
         }
 
@@ -330,15 +329,15 @@ namespace IsoUnity
                         case 2: { y = 90; break; }
                     }
                 }
+
+                this.transform.Rotate(x, y, z);
             }
 
             else if (this.father is Decoration)
             {
-                this.transform.localRotation = (this.father as Decoration).transform.rotation;
-                y = -45;
+                this.transform.rotation = (this.father as Decoration).transform.rotation;
+                //y = -45;
             }
-
-            this.transform.Rotate(x, y, z);
         }
     }
 }
