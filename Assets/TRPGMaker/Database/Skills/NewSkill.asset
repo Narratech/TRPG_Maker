@@ -16,4 +16,4 @@ MonoBehaviour:
   skillType: 0
   areaRange: 0
   formulas: []
-  animationName: {fileID: 11400000, guid: fd93e3770e82ad14790220e225fb2de3, type: 2}
+  animationName: {fileID: 0}
