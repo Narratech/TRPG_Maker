@@ -8,12 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fcfda68e797b224485786ca9e52d4b9, type: 3}
-  m_Name: NewSkill
+  m_Script: {fileID: 11500000, guid: 4a7b1fcdece9778478b2575993f98a72, type: 3}
+  m_Name: NewTeam
   m_EditorClassIdentifier: 
-  name: NewSkill
-  description: 
-  skillType: 0
-  areaRange: 0
-  formulas: []
-  animationName: {fileID: 11400000, guid: fd93e3770e82ad14790220e225fb2de3, type: 2}
+  name: NewTeam
+  id: 0
+  characters:
+  - {fileID: 11400000, guid: feaf72e7d5baa91418684d6f974ad5fc, type: 2}
+  playable: 1

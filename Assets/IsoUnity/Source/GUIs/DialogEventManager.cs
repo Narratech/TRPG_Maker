@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 
 namespace IsoUnity.Sequences {
 	public abstract class DialogEventManager : EventManager {
