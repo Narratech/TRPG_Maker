@@ -11,6 +11,11 @@ Supervisors of the two projects: [Federico Peinado](https://github.com/federicop
 
 ### Resources
 
+ - #### Documentation
+ 
+   - Technical documents about TRPGMaker in the UCM e-Prints repository: 
+https://eprints.ucm.es/cgi/searchdocencia/simple?q=trpgmaker
+
  - #### [IsoUnity](https://github.com/Victorma/IsoUnity)
  
    - This project contains [IsoUnity](https://github.com/Victorma/IsoUnity), an isometric retro-style editor for unity created by [Víctor Manuel Pérez Colado](https://github.com/Victorma) and [Iván José Pérez Colado](https://github.com/Synpheros) 
